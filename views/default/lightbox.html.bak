@@ -1,0 +1,132 @@
+<body>
+    <canvas id="myCanvas" width="800" height="600" style="border:1px solid #000000;"></canvas>
+</body>
+
+<script>
+    var canvas = document.getElementById('myCanvas');
+    var context = canvas.getContext('2d');
+    var number_of_columns = 5;
+    var marginx;
+    var marginy;
+    var offsetx;
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth - (window.innerWidth * 0.03);
+        canvas.height = window.innerHeight - (window.innerHeight * 0.03);
+        marginx = canvas.width * 0.01;
+        marginy = canvas.height * 0.01;
+        offsetx = canvas.width * 0.18;
+    }
+
+    resizeCanvas();
+
+    function img(source)
+    {
+        this.data = new Image();
+        this.data.src = source;
+        this.data.onload = function() {
+            this.width = this.data.width;
+            this.height = this.data.height;
+        }
+        this.draw = function(x, y, sizex, sizey) {
+            context.drawImage(this.data, x, y, sizex, sizey);
+        }
+        //    context.drawImage(imageObj, marginx + (marginx * 2 * i) + (offsetx * i), marginy, offsetx, (offsetx / this.width) * this.height);
+    }
+    var imageArray = [];
+    var img = [];
+
+    for (var i = 0; i<5; i++)
+    {
+        imageArray.push('http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg');
+
+        //imageArray[i].draw(marginx + (marginx * 2 * i) + (offsetx * i), marginy, offsetx, (offsetx / imageArray[i].width) * imageArray[i].height);
+        //var imageObj = new Image();
+        //imageObj.src = 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';
+
+        //imageObj.onload = function() {
+        //    context.drawImage(imageObj, marginx + (marginx * 2 * i) + (offsetx * i), marginy, offsetx, (offsetx / this.width) * this.height);
+        //}
+        //imageArray.push(imageObj);
+    }
+    imageArray.push('http://www.html5canvastutorials.com/demos/assets/yoda.jpg');
+    imageArray.push('http://www.html5canvastutorials.com/demos/assets/yoda.jpg');
+    imageArray.push('http://images6.alphacoders.com/451/451028.jpg');
+    imageArray.push('http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg');
+    imageArray.push('http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg');
+    imageArray.push('http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg');
+    imageArray.push('http://www.html5canvastutorials.com/demos/assets/yoda.jpg');
+    imageArray.push('http://www.html5canvastutorials.com/demos/assets/yoda.jpg');
+    imageArray.push('http://desirewallpapers.com/wp-content/uploads/2014/08/New-Wallpapers.jpg');
+
+    function loadImages(arr, callBack){
+        var count = 0;
+
+        for (var i in arr ){
+            img[i] = new Image();
+            img[i].src = arr[i];
+            img[i].onload = function(){
+                count++;
+                if(count == arr.length){
+                    callBack(img);
+                }
+            }
+        }
+    }
+
+    function imageLoaded() {
+        var offsety;
+        var temp;
+        for (var i in imageArray) {
+            offsety = 0;
+            temp = i - 5 + 1;
+            while (temp > 0) {
+                offsety = offsety + (marginy * 2) + ((offsetx / img[temp-1].width) * img[temp-1].height);
+                temp = temp - 5;
+            }
+            console.log(i + " " + offsety);
+            context.drawImage(img[i], marginx + (marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)), marginy + offsety, offsetx, (offsetx / img[i].width) * img[i].height);
+        }
+        window.requestAnimationFrame(imageLoaded());
+    }
+
+    loadImages(imageArray, imageLoaded );
+
+    function mouseDownEvent(e)
+    {
+        var temp = 0;
+        for (var i = 1; i<6; i++)
+        {
+            if (e.pageX < i * (offsetx + 2 * marginx))
+            {
+                temp = i - 1;
+                break;
+            }
+        }
+
+        var offsety = 0;
+        var i;
+        for (i = temp; i<imageArray.length; i = i + 5)
+        {
+            width = (marginy * 2) + ((offsetx / img[i].width) * img[i].height);
+            if (e.pageY >= offsety && e.pageY < offsety + width)
+            {
+                console.log(i+1);
+                break;
+            }
+            offsety = offsety + width;
+        }
+        if (i >= imageArray.length)
+        {
+            console.log("out");
+        }
+    }
+
+    canvas.onmousedown = mouseDownEvent;
+    /*for (var i = 0; i<5; i++)
+    {
+        imageArray[i].onload = function() {
+            context.drawImage(imageArray[i], marginx + (marginx * 2 * i) + (offsetx * i), marginy, offsetx, (offsetx / this.width) * this.height);
+        };
+    }*/
+</script>
