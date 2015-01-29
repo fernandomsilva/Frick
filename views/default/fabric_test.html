@@ -1,0 +1,20 @@
+<head>
+    <script language="javascript" type="text/javascript" src="../static/js/fabric_min.js"></script>
+</head>
+</head>
+<body>
+    <canvas id="myCanvas" width="800" height="600" style="border:1px solid #000000;"></canvas>
+</body>
+<script>
+    var canvas = new fabric.Canvas('myCanvas');
+    var imgArray = new Array;
+    for (var i = 0; i<5; i++)
+    {
+        imgArray[i] = fabric.Image.fromURL('http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg', function(loaded_img) {
+                                        canvas.add(loaded_img);
+                                    });
+    }
+    /*var img = fabric.Image.fromURL('http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg', function(loaded_img) {
+                                        canvas.add(loaded_img);
+                                    });*/
+</script>

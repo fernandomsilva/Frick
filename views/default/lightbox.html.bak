@@ -1,3 +1,6 @@
+<head>
+    <script language="javascript" type="text/javascript" src="../static/js/kinetic_min.js"></script>
+</head>
 <body>
     <canvas id="myCanvas" width="800" height="600" style="border:1px solid #000000;"></canvas>
 </body>
@@ -183,7 +186,6 @@
         if (drag)
         {
             drag = false;
-            drawScreenWithRect(getMousePosition(canvas, e), true);
 
             drop_image = getImageMouseCollision(getMousePosition(canvas, e));
             if (drop_image > -1 && drop_image != selected_image)
@@ -192,6 +194,8 @@
                 img[selected_image] = img[drop_image];
                 img[drop_image] = temp_image;
             }
+
+            drawScreenWithRect(getMousePosition(canvas, e), true);
         }
     }
 

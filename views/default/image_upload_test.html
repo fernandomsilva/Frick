@@ -1,0 +1,44 @@
+{{include 'web2py_ajax.html'}}
+
+<form>File to upload:
+    <input type="file" id="images" name="images[]" multiple />
+    <!--<input name="image" type="file" onchange="ajax('{{=URL('default', 'upload')}}', ['image'], 'target')"/>-->
+    <!-- Other fields go here -->
+    <!--<div id="target"></div>-->
+</form>
+<script>
+    function handleFileSelect(evt) {
+        var images = evt.target.files; // FileList object
+
+        // Loop through the FileList and render image files as thumbnails.
+        for (var i = 0, img; img = images[i]; i++) {
+            // Only process image files.
+            /*if (!img.type.match('image.*')) {
+                console.log('bum');
+                continue;
+            }*/
+
+            var reader = new FileReader();
+
+            // Closure to capture the file information.
+            reader.onload = (function(image) {
+                return function(e) {
+                    console.log(e.target.result);
+                    console.log(encodeURIComponent(e.target.result));
+                    var result = encodeURIComponent(e.target.result);
+                    ajax("{{=URL('default', 'upload')}}?data=" + result, [], 'target');
+/*                    // Render thumbnail.
+                    var span = document.createElement('span');
+                    span.innerHTML = ['<img class="thumb" src="', e.target.result,
+                                    '" title="', escape(theFile.name), '"/>'].join('');
+                    document.getElementById('list').insertBefore(span, null);*/
+                };
+            })(img);
+
+            // Read in the image file as a data URL.
+            reader.readAsDataURL(img);
+        }
+    }
+
+    document.getElementById('images').addEventListener('change', handleFileSelect, false);
+</script>

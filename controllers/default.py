@@ -9,6 +9,34 @@
 ## - api is an example of Hypermedia API support and access control
 #########################################################################
 
+def upload():
+    import os
+    import urllib
+
+    imgData = request.vars['data']
+    imgData = imgData.decode('base64')
+    print imgData[:15]
+    print imgData[15:20]
+    myfile = os.path.join(request.folder, 'static/images', 'imageToSave.png')
+
+    fh = open(myfile, "wb+")
+    fh.write(imgData[15:])
+    #fh.write(urllib.unquote(imgData).decode('base64'))
+    fh.close()
+
+    print 'done'
+
+    return P()
+
+def image_upload_test():
+    return dict()
+
+def fabric_test():
+    return dict()
+
+def kinetic_test():
+    return dict()
+
 def lightbox():
     return dict()
 
