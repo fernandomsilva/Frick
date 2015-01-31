@@ -1,5 +1,6 @@
-{{include 'web2py_ajax.html'}}
-
+<head>
+    <script language="javascript" type="text/javascript" src="../static/js/jquery_min.js"></script>
+</head>
 <form>File to upload:
     <input type="file" id="images" name="images[]" multiple />
     <!--<input name="image" type="file" onchange="ajax('{{=URL('default', 'upload')}}', ['image'], 'target')"/>-->
@@ -23,10 +24,29 @@
             // Closure to capture the file information.
             reader.onload = (function(image) {
                 return function(e) {
-                    console.log(e.target.result);
-                    console.log(encodeURIComponent(e.target.result));
+                    //console.log(e.target.result);
+                    //console.log(encodeURIComponent(e.target.result));
+                    console.log('1');
                     var result = encodeURIComponent(e.target.result);
-                    ajax("{{=URL('default', 'upload')}}?data=" + encodeURIComponent(e.target.result), [], 'target');
+                    console.log(' 2');
+                    //ajax("{{=URL('default', 'upload')}}?data=" + result, [], 'target');
+                    $.ajax({
+                        url: "{{=URL('default', 'upload')}}", // Url to which the request is send
+                        type: "POST",             // Type of request to be send, called as method
+                        data: "data=" + JSON.stringify(result), // Data sent to server, a set of key/value pairs (i.e. form fields and values)
+                        //contentType: false,       // The content type used when sending data to the server.
+                        //cache: false,             // To unable request pages to be cached
+                        //processData:false,        // To send DOMDocument or non processed data file it is set to false
+                        success: function (data)   // A function to be called if request succeeds
+                        {
+                            console.log('success');
+                        },
+                        error: function (data)
+                        {
+                            console.log(data.responseText);
+                        }
+                    });
+                    console.log('  3');
 /*                    // Render thumbnail.
                     var span = document.createElement('span');
                     span.innerHTML = ['<img class="thumb" src="', e.target.result,

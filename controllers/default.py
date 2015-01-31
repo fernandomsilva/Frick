@@ -11,22 +11,28 @@
 
 def upload():
     import os
-    import urllib
+    import json
 
-    imgData = request.vars['data']
+    imgData = json.loads(request.vars['data'])
+    #imgData_length = len(imgData)
+    #imgData_offset = imgData_length - (imgData_length % 4 if imgData_length % 4 else 4)
+    #print imgData_length, imgData_offset
+    #imgData = imgData.decode('base64')
+    #imgData = base64.b64decode(imgData, '/+')
+
     imgData = imgData.decode('base64')
-    print imgData[:15]
-    print imgData[15:20]
+    #print imgData[:15]
+    #print imgData[15:20]
     myfile = os.path.join(request.folder, 'static/images', 'imageToSave.png')
 
-    fh = open(myfile, "wb+")
-    fh.write(imgData[15:])
+    fh = open(myfile, "wb")
+    #fh.write(imgData[15:])
+    fh.write(imgData)
     #fh.write(urllib.unquote(imgData).decode('base64'))
     fh.close()
 
-    print 'done'
-
-    return P()
+    pass
+    #return P()
 
 def image_upload_test():
     return dict()

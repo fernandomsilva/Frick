@@ -1,0 +1,479 @@
+(dp1
+S'output'
+p2
+S"<class 'binascii.Error'> Incorrect padding"
+p3
+sS'layer'
+p4
+S'D:\\Applications\\web2py-master\\applications\\Frick\\controllers/default.py'
+p5
+sS'code'
+p6
+S'# -*- coding: utf-8 -*-\n# this file is released under public domain and you can use without limitations\n\n#########################################################################\n## This is a sample controller\n## - index is the default action of any application\n## - user is required for authentication and authorization\n## - download is for downloading files uploaded in the db (does streaming)\n## - api is an example of Hypermedia API support and access control\n#########################################################################\n\ndef upload():\n    import os\n    import urllib\n\n    imgData = request.vars[\'data\']\n    imgData = imgData.decode(\'base64\')\n    print imgData[:15]\n    print imgData[15:20]\n    myfile = os.path.join(request.folder, \'static/images\', \'imageToSave.png\')\n\n    fh = open(myfile, "wb+")\n    fh.write(imgData[15:])\n    #fh.write(urllib.unquote(imgData).decode(\'base64\'))\n    fh.close()\n\n    print \'done\'\n\n    pass\n    #return P()\n\ndef image_upload_test():\n    return dict()\n\ndef fabric_test():\n    return dict()\n\ndef kinetic_test():\n    return dict()\n\ndef lightbox():\n    return dict()\n\ndef index():\n    """\n    example action using the internationalization operator T and flash\n    rendered by views/default/index.html or views/generic.html\n\n    if you need a simple wiki simply replace the two lines below with:\n    return auth.wiki()\n    """\n    response.flash = T("Welcome to web2py!")\n    return dict(message=T(\'Hello World\'))\n\n\ndef user():\n    """\n    exposes:\n    http://..../[app]/default/user/login\n    http://..../[app]/default/user/logout\n    http://..../[app]/default/user/register\n    http://..../[app]/default/user/profile\n    http://..../[app]/default/user/retrieve_password\n    http://..../[app]/default/user/change_password\n    http://..../[app]/default/user/manage_users (requires membership in\n    use @auth.requires_login()\n        @auth.requires_membership(\'group name\')\n        @auth.requires_permission(\'read\',\'table name\',record_id)\n    to decorate functions that need access control\n    """\n    return dict(form=auth())\n\n\n@cache.action()\ndef download():\n    """\n    allows downloading of uploaded files\n    http://..../[app]/default/download/[filename]\n    """\n    return response.download(request, db)\n\n\ndef call():\n    """\n    exposes services. for example:\n    http://..../[app]/default/call/jsonrpc\n    decorate with @services.jsonrpc the functions to expose\n    supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv\n    """\n    return service()\n\n\n@auth.requires_login() \ndef api():\n    """\n    this is example of API with access control\n    WEB2PY provides Hypermedia API (Collection+JSON) Experimental\n    """\n    from gluon.contrib.hypermedia import Collection\n    rules = {\n        \'<tablename>\': {\'GET\':{},\'POST\':{},\'PUT\':{},\'DELETE\':{}},\n        }\n    return Collection(db).process(request,response,rules)\n\nresponse._vars=response._caller(upload)\n'
+p7
+sS'snapshot'
+p8
+(dp9
+S'exception'
+p10
+(dp11
+S'__module__'
+p12
+S"'binascii'"
+p13
+sS'__getslice__'
+p14
+S"<method-wrapper '__getslice__' of Error object>"
+p15
+sS'__str__'
+p16
+S"<method-wrapper '__str__' of Error object>"
+p17
+sS'__reduce__'
+p18
+S'<built-in method __reduce__ of Error object>'
+p19
+sS'__dict__'
+p20
+S'{}'
+p21
+sS'__sizeof__'
+p22
+S'<built-in method __sizeof__ of Error object>'
+p23
+sS'__weakref__'
+p24
+S'None'
+p25
+sS'__init__'
+p26
+S"<method-wrapper '__init__' of Error object>"
+p27
+sS'__setattr__'
+p28
+S"<method-wrapper '__setattr__' of Error object>"
+p29
+sS'__reduce_ex__'
+p30
+S'<built-in method __reduce_ex__ of Error object>'
+p31
+sS'__new__'
+p32
+S'<built-in method __new__ of type object>'
+p33
+sS'__format__'
+p34
+S'<built-in method __format__ of Error object>'
+p35
+sS'__class__'
+p36
+S"<class 'binascii.Error'>"
+p37
+sS'__doc__'
+p38
+S'None'
+p39
+sS'__getitem__'
+p40
+S"<method-wrapper '__getitem__' of Error object>"
+p41
+sS'__setstate__'
+p42
+S'<built-in method __setstate__ of Error object>'
+p43
+sS'__getattribute__'
+p44
+S"<method-wrapper '__getattribute__' of Error object>"
+p45
+sS'args'
+p46
+S"('Incorrect padding',)"
+p47
+sS'__subclasshook__'
+p48
+S'<built-in method __subclasshook__ of type object>'
+p49
+sS'__unicode__'
+p50
+S'<built-in method __unicode__ of Error object>'
+p51
+sS'__delattr__'
+p52
+S"<method-wrapper '__delattr__' of Error object>"
+p53
+sS'__repr__'
+p54
+S"<method-wrapper '__repr__' of Error object>"
+p55
+sS'__hash__'
+p56
+S"<method-wrapper '__hash__' of Error object>"
+p57
+ssS'evalue'
+p58
+S'Incorrect padding'
+p59
+sS'request'
+p60
+cgluon.html
+XML_unpickle
+p61
+(S's\xbbh\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">ajax</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">application</td><td style="vertical-align:top;">:</td><td><div>Frick</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cid</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">client</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">controller</td><td style="vertical-align:top;">:</td><td><div>default</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">session_id_frick</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-d681046a-443f-4114-9f0b-63f2fab1dc47<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">env</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">CONTENT_LENGTH</td><td style="vertical-align:top;">:</td><td><div>0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT</td><td style="vertical-align:top;">:</td><td><div>*/*</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_ENCODING</td><td style="vertical-align:top;">:</td><td><div>gzip, deflate</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_LANGUAGE</td><td style="vertical-align:top;">:</td><td><div>en-US</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_CACHE_CONTROL</td><td style="vertical-align:top;">:</td><td><div>no-cache</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_CONNECTION</td><td style="vertical-align:top;">:</td><td><div>Keep-Alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_CONTENT_LENGTH</td><td style="vertical-align:top;">:</td><td><div>0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_COOKIE</td><td style="vertical-align:top;">:</td><td><div>session_id_frick=127.0.0.1-d681046a-443f-4114-9f0b-63f2fab1dc47</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_DNT</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_HOST</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1:8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_REFERER</td><td style="vertical-align:top;">:</td><td><div>http://127.0.0.1:8000/Frick/default/image_upload_test</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_USER_AGENT</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; Touch; LCJB; rv:11.0) like Gecko</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_X_REQUESTED_WITH</td><td style="vertical-align:top;">:</td><td><div>XMLHttpRequest</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">PATH_INFO</td><td style="vertical-align:top;">:</td><td><div>/Frick/default/upload</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">QUERY_STRING</td><td style="vertical-align:top;">:</td><td><div>data=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA4FJREFUeNq8l01oE0EUx%2F%2BzO%2FmoTRsSW1u1CVEr%2FULFCn7UiyjqySqeRIW2IvQmnvwAi5GCXyevXrQi9ih%2BgQdBBPHrUEQFPahY2qqJ1bRpUpIm2RlnNumh2eiuW9MHCXmT2fd78%2Ba9NzsEBenY19flcLrC7oqKEMoo6VRqOJuZCT%2B%2F039D6kR%2Bbd1%2F9noosLx7R8c6NNT7y8nHWCSGxy%2Fe4cvI6MCz2%2Bd6yJZ9Z7qCDYGB3VvX41diBqPReFkdCNR5sbjKhYdPhzD27Ws3pQ5neHWwAa8%2F%2FsCPiSTKLdFYEkt8HjSFgoiMj4ep0%2BEKTSYziMbTWCiJ%2FEqAe92QbAqiYDyeAmNYUJFMyaZEfGU1DnA%2BL4NuN0Xn9ka0NdagQvwulhOXn8zRs5xAsiljHNo8l7%2Bs1oPeA2vh91aiqnIRKFUNc7TiBQpdsikDn1f43S4VhzubsbzOD1911R%2FnlWJItogAA%2BP2Pehob8Cq4JK%2FwnVYCYZkUy7CwOax%2F5vWLEWNz2s6rxSD61tQ2Au7sjJQaxi79eANBh%2B8teQU5dx%2BBHzVLpEDTsP4o%2BefLdmUbL0KwPPKv0psMg0nNZZcZDxh%2BiwhJF8FXCSHIo6kjM1tcDod5iVX6jkBlWw9AtIBq3lw8fgmQxiL5fyxjYaxU1dezdEVitkIcKjiVLaaB%2B1tzUWlxE3n5BPu5RxdMvM5wGUEiF4SVoQxzdZWFduXzHwViD9UYj0CzGbbLLavFhZNZYeSisbK60Cx%2FfyiC0moKtYjsP3ozbk1f%2FWQYc7O3lumdnTmbCdUhKLZbEalerwVW0ph0TQnQkqEkWwuZy%2B0mtEBK7YkU7JpNjWNTHoK6WTMXgRK5IQVW5m0Csmmy1pa0LS5A7movRdSphnLsm3bLtPnmuo8iKgq6HR8GqlYArHohM0IrDCeEVHzCKQcHJJNiX47yVeCZuM8sHOSulRFZ5J8MspOyOB1O2wmoWb4mEmli%2BpMna2w3PDEVBwB3yLbSVj8Mb0dCZZkSrbCZpLhT2NjqFByaA%2F4UOsRLxkO9b87QMUWS9uSIVmSKdn65XRDZ991T83S7lZxXar3%2B0VYFCiqNSeO7A0axq7dHSlZLdK5SCyGD8MjSPz8PjB0r7%2BHzE7YsOd0l%2BKqDGuEhmReWc3HkwdbDWOXBt8bOx%2BRb0GiBfPcMJuZDg%2Fdv6Bfz38LMADtLONxPx43OAAAAABJRU5ErkJggg%3D%3D</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_ADDR</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_PORT</td><td style="vertical-align:top;">:</td><td><div>49341</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_METHOD</td><td style="vertical-align:top;">:</td><td><div>POST</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SCRIPT_NAME</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_NAME</td><td style="vertical-align:top;">:</td><td><div>Apollo</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PORT</td><td style="vertical-align:top;">:</td><td><div>8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PROTOCOL</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_SOFTWARE</td><td style="vertical-align:top;">:</td><td><div>Rocket 1.2.6</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;D:\\\\Applications\\\\web2py-master\\\\applications\\\\admin\\\\&#x27;, &#x27;D:\\\\Applications\\\\web2py-master\\\\applications\\\\welcome\\\\&#x27;, &#x27;D:\\\\Applications\\\\web2py-master\\\\applications\\\\Frick\\\\&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>D:\\Applications\\web2py-master</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_options</td><td style="vertical-align:top;">:</td><td><div>&lt;Values at 0x3615608: {&#x27;verbose&#x27;: False, &#x27;ip&#x27;: &#x27;127.0.0.1&#x27;, &#x27;debuglevel&#x27;: 30, &#x27;with_scheduler&#x27;: False, &#x27;ips&#x27;: [&#x27;192.168.56.1&#x27;, &#x27;fe80::94a5:5e73:d9b5:ded3%3&#x27;, &#x27;172.16.25.120&#x27;, &#x27;fe80::2807:4e7f:d1b2:47d0%13&#x27;], &#x27;shutdown_timeout&#x27;: 5, &#x27;taskbar&#x27;: False, &#x27;with_coverage&#x27;: False, &#x27;scheduler_groups&#x27;: None, &#x27;port&#x27;: 8000, &#x27;maxthreads&#x27;: None, &#x27;softcron&#x27;: False, &#x27;server_name&#x27;: &#x27;Apollo&#x27;, &#x27;bpython&#x27;: False, &#x27;nogui&#x27;: False, &#x27;pid_filename&#x27;: &#x27;httpserver.pid&#x27;, &#x27;extcron&#x27;: False, &#x27;runcron&#x27;: False, &#x27;run_system_tests&#x27;: False, &#x27;test&#x27;: None, &#x27;folder&#x27;: &#x27;D:\\\\Applications\\\\web2py-master&#x27;, &#x27;config&#x27;: &#x27;&#x27;, &#x27;minthreads&#x27;: None, &#x27;shell&#x27;: None, &#x27;run&#x27;: &#x27;&#x27;, &#x27;log_filename&#x27;: &#x27;httpserver.log&#x27;, &#x27;profiler_dir&#x27;: None, &#x27;args&#x27;: [&#x27;&#x27;], &#x27;socket_timeout&#x27;: 5, &#x27;ssl_ca_certificate&#x27;: None, &#x27;scheduler&#x27;: None, &#x27;interfaces&#x27;: None, &#x27;ssl_private_key&#x27;: &#x27;&#x27;, &#x27;gae&#x27;: None, &#x27;password&#x27;: &#x27;&lt;ask&gt;&#x27;, &#x27;request_queue_size&#x27;: 5, &#x27;ssl_certificate&#x27;: &#x27;&#x27;, &#x27;cronjob&#x27;: False, &#x27;numthreads&#x27;: None, &#x27;quiet&#x27;: False, &#x27;import_models&#x27;: False, &#x27;timeout&#x27;: 10, &#x27;plain&#x27;: False, &#x27;nobanner&#x27;: False}&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">content_length</td><td style="vertical-align:top;">:</td><td><div>0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>D:\\Applications\\web2py-master</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept</td><td style="vertical-align:top;">:</td><td><div>*/*</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_encoding</td><td style="vertical-align:top;">:</td><td><div>gzip, deflate</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_language</td><td style="vertical-align:top;">:</td><td><div>en-US</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_cache_control</td><td style="vertical-align:top;">:</td><td><div>no-cache</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_connection</td><td style="vertical-align:top;">:</td><td><div>Keep-Alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_content_length</td><td style="vertical-align:top;">:</td><td><div>0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_cookie</td><td style="vertical-align:top;">:</td><td><div>session_id_frick=127.0.0.1-d681046a-443f-4114-9f0b-63f2fab1dc47</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_dnt</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_host</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1:8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_referer</td><td style="vertical-align:top;">:</td><td><div>http://127.0.0.1:8000/Frick/default/image_upload_test</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_user_agent</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; Touch; LCJB; rv:11.0) like Gecko</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_x_requested_with</td><td style="vertical-align:top;">:</td><td><div>XMLHttpRequest</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>fe80::94a5:5e73:d9b5:ded3%3</div></td></tr><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>172.16.25.120</div></td></tr><tr><td><div>192.168.56.1</div></td></tr><tr><td><div>Apollo</div></td></tr><tr><td><div>127.0.0.1</div></td></tr><tr><td><div>fe80::2807:4e7f:d1b2:47d0%13</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path_info</td><td style="vertical-align:top;">:</td><td><div>/Frick/default/upload</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">query_string</td><td style="vertical-align:top;">:</td><td><div>data=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA4FJREFUeNq8l01oE0EUx%2F%2BzO%2FmoTRsSW1u1CVEr%2FULFCn7UiyjqySqeRIW2IvQmnvwAi5GCXyevXrQi9ih%2BgQdBBPHrUEQFPahY2qqJ1bRpUpIm2RlnNumh2eiuW9MHCXmT2fd78%2Ba9NzsEBenY19flcLrC7oqKEMoo6VRqOJuZCT%2B%2F039D6kR%2Bbd1%2F9noosLx7R8c6NNT7y8nHWCSGxy%2Fe4cvI6MCz2%2Bd6yJZ9Z7qCDYGB3VvX41diBqPReFkdCNR5sbjKhYdPhzD27Ws3pQ5neHWwAa8%2F%2FsCPiSTKLdFYEkt8HjSFgoiMj4ep0%2BEKTSYziMbTWCiJ%2FEqAe92QbAqiYDyeAmNYUJFMyaZEfGU1DnA%2BL4NuN0Xn9ka0NdagQvwulhOXn8zRs5xAsiljHNo8l7%2Bs1oPeA2vh91aiqnIRKFUNc7TiBQpdsikDn1f43S4VhzubsbzOD1911R%2FnlWJItogAA%2BP2Pehob8Cq4JK%2FwnVYCYZkUy7CwOax%2F5vWLEWNz2s6rxSD61tQ2Au7sjJQaxi79eANBh%2B8teQU5dx%2BBHzVLpEDTsP4o%2BefLdmUbL0KwPPKv0psMg0nNZZcZDxh%2BiwhJF8FXCSHIo6kjM1tcDod5iVX6jkBlWw9AtIBq3lw8fgmQxiL5fyxjYaxU1dezdEVitkIcKjiVLaaB%2B1tzUWlxE3n5BPu5RxdMvM5wGUEiF4SVoQxzdZWFduXzHwViD9UYj0CzGbbLLavFhZNZYeSisbK60Cx%2FfyiC0moKtYjsP3ozbk1f%2FWQYc7O3lumdnTmbCdUhKLZbEalerwVW0ph0TQnQkqEkWwuZy%2B0mtEBK7YkU7JpNjWNTHoK6WTMXgRK5IQVW5m0Csmmy1pa0LS5A7movRdSphnLsm3bLtPnmuo8iKgq6HR8GqlYArHohM0IrDCeEVHzCKQcHJJNiX47yVeCZuM8sHOSulRFZ5J8MspOyOB1O2wmoWb4mEmli%2BpMna2w3PDEVBwB3yLbSVj8Mb0dCZZkSrbCZpLhT2NjqFByaA%2F4UOsRLxkO9b87QMUWS9uSIVmSKdn65XRDZ991T83S7lZxXar3%2B0VYFCiqNSeO7A0axq7dHSlZLdK5SCyGD8MjSPz8PjB0r7%2BHzE7YsOd0l%2BKqDGuEhmReWc3HkwdbDWOXBt8bOx%2BRb0GiBfPcMJuZDg%2Fdv6Bfz38LMADtLONxPx43OAAAAABJRU5ErkJggg%3D%3D</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_addr</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_port</td><td style="vertical-align:top;">:</td><td><div>49341</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_method</td><td style="vertical-align:top;">:</td><td><div>POST</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_uri</td><td style="vertical-align:top;">:</td><td><div>/Frick/default/upload?data=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA4FJREFUeNq8l01oE0EUx%2F%2BzO%2FmoTRsSW1u1CVEr%2FULFCn7UiyjqySqeRIW2IvQmnvwAi5GCXyevXrQi9ih%2BgQdBBPHrUEQFPahY2qqJ1bRpUpIm2RlnNumh2eiuW9MHCXmT2fd78%2Ba9NzsEBenY19flcLrC7oqKEMoo6VRqOJuZCT%2B%2F039D6kR%2Bbd1%2F9noosLx7R8c6NNT7y8nHWCSGxy%2Fe4cvI6MCz2%2Bd6yJZ9Z7qCDYGB3VvX41diBqPReFkdCNR5sbjKhYdPhzD27Ws3pQ5neHWwAa8%2F%2FsCPiSTKLdFYEkt8HjSFgoiMj4ep0%2BEKTSYziMbTWCiJ%2FEqAe92QbAqiYDyeAmNYUJFMyaZEfGU1DnA%2BL4NuN0Xn9ka0NdagQvwulhOXn8zRs5xAsiljHNo8l7%2Bs1oPeA2vh91aiqnIRKFUNc7TiBQpdsikDn1f43S4VhzubsbzOD1911R%2FnlWJItogAA%2BP2Pehob8Cq4JK%2FwnVYCYZkUy7CwOax%2F5vWLEWNz2s6rxSD61tQ2Au7sjJQaxi79eANBh%2B8teQU5dx%2BBHzVLpEDTsP4o%2BefLdmUbL0KwPPKv0psMg0nNZZcZDxh%2BiwhJF8FXCSHIo6kjM1tcDod5iVX6jkBlWw9AtIBq3lw8fgmQxiL5fyxjYaxU1dezdEVitkIcKjiVLaaB%2B1tzUWlxE3n5BPu5RxdMvM5wGUEiF4SVoQxzdZWFduXzHwViD9UYj0CzGbbLLavFhZNZYeSisbK60Cx%2FfyiC0moKtYjsP3ozbk1f%2FWQYc7O3lumdnTmbCdUhKLZbEalerwVW0ph0TQnQkqEkWwuZy%2B0mtEBK7YkU7JpNjWNTHoK6WTMXgRK5IQVW5m0Csmmy1pa0LS5A7movRdSphnLsm3bLtPnmuo8iKgq6HR8GqlYArHohM0IrDCeEVHzCKQcHJJNiX47yVeCZuM8sHOSulRFZ5J8MspOyOB1O2wmoWb4mEmli%2BpMna2w3PDEVBwB3yLbSVj8Mb0dCZZkSrbCZpLhT2NjqFByaA%2F4UOsRLxkO9b87QMUWS9uSIVmSKdn65XRDZ991T83S7lZxXar3%2B0VYFCiqNSeO7A0axq7dHSlZLdK5SCyGD8MjSPz8PjB0r7%2BHzE7YsOd0l%2BKqDGuEhmReWc3HkwdbDWOXBt8bOx%2BRb0GiBfPcMJuZDg%2Fdv6Bfz38LMADtLONxPx43OAAAAABJRU5ErkJggg%3D%3D</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">script_name</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_name</td><td style="vertical-align:top;">:</td><td><div>Apollo</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_port</td><td style="vertical-align:top;">:</td><td><div>8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_protocol</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_software</td><td style="vertical-align:top;">:</td><td><div>Rocket 1.2.6</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_path</td><td style="vertical-align:top;">:</td><td><div>D:\\Applications\\web2py-master</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.9.12-stable+timestamp.2015.01.17.00.07.04</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;&lt;stderr&gt;&#x27;, mode &#x27;w&#x27; at 0x0000000001C3B150&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;class wsgiref.util.FileWrapper at 0x000000000339D528&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.input</td><td style="vertical-align:top;">:</td><td><div>&lt;socket._fileobject object at 0x0000000008E98B10&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multiprocess</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multithread</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.url_scheme</td><td style="vertical-align:top;">:</td><td><div>http</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;&lt;stderr&gt;&#x27;, mode &#x27;w&#x27; at 0x0000000001C3B150&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;class wsgiref.util.FileWrapper at 0x000000000339D528&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_input</td><td style="vertical-align:top;">:</td><td><div>&lt;socket._fileobject object at 0x0000000008E98B10&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multiprocess</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multithread</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_url_scheme</td><td style="vertical-align:top;">:</td><td><div>http</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">extension</td><td style="vertical-align:top;">:</td><td><div>html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">folder</td><td style="vertical-align:top;">:</td><td><div>D:\\Applications\\web2py-master\\applications\\Frick\\</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">function</td><td style="vertical-align:top;">:</td><td><div>upload</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">global_settings</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;D:\\\\Applications\\\\web2py-master\\\\applications\\\\admin\\\\&#x27;, &#x27;D:\\\\Applications\\\\web2py-master\\\\applications\\\\welcome\\\\&#x27;, &#x27;D:\\\\Applications\\\\web2py-master\\\\applications\\\\Frick\\\\&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>D:\\Applications\\web2py-master</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_options</td><td style="vertical-align:top;">:</td><td><div>&lt;Values at 0x3615608: {&#x27;verbose&#x27;: False, &#x27;ip&#x27;: &#x27;127.0.0.1&#x27;, &#x27;debuglevel&#x27;: 30, &#x27;with_scheduler&#x27;: False, &#x27;ips&#x27;: [&#x27;192.168.56.1&#x27;, &#x27;fe80::94a5:5e73:d9b5:ded3%3&#x27;, &#x27;172.16.25.120&#x27;, &#x27;fe80::2807:4e7f:d1b2:47d0%13&#x27;], &#x27;shutdown_timeout&#x27;: 5, &#x27;taskbar&#x27;: False, &#x27;with_coverage&#x27;: False, &#x27;scheduler_groups&#x27;: None, &#x27;port&#x27;: 8000, &#x27;maxthreads&#x27;: None, &#x27;softcron&#x27;: False, &#x27;server_name&#x27;: &#x27;Apollo&#x27;, &#x27;bpython&#x27;: False, &#x27;nogui&#x27;: False, &#x27;pid_filename&#x27;: &#x27;httpserver.pid&#x27;, &#x27;extcron&#x27;: False, &#x27;runcron&#x27;: False, &#x27;run_system_tests&#x27;: False, &#x27;test&#x27;: None, &#x27;folder&#x27;: &#x27;D:\\\\Applications\\\\web2py-master&#x27;, &#x27;config&#x27;: &#x27;&#x27;, &#x27;minthreads&#x27;: None, &#x27;shell&#x27;: None, &#x27;run&#x27;: &#x27;&#x27;, &#x27;log_filename&#x27;: &#x27;httpserver.log&#x27;, &#x27;profiler_dir&#x27;: None, &#x27;args&#x27;: [&#x27;&#x27;], &#x27;socket_timeout&#x27;: 5, &#x27;ssl_ca_certificate&#x27;: None, &#x27;scheduler&#x27;: None, &#x27;interfaces&#x27;: None, &#x27;ssl_private_key&#x27;: &#x27;&#x27;, &#x27;gae&#x27;: None, &#x27;password&#x27;: &#x27;&lt;ask&gt;&#x27;, &#x27;request_queue_size&#x27;: 5, &#x27;ssl_certificate&#x27;: &#x27;&#x27;, &#x27;cronjob&#x27;: False, &#x27;numthreads&#x27;: None, &#x27;quiet&#x27;: False, &#x27;import_models&#x27;: False, &#x27;timeout&#x27;: 10, &#x27;plain&#x27;: False, &#x27;nobanner&#x27;: False}&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>D:\\Applications\\web2py-master</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>fe80::94a5:5e73:d9b5:ded3%3</div></td></tr><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>172.16.25.120</div></td></tr><tr><td><div>192.168.56.1</div></td></tr><tr><td><div>Apollo</div></td></tr><tr><td><div>127.0.0.1</div></td></tr><tr><td><div>fe80::2807:4e7f:d1b2:47d0%13</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.9.12-stable+timestamp.2015.01.17.00.07.04</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_https</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_local</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_restful</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_sheduler</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_shell</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">now</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2015, 1, 30, 16, 21, 46, 470000)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">raw_args</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">raw_extension</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">url</td><td style="vertical-align:top;">:</td><td><div>/Frick/default/upload</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">utcnow</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2015, 1, 30, 21, 21, 46, 470000)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">uuid</td><td style="vertical-align:top;">:</td><td><div>Frick/127.0.0.1.2015-01-30.16-21-46.ee2ba280-1678-40bd-8870-6f77243346af</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi</td><td style="vertical-align:top;">:</td><td><div>&lt;gluon.main.LazyWSGI object at 0x0000000003636320&gt;</div></td></tr></table></div>'
+tRp62
+sS'frames'
+p63
+(lp64
+(dp65
+S'file'
+p66
+S'D:\\Applications\\web2py-master\\gluon\\restricted.py'
+p67
+sS'dump'
+p68
+(dp69
+S'environment'
+p70
+S"{'A': <class 'gluon.html.A'>, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'BUTTON': <class 'gluon.html.BUTTON'>, 'CAT': <class 'gluon.html.CAT'>, ...}"
+p71
+sS'ccode'
+p72
+S'<code object <module> at 0000000009A09C30, file ...lications\\Frick\\controllers/default.py", line 12>'
+p73
+ssS'lnum'
+p74
+I224
+sS'lines'
+p75
+(dp76
+I224
+S'        exec ccode in environment'
+p77
+sI225
+S'    except HTTP:'
+p78
+sI226
+S'        raise'
+p79
+sI227
+S'    except RestrictedError:'
+p80
+sI228
+S'        # do not encapsulate (obfuscate) the original RestrictedError'
+p81
+sI219
+S'    try:'
+p82
+sI220
+S'        if isinstance(code, types.CodeType):'
+p83
+sI221
+S'            ccode = code'
+p84
+sI222
+S'        else:'
+p85
+sI223
+S'            ccode = compile2(code, layer)'
+p86
+ssS'call'
+p87
+S"(code='# -*- coding: utf-8 -*-\\n# this file is released ...,rules)\\n\\nresponse._vars=response._caller(upload)\\n', environment={'A': <class 'gluon.html.A'>, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'BUTTON': <class 'gluon.html.BUTTON'>, 'CAT': <class 'gluon.html.CAT'>, ...}, layer=r'D:\\Applications\\web2py-master\\applications\\Frick\\controllers/default.py')"
+p88
+sS'func'
+p89
+S'restricted'
+p90
+sa(dp91
+g66
+S'D:\\Applications\\web2py-master\\applications\\Frick\\controllers\\default.py'
+p92
+sg68
+(dp93
+sg74
+I105
+sg75
+(dp94
+I96
+S'    this is example of API with access control'
+p95
+sI97
+S'    WEB2PY provides Hypermedia API (Collection+JSON) Experimental'
+p96
+sI98
+S'    """'
+p97
+sI99
+S'    from gluon.contrib.hypermedia import Collection'
+p98
+sI100
+S'    rules = {'
+p99
+sI101
+S"        '<tablename>': {'GET':{},'POST':{},'PUT':{},'DELETE':{}},"
+p100
+sI102
+S'        }'
+p101
+sI103
+S'    return Collection(db).process(request,response,rules)'
+p102
+sI94
+S'def api():'
+p103
+sI95
+S'    """'
+p104
+ssg87
+S'()'
+p105
+sg89
+S'<module>'
+p106
+sa(dp107
+g66
+S'D:\\Applications\\web2py-master\\gluon\\globals.py'
+p108
+sg68
+(dp109
+S'self'
+p110
+S'undefined'
+p111
+sS'f'
+S'<function upload>'
+p112
+ssg74
+I393
+sg75
+(dp113
+I388
+S"        self.flash = ''            # used by the default view layout"
+p114
+sI389
+S'        self.meta = Storage()      # used by web2py_ajax.html'
+p115
+sI390
+S'        self.menu = []             # used by the default view layout'
+p116
+sI391
+S'        self.files = []            # used by web2py_ajax.html'
+p117
+sI392
+S'        self._vars = None'
+p118
+sI393
+S'        self._caller = lambda f: f()'
+p119
+sI394
+S'        self._view_environment = None'
+p120
+sI395
+S'        self._custom_commit = None'
+p121
+sI396
+S'        self._custom_rollback = None'
+p122
+sI397
+S"        self.generic_patterns = ['*']"
+p123
+ssg87
+S'(f=<function upload>)'
+p124
+sg89
+S'<lambda>'
+p125
+sa(dp126
+g66
+S'D:\\Applications\\web2py-master\\applications\\Frick\\controllers\\default.py'
+p127
+sg68
+(dp128
+S'imgData.decode'
+p129
+S'<built-in method decode of str object>'
+p130
+sS'imgData'
+p131
+S"'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC...cMJuZDg/dv6Bfz38LMADtLONxPx43OAAAAABJRU5ErkJggg=='"
+p132
+ssg74
+I17
+sg75
+(dp133
+I12
+S'def upload():'
+p134
+sI13
+S'    import os'
+p135
+sI14
+S'    import urllib'
+p136
+sI15
+S''
+sI16
+S"    imgData = request.vars['data']"
+p137
+sI17
+S"    imgData = imgData.decode('base64')"
+p138
+sI18
+S'    print imgData[:15]'
+p139
+sI19
+S'    print imgData[15:20]'
+p140
+sI20
+S"    myfile = os.path.join(request.folder, 'static/images', 'imageToSave.png')"
+p141
+sI21
+S''
+ssg87
+S'()'
+p142
+sg89
+S'upload'
+p143
+sa(dp144
+g66
+S'D:\\Applications\\Python 2.7.8\\lib\\encodings\\base64_codec.py'
+p145
+sg68
+(dp146
+S'output'
+p147
+g111
+sS'global base64'
+p148
+S"<module 'base64' from 'D:\\Applications\\Python 2.7.8\\lib\\base64.pyc'>"
+p149
+sS'base64.decodestring'
+p150
+S'<function decodestring>'
+p151
+sS'input'
+p152
+S"'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC...cMJuZDg/dv6Bfz38LMADtLONxPx43OAAAAABJRU5ErkJggg=='"
+p153
+ssg74
+I42
+sg75
+(dp154
+I37
+S"        'strict' handling which is the only currently supported"
+p155
+sI38
+S'        error handling for this codec.'
+p156
+sI39
+S''
+sI40
+S'    """'
+p157
+sI41
+S"    assert errors == 'strict'"
+p158
+sI42
+S'    output = base64.decodestring(input)'
+p159
+sI43
+S'    return (output, len(input))'
+p160
+sI44
+S''
+sI45
+S'class Codec(codecs.Codec):'
+p161
+sI46
+S''
+ssg87
+S"(input='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC...cMJuZDg/dv6Bfz38LMADtLONxPx43OAAAAABJRU5ErkJggg==', errors='strict')"
+p162
+sg89
+S'base64_decode'
+p163
+sa(dp164
+g66
+S'D:\\Applications\\Python 2.7.8\\lib\\base64.py'
+p165
+sg68
+(dp166
+S'global binascii'
+p167
+S"<module 'binascii' (built-in)>"
+p168
+sS'binascii.a2b_base64'
+p169
+S'<built-in function a2b_base64>'
+p170
+sS's'
+S"'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC...cMJuZDg/dv6Bfz38LMADtLONxPx43OAAAAABJRU5ErkJggg=='"
+p171
+ssg74
+I321
+sg75
+(dp172
+I320
+S'    """Decode a string."""'
+p173
+sI321
+S'    return binascii.a2b_base64(s)'
+p174
+sI322
+S''
+sI323
+S''
+sI324
+S''
+sI325
+S'# Useable as a script...'
+p175
+sI316
+S'    return "".join(pieces)'
+p176
+sI317
+S''
+sI318
+S''
+sI319
+S'def decodestring(s):'
+p177
+ssg87
+S"(s='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC...cMJuZDg/dv6Bfz38LMADtLONxPx43OAAAAABJRU5ErkJggg==')"
+p178
+sg89
+S'decodestring'
+p179
+sasS'pyver'
+p180
+S'Python 2.7.8: D:\\Applications\\Python 2.7.8\\python.exe (prefix: D:\\Applications\\Python 2.7.8)'
+p181
+sS'session'
+p182
+g61
+(S's\x1a\x00\x00\x00<div><table></table></div>'
+tRp183
+sS'etype'
+p184
+S"<class 'binascii.Error'>"
+p185
+sS'date'
+p186
+S'Fri Jan 30 16:21:46 2015'
+p187
+sS'response'
+p188
+g61
+(S'sH1\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">body</td><td style="vertical-align:top;">:</td><td><div>&lt;cStringIO.StringO object at 0x0000000009A07A08&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">session_id_frick</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-74004aed-92f4-45a2-bb18-a2c78d59bc2e<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div>/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">delimiters</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>{{</div></td></tr><tr><td><div>}}</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">files</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">flash</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">form_label_separator</td><td style="vertical-align:top;">:</td><td><div>: </div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">formstyle</td><td style="vertical-align:top;">:</td><td><div>table3cols</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generic_patterns</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>*</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">google_analytics_id</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">headers</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">X-Powered-By</td><td style="vertical-align:top;">:</td><td><div>web2py</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">logo</td><td style="vertical-align:top;">:</td><td><div><a class="brand" href="http://www.web2py.com/"><b>web<span>2</span>py</b>&trade;&nbsp;</a></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">menu</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div><table><tr><td><div>Home</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/Frick/default/index</div></td></tr><tr><td><div><table></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div><span class="highlighted">web2py</span></div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>My Sites</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/site</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>This App</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/design/Frick</div></td></tr><tr><td><div>[(&lt;lazyT &#x27;Controller&#x27;&gt;, False, &#x27;/admin/default/edit/Frick/controllers/default.py&#x27;), (&lt;lazyT &#x27;View&#x27;&gt;, False, &#x27;/admin/default/edit/Frick/views/default/upload.html&#x27;), (&lt;lazyT &#x27;Layout&#x27;&gt;, False, &#x27;/admin/default/edit/Frick/views/layout.html&#x27;), (&lt;lazyT &#x27;Stylesheet&#x27;&gt;, False, &#x27;/admin/default/edit/Frick/static/css/web2py.css&#x27;), (&lt;lazyT &#x27;DB Model&#x27;&gt;, False, &#x27;/admin/default/edit/Frick/models/db.py&#x27;), (&lt;lazyT &#x27;Menu Model&#x27;&gt;, False, &#x27;/admin/default/edit/Frick/models/menu.py&#x27;), (&lt;lazyT &#x27;Database&#x27;&gt;, False, &#x27;/Frick/appadmin/index&#x27;), (&lt;lazyT &#x27;Errors&#x27;&gt;, False, &#x27;/admin/default/errors/Frick&#x27;), (&lt;lazyT &#x27;About&#x27;&gt;, False, &#x27;/admin/default/about/Frick&#x27;)]</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>web2py.com</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com</div></td></tr><tr><td><div>[(&lt;lazyT &#x27;Download&#x27;&gt;, False, &#x27;http://www.web2py.com/examples/default/download&#x27;), (&lt;lazyT &#x27;Support&#x27;&gt;, False, &#x27;http://www.web2py.com/examples/default/support&#x27;), (&lt;lazyT &#x27;Demo&#x27;&gt;, False, &#x27;http://web2py.com/demo_admin&#x27;), (&lt;lazyT &#x27;Quick Examples&#x27;&gt;, False, &#x27;http://web2py.com/examples/default/examples&#x27;), (&lt;lazyT &#x27;FAQ&#x27;&gt;, False, &#x27;http://web2py.com/AlterEgo&#x27;), (&lt;lazyT &#x27;Videos&#x27;&gt;, False, &#x27;http://www.web2py.com/examples/default/videos/&#x27;), (&lt;lazyT &#x27;Free Applications&#x27;&gt;, False, &#x27;http://web2py.com/appliances&#x27;), (&lt;lazyT &#x27;Plugins&#x27;&gt;, False, &#x27;http://web2py.com/plugins&#x27;), (&lt;lazyT &#x27;Layouts&#x27;&gt;, False, &#x27;http://web2py.com/layouts&#x27;), (&lt;lazyT &#x27;Recipes&#x27;&gt;, False, &#x27;http://web2pyslices.com/&#x27;), (&lt;lazyT &#x27;Semantic&#x27;&gt;, False, &#x27;http://web2py.com/semantic&#x27;)]</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Documentation</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book</div></td></tr><tr><td><div>[(&lt;lazyT &#x27;Preface&#x27;&gt;, False, &#x27;http://www.web2py.com/book/default/chapter/00&#x27;), (&lt;lazyT &#x27;Introduction&#x27;&gt;, False, &#x27;http://www.web2py.com/book/default/chapter/01&#x27;), (&lt;lazyT &#x27;Python&#x27;&gt;, False, &#x27;http://www.web2py.com/book/default/chapter/02&#x27;), (&lt;lazyT &#x27;Overview&#x27;&gt;, False, &#x27;http://www.web2py.com/book/default/chapter/03&#x27;), (&lt;lazyT &#x27;The Core&#x27;&gt;, False, &#x27;http://www.web2py.com/book/default/chapter/04&#x27;), (&lt;lazyT &#x27;The Views&#x27;&gt;, False, &#x27;http://www.web2py.com/book/default/chapter/05&#x27;), (&lt;lazyT &#x27;Database&#x27;&gt;, False, &#x27;http://www.web2py.com/book/default/chapter/06&#x27;), (&lt;lazyT &#x27;Forms and Validators&#x27;&gt;, False, &#x27;http://www.web2py.com/book/default/chapter/07&#x27;), (&lt;lazyT &#x27;Email and SMS&#x27;&gt;, False, &#x27;http://www.web2py.com/book/default/chapter/08&#x27;), (&lt;lazyT &#x27;Access Control&#x27;&gt;, False, &#x27;http://www.web2py.com/book/default/chapter/09&#x27;), (&lt;lazyT &#x27;Services&#x27;&gt;, False, &#x27;http://www.web2py.com/book/default/chapter/10&#x27;), (&lt;lazyT &#x27;Ajax Recipes&#x27;&gt;, False, &#x27;http://www.web2py.com/book/default/chapter/11&#x27;), (&lt;lazyT &#x27;Components and Plugins&#x27;&gt;, False, &#x27;http://www.web2py.com/book/default/chapter/12&#x27;), (&lt;lazyT &#x27;Deployment Recipes&#x27;&gt;, False, &#x27;http://www.web2py.com/book/default/chapter/13&#x27;), (&lt;lazyT &#x27;Other Recipes&#x27;&gt;, False, &#x27;http://www.web2py.com/book/default/chapter/14&#x27;), (&lt;lazyT &#x27;Buy this book&#x27;&gt;, False, &#x27;http://stores.lulu.com/web2py&#x27;)]</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Community</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>None</div></td></tr><tr><td><div>[(&lt;lazyT &#x27;Groups&#x27;&gt;, False, &#x27;http://www.web2py.com/examples/default/usergroups&#x27;), (&lt;lazyT &#x27;Twitter&#x27;&gt;, False, &#x27;http://twitter.com/web2py&#x27;), (&lt;lazyT &#x27;Live Chat&#x27;&gt;, False, &#x27;http://webchat.freenode.net/?channels=web2py&#x27;)]</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Plugins</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>None</div></td></tr><tr><td><div>[(&#x27;plugin_wiki&#x27;, False, &#x27;http://web2py.com/examples/default/download&#x27;), (&lt;lazyT &#x27;Other Plugins&#x27;&gt;, False, &#x27;http://web2py.com/plugins&#x27;), (&lt;lazyT &#x27;Layout Plugins&#x27;&gt;, False, &#x27;http://web2py.com/layouts&#x27;)]</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">meta</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">author</td><td style="vertical-align:top;">:</td><td><div>Your Name &lt;you@example.com&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generator</td><td style="vertical-align:top;">:</td><td><div>Web2py Web Framework</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">keywords</td><td style="vertical-align:top;">:</td><td><div>web2py, python, framework</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">models_to_run</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>^\\w+\\.py$</div></td></tr><tr><td><div>^default/\\w+\\.py$</div></td></tr><tr><td><div>^default/upload/\\w+\\.py$</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">postprocessing</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_client</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_compression_level</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_expires</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_key</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_data_name</td><td style="vertical-align:top;">:</td><td><div>session_data_frick</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_file</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_filename</td><td style="vertical-align:top;">:</td><td><div>D:\\Applications\\web2py-master\\applications\\Frick\\sessions\\127.0.0.1-74004aed-92f4-45a2-bb18-a2c78d59bc2e</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_hash</td><td style="vertical-align:top;">:</td><td><div>c0762cbf4baf7f9af97c051e7fcb8083</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-74004aed-92f4-45a2-bb18-a2c78d59bc2e</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_name</td><td style="vertical-align:top;">:</td><td><div>session_id_frick</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_masterapp</td><td style="vertical-align:top;">:</td><td><div>Frick</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_new</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_storage_type</td><td style="vertical-align:top;">:</td><td><div>file</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">status</td><td style="vertical-align:top;">:</td><td><div>200</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">subtitle</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">title</td><td style="vertical-align:top;">:</td><td><div>Frick</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">view</td><td style="vertical-align:top;">:</td><td><div>default/upload.html</div></td></tr></table></div>'
+tRp189
+sS'locals'
+p190
+(dp191
+S's'
+S"'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC...cMJuZDg/dv6Bfz38LMADtLONxPx43OAAAAABJRU5ErkJggg=='"
+p192
+sssS'traceback'
+p193
+S'Traceback (most recent call last):\n  File "D:\\Applications\\web2py-master\\gluon\\restricted.py", line 224, in restricted\n    exec ccode in environment\n  File "D:\\Applications\\web2py-master\\applications\\Frick\\controllers/default.py", line 105, in <module>\n  File "D:\\Applications\\web2py-master\\gluon\\globals.py", line 393, in <lambda>\n    self._caller = lambda f: f()\n  File "D:\\Applications\\web2py-master\\applications\\Frick\\controllers/default.py", line 17, in upload\n    imgData = imgData.decode(\'base64\')\n  File "D:\\Applications\\Python 2.7.8\\lib\\encodings\\base64_codec.py", line 42, in base64_decode\n    output = base64.decodestring(input)\n  File "D:\\Applications\\Python 2.7.8\\lib\\base64.py", line 321, in decodestring\n    return binascii.a2b_base64(s)\nError: Incorrect padding\n'
+p194
+s.
