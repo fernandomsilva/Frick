@@ -27,7 +27,7 @@
                     //console.log(e.target.result);
                     //console.log(encodeURIComponent(e.target.result));
                     console.log('1');
-                    var result = encodeURIComponent(e.target.result);
+                    var result = encodeURIComponent(e.target.result.match(/,(.*)$/)[1]);
                     console.log(' 2');
                     //ajax("{{=URL('default', 'upload')}}?data=" + result, [], 'target');
                     $.ajax({

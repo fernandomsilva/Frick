@@ -1,4 +1,12 @@
+<head>
+    <script language="javascript" type="text/javascript" src="../static/js/jquery_min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/font-awesome_min.css" media="screen" />
+</head>
 <body>
+    <form>
+        <input type="file" id="images" name="images[]" style="display: none;" multiple></input>
+    </form>
+    <i class="fa fa-upload" id="btn_upload" onclick="upload_button_click()"></i>
     <canvas id="myCanvas" width="800" height="600" style="border:1px solid #000000;"></canvas>
 </body>
 
@@ -11,8 +19,12 @@
     var offsetx;
 
     var selected_image = -1;
-    //var old_mousepos;
     var drag = false;
+    var image_name_list = "{{=image_list}}";
+    if (image_name_list.length > 0)
+    {
+        image_name_list = image_name_list.split(" ");
+    }
 
     function getMousePosition(canvas, event)
     {
@@ -49,28 +61,10 @@
     var imageArray = [];
     var img = [];
 
-    for (var i = 0; i<5; i++)
+    for (var i = 0; i<image_name_list.length; i++)
     {
-        imageArray.push('http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg');
-
-        //imageArray[i].draw(marginx + (marginx * 2 * i) + (offsetx * i), marginy, offsetx, (offsetx / imageArray[i].width) * imageArray[i].height);
-        //var imageObj = new Image();
-        //imageObj.src = 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';
-
-        //imageObj.onload = function() {
-        //    context.drawImage(imageObj, marginx + (marginx * 2 * i) + (offsetx * i), marginy, offsetx, (offsetx / this.width) * this.height);
-        //}
-        //imageArray.push(imageObj);
+        imageArray.push("../static/images/user/" + image_name_list[i]);
     }
-    imageArray.push('http://www.html5canvastutorials.com/demos/assets/yoda.jpg');
-    imageArray.push('http://www.html5canvastutorials.com/demos/assets/yoda.jpg');
-    imageArray.push('http://images6.alphacoders.com/451/451028.jpg');
-    imageArray.push('http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg');
-    imageArray.push('http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg');
-    imageArray.push('http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg');
-    imageArray.push('http://www.html5canvastutorials.com/demos/assets/yoda.jpg');
-    imageArray.push('http://www.html5canvastutorials.com/demos/assets/yoda.jpg');
-    imageArray.push('http://desirewallpapers.com/wp-content/uploads/2014/08/New-Wallpapers.jpg');
 
     function loadImages(arr, callBack){
         var count = 0;
@@ -117,7 +111,7 @@
         //window.requestAnimationFrame(imageLoaded);
     }
 
-    loadImages(imageArray, imageLoaded );
+    loadImages(imageArray, imageLoaded);
 
     function getImageMouseCollision(mousepos)
     {
@@ -168,7 +162,6 @@
         if (selected_image > -1)
         {
             drag = true;
-            //old_mousepos = mousepos;
         }
     }
     function mouseMoveEvent(e)
@@ -212,10 +205,50 @@
             context.fillRect(mousepos.x - 10, mousepos.y - 10, 20, 20);
         }
 	}
-    /*for (var i = 0; i<5; i++)
-    {
-        imageArray[i].onload = function() {
-            context.drawImage(imageArray[i], marginx + (marginx * 2 * i) + (offsetx * i), marginy, offsetx, (offsetx / this.width) * this.height);
-        };
-    }*/
+
+    function upload_button_click() {
+        $('#images').click();
+    }
+
+    function handleFileSelect(evt) {
+        var images = evt.target.files;
+
+        for (var i = 0, temp_img; temp_img = images[i]; i++) {
+            var reader = new FileReader();
+
+            reader.onload = (function(image) {
+                return function(e) {
+                    //console.log('1');
+                    var result = encodeURIComponent(e.target.result.match(/,(.*)$/)[1]);
+                    //console.log(' 2');
+                    $.ajax({
+                        url: "{{=URL('default', 'upload')}}",
+                        type: "POST",
+                        data: "data=" + JSON.stringify(result),
+                        success: function (data)
+                        {
+                            imageArray.push("../static/images/user/" + data);
+                            img.push(new Image());
+                            img[img.length - 1].src = imageArray[imageArray.length - 1];
+                            img[img.length - 1].onload = function(){
+                                context.fillStyle = "#ffffff";
+                                context.fillRect(0, 0, canvas.width, canvas.height);
+                                imageLoaded();
+                            }
+                            //console.log(data);
+                        },
+                        error: function (data)
+                        {
+                            //console.log(data.responseText);
+                        }
+                    });
+                    //console.log('  3');
+                };
+            })(temp_img);
+
+            reader.readAsDataURL(temp_img);
+        }
+    }
+
+    document.getElementById('images').addEventListener('change', handleFileSelect, false);
 </script>

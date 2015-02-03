@@ -9,29 +9,42 @@
 ## - api is an example of Hypermedia API support and access control
 #########################################################################
 
+def test():
+    return dict(test='foi')
+
 def upload():
     import os
     import json
 
     imgData = json.loads(request.vars['data'])
-    #imgData_length = len(imgData)
-    #imgData_offset = imgData_length - (imgData_length % 4 if imgData_length % 4 else 4)
-    #print imgData_length, imgData_offset
-    #imgData = imgData.decode('base64')
-    #imgData = base64.b64decode(imgData, '/+')
-
     imgData = imgData.decode('base64')
-    #print imgData[:15]
-    #print imgData[15:20]
-    myfile = os.path.join(request.folder, 'static/images', 'imageToSave.png')
 
-    fh = open(myfile, "wb")
-    fh.write(imgData[15:])
-    #fh.write(urllib.unquote(imgData).decode('base64'))
-    fh.close()
+    infofile = os.path.join(request.folder, 'static/images/user', 'info.txt')
 
-    pass
-    #return P()
+    file_contents = []
+
+    filehandler = open(infofile, "r")
+    for line in filehandler:
+        file_contents.append(line)
+    filehandler.close()
+
+    index = int(file_contents[0])
+    file_contents[0] = str(index + 1) + '\n'
+
+    imagefile = os.path.join(request.folder, 'static/images/user', str(index) + '.png')
+
+    filehandler = open(imagefile, "wb")
+    filehandler.write(imgData)
+    filehandler.close()
+
+    file_contents.append(str(index) + '\n')
+
+    filehandler = open(infofile, "w")
+    for line in file_contents:
+        filehandler.write(line)
+    filehandler.close()
+
+    return T(str(index) + '.png')
 
 def image_upload_test():
     return dict()
@@ -43,7 +56,19 @@ def kinetic_test():
     return dict()
 
 def lightbox():
-    return dict()
+    import os
+    import json
+
+    infofile = os.path.join(request.folder, 'static/images/user', 'info.txt')
+
+    file_contents = []
+
+    filehandler = open(infofile, "r")
+    for line in filehandler:
+        file_contents.append(line[:-1] + '.png')
+    filehandler.close()
+
+    return dict(image_list=' '.join(file_contents[1:]))
 
 def index():
     """
