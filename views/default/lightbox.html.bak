@@ -1,18 +1,29 @@
 <head>
     <script language="javascript" type="text/javascript" src="../static/js/jquery_min.js"></script>
+    <script language="javascript" type="text/javascript" src="../static/js/fabric_min.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/font-awesome_min.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../static/css/canvas.css" media="screen" />
 </head>
 <body>
     <form>
         <input type="file" id="images" name="images[]" style="display: none;" multiple></input>
     </form>
     <i class="fa fa-upload" id="btn_upload" onclick="upload_button_click()"></i>
-    <canvas id="myCanvas" width="800" height="600" style="border:1px solid #000000;"></canvas>
+    <br>
+    <div class="interface"><canvas id="interfaceCanvas" width="800" height="600"></canvas></div>
+    <div class="imageMenu"><canvas id="imageMenuCanvas" width="800" height="600"></canvas></div>
+    <div class="lightbox"><canvas id="lightboxCanvas" width="800" height="600"></canvas></div>
 </body>
 
 <script>
-    var canvas = document.getElementById('myCanvas');
-    var context = canvas.getContext('2d');
+    var interfaceCanvas = document.getElementById('interfaceCanvas');
+    var interfaceContext = interfaceCanvas.getContext('2d');
+
+    var imageMenuCanvas = document.getElementById('imageMenuCanvas');
+    var imageMenuContext = imageMenuCanvas.getContext('2d');
+
+    var lightboxCanvas = new fabric.Canvas('lightboxCanvas');
+
     var number_of_columns = 3;
     var marginx;
     var marginy;
@@ -35,15 +46,20 @@
         };
     }
 
-    function resizeCanvas() {
-        canvas.width = window.innerWidth - (window.innerWidth * 0.03);
-        canvas.height = window.innerHeight - (window.innerHeight * 0.03);
-        marginx = canvas.width * 0.001;
-        marginy = canvas.height * 0.001;
-        offsetx = canvas.width * 0.08;
+    function resizeImageMenu() {
+        imageMenuCanvas.width = (window.innerWidth - (window.innerWidth * 0.03)) * 0.3;
+        imageMenuCanvas.height = window.innerHeight - (window.innerHeight * 0.03);
+        marginx = imageMenuCanvas.width * 0.016;
+        marginy = marginx;//imageMenuCanvas.height * 0.025;
+        offsetx = imageMenuCanvas.width * 0.3;//imageMenuCanvas.width * 0.08;
+
+        imageMenuContext.globalAlpha = 0.5;
+		imageMenuContext.fillStyle = "#777777";
+		imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
+        imageMenuContext.globalAlpha = 1;
     }
 
-    resizeCanvas();
+    resizeImageMenu();
 
     function img(source)
     {
@@ -54,10 +70,12 @@
             this.height = this.data.height;
         }
         this.draw = function(x, y, sizex, sizey) {
-            context.drawImage(this.data, x, y, sizex, sizey);
+            imageMenuContext.drawImage(this.data, x, y, sizex, sizey);
         }
         //    context.drawImage(imageObj, marginx + (marginx * 2 * i) + (offsetx * i), marginy, offsetx, (offsetx / this.width) * this.height);
     }
+
+    var editableImageArray = new Array;
     var imageArray = [];
     var img = [];
 
@@ -65,6 +83,8 @@
     {
         imageArray.push("../static/images/user/" + image_name_list[i]);
     }
+    //editableImageArray[0] = fabric.Image.fromURL(imageArray[2], function(loaded_img) { lightboxCanvas.add(loaded_img); });
+    //editableImageArray[0] = fabric.Image.fromURL('../static/images/user/2.png', function(loaded_img) { lightboxCanvas.add(loaded_img); });
 
     function loadImages(arr, callBack){
         var count = 0;
@@ -104,11 +124,10 @@
                 img_width = (offsetx / img[i].height) * img[i].width;
                 img_height = offsetx;
             }
-            context.drawImage(img[i], marginx + (marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)) + ((offsetx - img_width) / 2), marginy + offsety + ((offsetx - img_height) / 2), img_width, img_height);
-            context.rect((marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)), offsety, offsetx + (marginx * 2), offsetx + (marginy * 2));
-            context.stroke();
+            imageMenuContext.drawImage(img[i], marginx + (marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)) + ((offsetx - img_width) / 2), marginy + offsety + ((offsetx - img_height) / 2), img_width, img_height);
+            //imageMenuContext.rect((marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)), offsety, offsetx + (marginx * 2), offsetx + (marginy * 2));
+            imageMenuContext.stroke();
         }
-        //window.requestAnimationFrame(imageLoaded);
     }
 
     loadImages(imageArray, imageLoaded);
@@ -156,19 +175,21 @@
 
     function mouseDownEvent(e)
     {
-        var mousepos = getMousePosition(canvas, e);
+        var mousepos = getMousePosition(imageMenuCanvas, e);
 
         selected_image = getImageMouseCollision(mousepos);
         if (selected_image > -1)
         {
             drag = true;
+            interfaceCanvas.style.zIndex = 3;
         }
     }
     function mouseMoveEvent(e)
     {
         if (drag)
         {
-            drawScreenWithRect(getMousePosition(canvas, e), false);
+            //drawScreenWithRect(getMousePosition(imageMenuCanvas, e), false);
+            drawScreenWithRect(getMousePosition(interfaceCanvas, e), false);
         }
     }
     function mouseUpEvent(e)
@@ -177,32 +198,50 @@
         {
             drag = false;
 
-            drop_image = getImageMouseCollision(getMousePosition(canvas, e));
+            var mousePosition = getMousePosition(interfaceCanvas, e);
+            drop_image = getImageMouseCollision(mousePosition);
             if (drop_image > -1 && drop_image != selected_image)
             {
                 var temp_image = img[selected_image];
                 img[selected_image] = img[drop_image];
                 img[drop_image] = temp_image;
             }
+            else if (drop_image = -1)
+            {
+                editableImageArray.push(new fabric.Image.fromURL(img[selected_image].src, function(loaded_img) {
+                    loaded_img.set('left', mousePosition.x).set('top', mousePosition.y);
+                    lightboxCanvas.add(loaded_img);
+                }));
+            }
 
-            drawScreenWithRect(getMousePosition(canvas, e), true);
+            drawScreenWithRect(getMousePosition(interfaceCanvas, e), true);
         }
+        interfaceCanvas.style.zIndex = -1;
     }
 
-    canvas.onmousedown = mouseDownEvent;
-    canvas.onmousemove = mouseMoveEvent;
-    canvas.onmouseup = mouseUpEvent;
+    imageMenuCanvas.onmousedown = mouseDownEvent;
+    //imageMenuCanvas.onmousemove = mouseMoveEvent;
+    //imageMenuCanvas.onmouseup = mouseUpEvent;
+    interfaceCanvas.onmousemove = mouseMoveEvent;
+    interfaceCanvas.onmouseup = mouseUpEvent;
 
 	function drawScreenWithRect(mousepos, erase) {
-		context.fillStyle = "#ffffff";
-		context.fillRect(0, 0, canvas.width, canvas.height);
+		imageMenuContext.fillStyle = "#ffffff";
+		imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
+        imageMenuContext.globalAlpha = 0.5;
+		imageMenuContext.fillStyle = "#777777";
+		imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
+        imageMenuContext.globalAlpha = 1;
 
 		imageLoaded();
 
         if (!erase)
         {
-            context.fillStyle = "#0000ff";
-            context.fillRect(mousepos.x - 10, mousepos.y - 10, 20, 20);
+            interfaceContext.clearRect( 0 , 0 , interfaceCanvas.width, interfaceCanvas.height );
+            interfaceContext.fillStyle = "#0000ff"
+            interfaceContext.fillRect(mousepos.x - 10, mousepos.y - 10, 20, 20);
+            //imageMenuContext.fillStyle = "#0000ff";
+            //imageMenuContext.fillRect(mousepos.x - 10, mousepos.y - 10, 20, 20);
         }
 	}
 
@@ -231,9 +270,8 @@
                             img.push(new Image());
                             img[img.length - 1].src = imageArray[imageArray.length - 1];
                             img[img.length - 1].onload = function(){
-                                console.log('foi');
-                                context.fillStyle = "#ffffff";
-                                context.fillRect(0, 0, canvas.width, canvas.height);
+                                imageMenuContext.fillStyle = "#ffffff";
+                                imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
                                 imageLoaded();
                             }
                             //console.log(data);

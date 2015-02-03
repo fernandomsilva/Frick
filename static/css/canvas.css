@@ -1,0 +1,34 @@
+.interface {
+	position: relative;
+}
+
+.interface canvas {
+	z-index: -1;
+
+	position: absolute;
+	top: 5%;
+}
+
+
+.imageMenu {
+	position: relative;
+}
+
+.imageMenu canvas {
+	z-index: 1;
+
+	position: absolute;
+	top: 5%;
+}
+
+.lightbox {
+	position: relative;
+}
+
+.lightbox canvas {
+	border: 1px solid #000000;
+	z-index: 0;
+
+	position: absolute;
+	top: 5%;
+}

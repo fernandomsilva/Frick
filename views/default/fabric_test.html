@@ -11,7 +11,7 @@
     for (var i = 0; i<5; i++)
     {
         imgArray[i] = fabric.Image.fromURL('http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg', function(loaded_img) {
-                                        canvas.add(loaded_img);
+                                        canvas.add(loaded_img).renderAll();
                                     });
     }
     /*var img = fabric.Image.fromURL('http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg', function(loaded_img) {
