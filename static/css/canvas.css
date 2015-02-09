@@ -1,5 +1,35 @@
+.buttons {
+	position: relative;
+	margin: 0px;
+}
+
+.buttons i:hover {
+	color: #0000FF;
+}
+
+.group_name_input {
+	position: absolute;
+	z-index: 10;
+	left: 18px;
+	visibility: hidden;
+	
+	background-color: black;
+	padding: 5px;
+}
+
+.group_name_input input {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.group_name_input i {
+	color: white;
+}
+
 .interface {
 	position: relative;
+	margin: 0px;
 }
 
 .interface canvas {
@@ -12,17 +42,25 @@
 
 .imageMenu {
 	position: relative;
+	margin: 0px;
 }
 
 .imageMenu canvas {
-	z-index: 1;
+	z-index: 3;
 
 	position: absolute;
 	top: 5%;
 }
 
+.imageMenu #imageMenuCanvasBackground {
+	opacity: 0.8;
+	background-color: black;
+	z-index: 2;
+}
+
 .lightbox {
 	position: relative;
+	margin: 0px;
 }
 
 .lightbox canvas {
@@ -31,4 +69,14 @@
 
 	position: absolute;
 	top: 5%;
+}
+
+.group_aux {
+	position: absolute;
+	visibility: hidden;
+	z-index: -1;
+	top: 5%;
+}
+
+.group_aux canvas {
 }

@@ -8,13 +8,53 @@
     <form>
         <input type="file" id="images" name="images[]" style="display: none;" multiple></input>
     </form>
-    <i class="fa fa-upload" id="btn_upload" onclick="upload_button_click()"></i>
-    <br>
+    <div id="buttons" class="buttons">
+        <i class="fa fa-upload" id="btn_upload" onclick="upload_button_click()"></i>
+        <i class="fa fa-plus-square" id="btn_show_add_group" onclick="show_add_group_button_click()"></i>
+        <div id="group_name_input" class="group_name_input">
+            <input type="text" id="textbox_group_name"></input>
+            <i class="fa fa-plus" id="btn_add_group" onclick="add_group_button_click()"></i>
+        </div>
+    </div>
     <div class="interface"><canvas id="interfaceCanvas" width="800" height="600"></canvas></div>
-    <div class="imageMenu"><canvas id="imageMenuCanvas" width="800" height="600"></canvas></div>
+    <div id="imageMenu" class="imageMenu">
+		<canvas id="imageMenuCanvas" width="800" height="600"></canvas>
+		<canvas id="imageMenuCanvasBackground" width="800" height="600"></canvas>
+	</div>
     <div class="lightbox"><canvas id="lightboxCanvas" width="800" height="600"></canvas></div>
+    <div class="group_aux"><canvas id="auxiliarImageCanvas" width="100" height="100"></canvas></div>
 </body>
+<script>
+    function Group(name)
+    {
+        this.name = name;
+        this.images = new Array;
+        //this.thumbnail = new Image();
+        //console.log(this.thumbnail);
+        this.getThumbnail = function(callback) {
+            var auxiliarImageCanvas = document.getElementById('auxiliarImageCanvas');
+            var auxiliarImageContext = auxiliarImageCanvas.getContext('2d');
 
+            auxiliarImageContext.clearRect( 0 , 0 , auxiliarImageCanvas.width, auxiliarImageCanvas.height );
+            auxiliarImageContext.font = "20px Georgia";
+            auxiliarImageContext.textAlign = "center";
+            auxiliarImageContext.fillStyle = "#ffffff";
+            auxiliarImageContext.fillText(this.name, auxiliarImageCanvas.width/2, 20, auxiliarImageCanvas.width);
+
+            if (this.images.length > 0)
+            {
+
+            }
+
+            //this.thumbnail.src = auxiliarImageCanvas.toDataURL();
+            //this.thumbnail.onload = function(){
+            //    console.log(this.thumbnail);
+            //    callback();
+            //}
+            return auxiliarImageCanvas;
+        };
+    }
+</script>
 <script>
     var interfaceCanvas = document.getElementById('interfaceCanvas');
     var interfaceContext = interfaceCanvas.getContext('2d');
@@ -24,6 +64,9 @@
 
     var lightboxCanvas = new fabric.Canvas('lightboxCanvas');
 
+    var current_menu_workspace;
+
+    var alpha = 0.5;
     var number_of_columns = 3;
     var marginx;
     var marginy;
@@ -49,14 +92,24 @@
     function resizeImageMenu() {
         imageMenuCanvas.width = (window.innerWidth - (window.innerWidth * 0.03)) * 0.3;
         imageMenuCanvas.height = window.innerHeight - (window.innerHeight * 0.03);
+		$('#imageMenuCanvasBackground').width(imageMenuCanvas.width);
+		$('#imageMenuCanvasBackground').height(imageMenuCanvas.height);
+		
         marginx = imageMenuCanvas.width * 0.016;
         marginy = marginx;//imageMenuCanvas.height * 0.025;
         offsetx = imageMenuCanvas.width * 0.3;//imageMenuCanvas.width * 0.08;
 
-        imageMenuContext.globalAlpha = 0.5;
+        var auxiliarImageCanvas = document.getElementById('auxiliarImageCanvas');
+        auxiliarImageCanvas.width = offsetx;
+        auxiliarImageCanvas.height = offsetx;
+
+        lightboxCanvas.setWidth(window.innerWidth);
+        lightboxCanvas.setHeight(window.innerHeight);
+
+        /*imageMenuContext.globalAlpha = alpha;
 		imageMenuContext.fillStyle = "#777777";
 		imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
-        imageMenuContext.globalAlpha = 1;
+        imageMenuContext.globalAlpha = 1;*/
     }
 
     resizeImageMenu();
@@ -77,7 +130,8 @@
 
     var editableImageArray = new Array;
     var imageArray = [];
-    var img = [];
+    var main_menu_workspace = [];
+    current_menu_workspace = main_menu_workspace;
 
     for (var i = 0; i<image_name_list.length; i++)
     {
@@ -90,12 +144,12 @@
         var count = 0;
 
         for (var i in arr ){
-            img[i] = new Image();
-            img[i].src = arr[i];
-            img[i].onload = function(){
+            current_menu_workspace[i] = new Image();
+            current_menu_workspace[i].src = arr[i];
+            current_menu_workspace[i].onload = function(){
                 count++;
                 if(count == arr.length){
-                    callBack(img);
+                    callBack(current_menu_workspace);
                 }
             }
         }
@@ -105,7 +159,10 @@
         var offsety;
         var temp;
         var img_width, img_height;
-        for (var i in imageArray) {
+
+        imageMenuContext.clearRect( 0 , 0 , imageMenuCanvas.width, imageMenuCanvas.height );
+
+        for (var i in current_menu_workspace) {
             offsety = 0;
             temp = i - number_of_columns + 1;
             while (temp > 0) {
@@ -114,20 +171,29 @@
                 temp = temp - number_of_columns;
             }
             //context.drawImage(img[i], marginx + (marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)), marginy + offsety, offsetx, (offsetx / img[i].width) * img[i].height);
-            if (img[i].width > img[i].height)
+            if (current_menu_workspace[i].width > current_menu_workspace[i].height)
             {
                 img_width = offsetx;
-                img_height = (offsetx / img[i].width) * img[i].height;
+                img_height = (offsetx / current_menu_workspace[i].width) * current_menu_workspace[i].height;
             }
             else
             {
-                img_width = (offsetx / img[i].height) * img[i].width;
+                img_width = (offsetx / current_menu_workspace[i].height) * current_menu_workspace[i].width;
                 img_height = offsetx;
             }
-            imageMenuContext.drawImage(img[i], marginx + (marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)) + ((offsetx - img_width) / 2), marginy + offsety + ((offsetx - img_height) / 2), img_width, img_height);
-            //imageMenuContext.rect((marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)), offsety, offsetx + (marginx * 2), offsetx + (marginy * 2));
-            imageMenuContext.stroke();
+            if (Object.prototype.toString.call(current_menu_workspace[i]).slice(8, -1) == 'HTMLImageElement')
+            {
+                imageMenuContext.drawImage(current_menu_workspace[i], marginx + (marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)) + ((offsetx - img_width) / 2), marginy + offsety + ((offsetx - img_height) / 2), img_width, img_height);
+                //imageMenuContext.rect((marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)), offsety, offsetx + (marginx * 2), offsetx + (marginy * 2));
+            }
+            else
+            {
+                img_width = offsetx;
+                img_height = offsetx;
+                imageMenuContext.drawImage(current_menu_workspace[i].getThumbnail(), marginx + (marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)) + ((offsetx - img_width) / 2), marginy + offsety + ((offsetx - img_height) / 2), img_width, img_height);
+            }
         }
+        imageMenuContext.stroke();
     }
 
     loadImages(imageArray, imageLoaded);
@@ -149,7 +215,7 @@
         {
             var offsety = 0;
             var i;
-            for (i = temp; i<imageArray.length; i = i + number_of_columns)
+            for (i = temp; i<current_menu_workspace.length; i = i + number_of_columns)
             {
                 //width = (marginy * 2) + ((offsetx / img[i].width) * img[i].height);
                 width = (marginy * 2) + offsetx;
@@ -160,7 +226,7 @@
                 }
                 offsety = offsety + width;
             }
-            if (i >= imageArray.length)
+            if (i >= current_menu_workspace.length)
             {
                 result = -1;
             }
@@ -181,8 +247,24 @@
         if (selected_image > -1)
         {
             drag = true;
-            interfaceCanvas.style.zIndex = 3;
+            interfaceCanvas.style.zIndex = 10;
         }
+    }
+    function mouseRightClickEvent(e)
+    {
+		var mousepos = getMousePosition(imageMenuCanvas, e);
+
+		e.preventDefault();
+
+		selected_image = getImageMouseCollision(mousepos);
+		if (selected_image > -1)
+		{
+			if (Object.prototype.toString.call(current_menu_workspace[selected_image]).slice(8, -1) != 'HTMLImageElement')
+			{
+				current_menu_workspace = current_menu_workspace[selected_image].images;
+				imageLoaded();
+			}
+		}
     }
     function mouseMoveEvent(e)
     {
@@ -202,13 +284,23 @@
             drop_image = getImageMouseCollision(mousePosition);
             if (drop_image > -1 && drop_image != selected_image)
             {
-                var temp_image = img[selected_image];
-                img[selected_image] = img[drop_image];
-                img[drop_image] = temp_image;
+                if (Object.prototype.toString.call(current_menu_workspace[drop_image]).slice(8, -1) == 'HTMLImageElement')
+                {
+                    var temp_image = current_menu_workspace[selected_image];
+                    current_menu_workspace[selected_image] = current_menu_workspace[drop_image];
+                    current_menu_workspace[drop_image] = temp_image;
+                }
+                else
+                {
+                    current_menu_workspace[drop_image].images.push(current_menu_workspace[selected_image]);
+                    current_menu_workspace.splice($.inArray(current_menu_workspace[selected_image], current_menu_workspace), 1);
+
+                    imageLoaded();
+                }
             }
             else if (drop_image = -1)
             {
-                editableImageArray.push(new fabric.Image.fromURL(img[selected_image].src, function(loaded_img) {
+                editableImageArray.push(new fabric.Image.fromURL(current_menu_workspace[selected_image].src, function(loaded_img) {
                     loaded_img.set('left', mousePosition.x - (loaded_img.getWidth() / 2)).set('top', mousePosition.y - (loaded_img.getHeight() / 2));
                     lightboxCanvas.add(loaded_img);
                 }));
@@ -216,22 +308,26 @@
 
             drawScreenWithRect(getMousePosition(interfaceCanvas, e), true);
         }
+		interfaceContext.clearRect(0, 0, interfaceCanvas.width, interfaceCanvas.height);
         interfaceCanvas.style.zIndex = -1;
     }
 
     imageMenuCanvas.onmousedown = mouseDownEvent;
+	//imageMenuCanvas.oncontextmenu = mouseRightClickEvent;
+	imageMenuCanvas.addEventListener('contextmenu', mouseRightClickEvent, false); 
     //imageMenuCanvas.onmousemove = mouseMoveEvent;
     //imageMenuCanvas.onmouseup = mouseUpEvent;
     interfaceCanvas.onmousemove = mouseMoveEvent;
     interfaceCanvas.onmouseup = mouseUpEvent;
 
 	function drawScreenWithRect(mousepos, erase) {
-		imageMenuContext.fillStyle = "#ffffff";
+        //imageMenuContext.clearRect( 0 , 0 , imageMenuCanvas.width, imageMenuCanvas.height );
+		/*imageMenuContext.fillStyle = "#ffffff";
 		imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
-        imageMenuContext.globalAlpha = 0.5;
+        imageMenuContext.globalAlpha = alpha;
 		imageMenuContext.fillStyle = "#777777";
 		imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
-        imageMenuContext.globalAlpha = 1;
+        imageMenuContext.globalAlpha = 1;*/
 
 		imageLoaded();
 
@@ -247,6 +343,35 @@
 
     function upload_button_click() {
         $('#images').click();
+    }
+
+    function show_add_group_button_click() {
+        if ($('#group_name_input').css("visibility") == "hidden")
+        {
+            $('#group_name_input').css("visibility","visible");
+        }
+        else
+        {
+            $('#group_name_input').css("visibility","hidden");
+            $('#textbox_group_name').val("");
+        }
+    }
+
+    function add_group_button_click() {
+        if ($('#textbox_group_name').val() != "")
+        {
+            current_menu_workspace.push(new Group($('#textbox_group_name').val()));
+            $('#textbox_group_name').val("");
+            $('#group_name_input').css("visibility","hidden");
+
+            /*imageMenuContext.fillStyle = "#ffffff";
+            imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
+            imageMenuContext.globalAlpha = alpha;
+            imageMenuContext.fillStyle = "#777777";
+            imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
+            imageMenuContext.globalAlpha = 1;*/
+            imageLoaded();
+        }
     }
 
     function handleFileSelect(evt) {
@@ -267,9 +392,9 @@
                         success: function (data)
                         {
                             imageArray.push("../static/images/user/" + data);
-                            img.push(new Image());
-                            img[img.length - 1].src = imageArray[imageArray.length - 1];
-                            img[img.length - 1].onload = function(){
+                            current_menu_workspace.push(new Image());
+                            current_menu_workspace[current_menu_workspace.length - 1].src = imageArray[imageArray.length - 1];
+                            current_menu_workspace[current_menu_workspace.length - 1].onload = function(){
                                 imageMenuContext.fillStyle = "#ffffff";
                                 imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
                                 imageLoaded();

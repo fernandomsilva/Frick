@@ -8,13 +8,50 @@
     <form>
         <input type="file" id="images" name="images[]" style="display: none;" multiple></input>
     </form>
-    <i class="fa fa-upload" id="btn_upload" onclick="upload_button_click()"></i>
-    <br>
+    <div id="buttons" class="buttons">
+        <i class="fa fa-upload" id="btn_upload" onclick="upload_button_click()"></i>
+        <i class="fa fa-plus-square" id="btn_show_add_group" onclick="show_add_group_button_click()"></i>
+        <div id="group_name_input" class="group_name_input">
+            <input type="text" id="textbox_group_name"></input>
+            <i class="fa fa-plus" id="btn_add_group" onclick="add_group_button_click()"></i>
+        </div>
+    </div>
     <div class="interface"><canvas id="interfaceCanvas" width="800" height="600"></canvas></div>
     <div class="imageMenu"><canvas id="imageMenuCanvas" width="800" height="600"></canvas></div>
     <div class="lightbox"><canvas id="lightboxCanvas" width="800" height="600"></canvas></div>
+    <div class="group_aux"><canvas id="auxiliarImageCanvas" width="100" height="100"></canvas></div>
 </body>
+<script>
+    function Group(name)
+    {
+        this.name = name;
+        this.images = new Array;
+        //this.thumbnail = new Image();
+        //console.log(this.thumbnail);
+        this.getThumbnail = function(callback) {
+            var auxiliarImageCanvas = document.getElementById('auxiliarImageCanvas');
+            var auxiliarImageContext = auxiliarImageCanvas.getContext('2d');
 
+            auxiliarImageContext.clearRect( 0 , 0 , auxiliarImageCanvas.width, auxiliarImageCanvas.height );
+            auxiliarImageContext.font = "20px Georgia";
+            auxiliarImageContext.textAlign = "center";
+            auxiliarImageContext.fillStyle = "#000000";
+            auxiliarImageContext.fillText(this.name, auxiliarImageCanvas.width/2, 20, auxiliarImageCanvas.width);
+
+            if (this.images.length > 0)
+            {
+
+            }
+
+            //this.thumbnail.src = auxiliarImageCanvas.toDataURL();
+            //this.thumbnail.onload = function(){
+            //    console.log(this.thumbnail);
+            //    callback();
+            //}
+            return auxiliarImageCanvas;
+        };
+    }
+</script>
 <script>
     var interfaceCanvas = document.getElementById('interfaceCanvas');
     var interfaceContext = interfaceCanvas.getContext('2d');
@@ -24,6 +61,9 @@
 
     var lightboxCanvas = new fabric.Canvas('lightboxCanvas');
 
+    var current_menu_workspace;
+
+    var alpha = 0.5;
     var number_of_columns = 3;
     var marginx;
     var marginy;
@@ -53,7 +93,14 @@
         marginy = marginx;//imageMenuCanvas.height * 0.025;
         offsetx = imageMenuCanvas.width * 0.3;//imageMenuCanvas.width * 0.08;
 
-        imageMenuContext.globalAlpha = 0.5;
+        var auxiliarImageCanvas = document.getElementById('auxiliarImageCanvas');
+        auxiliarImageCanvas.width = offsetx;
+        auxiliarImageCanvas.height = offsetx;
+
+        lightboxCanvas.setWidth(window.innerWidth);
+        lightboxCanvas.setHeight(window.innerHeight);
+
+        imageMenuContext.globalAlpha = alpha;
 		imageMenuContext.fillStyle = "#777777";
 		imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
         imageMenuContext.globalAlpha = 1;
@@ -78,6 +125,7 @@
     var editableImageArray = new Array;
     var imageArray = [];
     var img = [];
+    current_menu_workspace = img;
 
     for (var i = 0; i<image_name_list.length; i++)
     {
@@ -105,7 +153,9 @@
         var offsety;
         var temp;
         var img_width, img_height;
-        for (var i in imageArray) {
+
+        //for (var i in imageArray) {
+        for (var i in current_menu_workspace) {
             offsety = 0;
             temp = i - number_of_columns + 1;
             while (temp > 0) {
@@ -114,20 +164,29 @@
                 temp = temp - number_of_columns;
             }
             //context.drawImage(img[i], marginx + (marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)), marginy + offsety, offsetx, (offsetx / img[i].width) * img[i].height);
-            if (img[i].width > img[i].height)
+            if (current_menu_workspace[i].width > current_menu_workspace[i].height)
             {
                 img_width = offsetx;
-                img_height = (offsetx / img[i].width) * img[i].height;
+                img_height = (offsetx / current_menu_workspace[i].width) * current_menu_workspace[i].height;
             }
             else
             {
-                img_width = (offsetx / img[i].height) * img[i].width;
+                img_width = (offsetx / current_menu_workspace[i].height) * current_menu_workspace[i].width;
                 img_height = offsetx;
             }
-            imageMenuContext.drawImage(img[i], marginx + (marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)) + ((offsetx - img_width) / 2), marginy + offsety + ((offsetx - img_height) / 2), img_width, img_height);
-            //imageMenuContext.rect((marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)), offsety, offsetx + (marginx * 2), offsetx + (marginy * 2));
-            imageMenuContext.stroke();
+            if (Object.prototype.toString.call(current_menu_workspace[i]).slice(8, -1) == 'HTMLImageElement')
+            {
+                imageMenuContext.drawImage(current_menu_workspace[i], marginx + (marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)) + ((offsetx - img_width) / 2), marginy + offsety + ((offsetx - img_height) / 2), img_width, img_height);
+                //imageMenuContext.rect((marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)), offsety, offsetx + (marginx * 2), offsetx + (marginy * 2));
+            }
+            else
+            {
+                img_width = offsetx;
+                img_height = offsetx;
+                imageMenuContext.drawImage(current_menu_workspace[i].getThumbnail(), marginx + (marginx * 2 * (i % number_of_columns)) + (offsetx * (i % number_of_columns)) + ((offsetx - img_width) / 2), marginy + offsety + ((offsetx - img_height) / 2), img_width, img_height);
+            }
         }
+        imageMenuContext.stroke();
     }
 
     loadImages(imageArray, imageLoaded);
@@ -149,7 +208,7 @@
         {
             var offsety = 0;
             var i;
-            for (i = temp; i<imageArray.length; i = i + number_of_columns)
+            for (i = temp; i<img.length; i = i + number_of_columns)
             {
                 //width = (marginy * 2) + ((offsetx / img[i].width) * img[i].height);
                 width = (marginy * 2) + offsetx;
@@ -160,7 +219,7 @@
                 }
                 offsety = offsety + width;
             }
-            if (i >= imageArray.length)
+            if (i >= img.length)
             {
                 result = -1;
             }
@@ -202,14 +261,26 @@
             drop_image = getImageMouseCollision(mousePosition);
             if (drop_image > -1 && drop_image != selected_image)
             {
-                var temp_image = img[selected_image];
-                img[selected_image] = img[drop_image];
-                img[drop_image] = temp_image;
+                if (Object.prototype.toString.call(img[drop_image]).slice(8, -1) == 'HTMLImageElement')
+                {
+                    var temp_image = img[selected_image];
+                    img[selected_image] = img[drop_image];
+                    img[drop_image] = temp_image;
+                }
+                else
+                {
+                    img[drop_image].images.push(img[selected_image]);
+                    img.splice($.inArray(img[selected_image], img), 1);
+
+                    console.log(img[drop_image - 1]);
+
+                    imageLoaded();
+                }
             }
             else if (drop_image = -1)
             {
                 editableImageArray.push(new fabric.Image.fromURL(img[selected_image].src, function(loaded_img) {
-                    loaded_img.set('left', mousePosition.x).set('top', mousePosition.y);
+                    loaded_img.set('left', mousePosition.x - (loaded_img.getWidth() / 2)).set('top', mousePosition.y - (loaded_img.getHeight() / 2));
                     lightboxCanvas.add(loaded_img);
                 }));
             }
@@ -226,9 +297,10 @@
     interfaceCanvas.onmouseup = mouseUpEvent;
 
 	function drawScreenWithRect(mousepos, erase) {
+        //imageMenuContext.clearRect( 0 , 0 , imageMenuCanvas.width, imageMenuCanvas.height );
 		imageMenuContext.fillStyle = "#ffffff";
 		imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
-        imageMenuContext.globalAlpha = 0.5;
+        imageMenuContext.globalAlpha = alpha;
 		imageMenuContext.fillStyle = "#777777";
 		imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
         imageMenuContext.globalAlpha = 1;
@@ -247,6 +319,35 @@
 
     function upload_button_click() {
         $('#images').click();
+    }
+
+    function show_add_group_button_click() {
+        if ($('#group_name_input').css("visibility") == "hidden")
+        {
+            $('#group_name_input').css("visibility","visible");
+        }
+        else
+        {
+            $('#group_name_input').css("visibility","hidden");
+            $('#textbox_group_name').val("");
+        }
+    }
+
+    function add_group_button_click() {
+        if ($('#textbox_group_name').val() != "")
+        {
+            img.push(new Group($('#textbox_group_name').val()));
+            $('#textbox_group_name').val("");
+            $('#group_name_input').css("visibility","hidden");
+
+            imageMenuContext.fillStyle = "#ffffff";
+            imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
+            imageMenuContext.globalAlpha = alpha;
+            imageMenuContext.fillStyle = "#777777";
+            imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
+            imageMenuContext.globalAlpha = 1;
+            imageLoaded();
+        }
     }
 
     function handleFileSelect(evt) {
