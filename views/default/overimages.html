@@ -1,0 +1,538 @@
+<body>
+<button onclick="drawRect()">Draw Rect</button>
+<button onclick="cropImage()">Crop Image</button>
+<button onclick="drawOriginal()">Return</button>
+<button type="button" onclick="zoomBy(0,0,2)">Zoom in</button>
+<button type="button" onclick="zoomBy(0,0,-2)">Zoom out</button>
+<button type="button" onclick="zoomBy(-5,0,0)">&#8592;</button>
+<button type="button" onclick="zoomBy(0,-5,0)">&#8593;</button>
+<button type="button" onclick="zoomBy(0,5,0)">&#8595;</button>
+<button type="button" onclick="zoomBy(5,0,0)">&#8594;</button>
+<label>Brightness: <input type="range" id="brightness-value" value="0" min="0" max="100" step="5" disabled></label>
+<!--<label>Opacity: <input type="range" id="opacity-value" value="1" min="0" max="1" step="0.1" disabled></label>-->
+<label>View Large:<input type=checkbox id="check" onClick="viewLarge()"></label>
+</br>
+<canvas id="c" width="1000" height="600" style="border:1px solid #000000;"></canvas>
+</br>
+</body>
+
+<script src="{{=URL('static','js/fabric_min.js')}}"></script>
+
+
+<script id="main">
+
+    var mycanvas;
+    var img0, img1;
+    var imgInstance0, imgInstance1;
+    var rImage0, rImage1;
+    var zImg0, zImg1;
+    var brigtImg0 = 0, brigtImg1 = 0;
+    var clone;
+	var maxDimension = 300;
+
+    var $ = function(id){return document.getElementById(id)};
+
+    var filter = new fabric.Image.filters.Brightness({
+        brightness: 0
+    });
+
+    fabric.Rectimage = fabric.util.createClass(fabric.Image, {
+        type: 'cropzoomimage',
+        zoomedXY: false,
+        initialize: function(element, options)
+        {
+            options || (options = {});
+            this.callSuper('initialize', element, options);
+            this.set({
+                orgSrc: element.src,
+                iml: options.iml,
+                imt: options.imt,
+                imw: options.imw,
+                imh: options.imh,
+                imr: new fabric.Rect({
+                    left: 0,
+                    top: 0,
+                    width: 0,
+                    height: 0,
+                    angle: 0,
+                    fill: 'transparent',
+                    stroke: '#000000',
+                    strokeDashArray: [3, 2],
+                    strokeWidth: 2,
+                    hasBorders: false})
+            });
+            mycanvas.add(this.imr);
+        },
+        updateImage: function(l, t, w, h) {
+            this.iml = l;
+            this.imt = t;
+            this.imw = w;
+            this.imh = h;
+        },
+        updateRect: function(l, t, w, h) {
+            this.imr.left = l;
+            this.imr.top = t;
+            this.imr.width = w;
+            this.imr.height = h;
+        },
+        crop: function(x, y, w, h, callback){
+            this.iml=x;
+            this.imt=y;
+            this.imw=w;
+            this.imh=h;
+            this.rerender(callback);
+        },
+        rerender: function(callback) {
+            console.log("entrou");
+            var img = new Image(), obj = this;
+            img.onload = function() {
+                var canvas = fabric.util.createCanvasElement();
+                canvas.width = obj.width;
+                canvas.height = obj.height;
+                canvas.getContext('2d').drawImage(this, obj.iml, obj.imt, obj.imw, obj.imh, 0, 0, obj.width, obj.height);
+
+                img.onload = function() {
+                    obj.setElement(this);
+                    //obj.applyFilters(mycanvas.renderAll.bind(mycanvas));
+                    obj.set({
+                        left: obj.left,
+                        top: obj.top,
+                        angle: obj.angle
+                    });
+                    obj.setCoords();
+                    if (callback) { callback(obj); }
+                };
+                img.src = canvas.toDataURL('image/png');
+            };
+            img.src = this.orgSrc;
+        }
+    });
+
+    fabric.Rectimage.async = true;
+
+    (function () {
+        mycanvas = this.__canvas = new fabric.Canvas('c');
+        fabric.Object.prototype.transparentCorners = false;
+
+        img0 = new Image();
+        img0.src = '/Frick/static/images/user/6.png';
+		img0.onload = function() {
+			var width = img0.width;
+			var height = img0.height;
+			var scaleX = 1.0;
+			var scaleY = 1.0;
+			
+			if (width > height && width > maxDimension)
+			{
+				scaleX = maxDimension / width;
+				scaleY = scaleX;
+				height = height * maxDimension / width;
+				width = maxDimension;
+			}
+			else if (height > width && height > maxDimension)
+			{
+				scaleY = maxDimension / height;
+				scaleX = scaleY;
+				width = width * maxDimension / height;
+				height = maxDimension;
+			}
+			
+			rImage0 = new fabric.Rectimage(img0,{
+				originX: 'left',
+				originY: 'top',
+				left: 100,
+				top: 100,
+				width: img0.width,
+				height: img0.height,
+				//width: width,
+				//height: height,
+				//width: 250,
+				//height: 332,
+				opacity: 1.0,
+				iml: 100,
+				imt: 100,
+				imw: img0.width,
+				imh: img0.height,
+				//imw: width,
+				//imh: height,
+				scaleX: scaleX,
+				scaleY: scaleY
+				//imw: 250,
+				//imh: 183
+			});
+			mycanvas.add(rImage0);
+		}
+
+        img1 = new Image();
+        img1.src = '/Frick/static/images/user/4.png';
+		img1.onload = function() {
+			rImage1 = new fabric.Rectimage(img1,{
+				originX: 'left',
+				originY: 'top',
+				left: 400,
+				top: 100,
+				width: 250,
+				height: 183,
+				opacity: 1.0,
+				iml: 400,
+				imt: 100,
+				imw: 250,
+				imh: 158
+			});
+			mycanvas.add(rImage1);
+		}
+
+        mycanvas.on({'object:moving': onChange, 'object:scaling': onChange, 'object:rotating': onChange,
+            'object:selected': onSelect, 'selection:cleared': onClear});
+    })();
+
+    function onSelect(){
+        fabric.util.toArray(document.getElementsByTagName('input'))
+                .forEach(function(el){ el.disabled = false; });
+
+        var obj = mycanvas.getActiveObject();
+        if(obj === rImage0) { $('brightness-value').value = brigtImg0; }
+        if(obj === rImage1) { $('brightness-value').value = brigtImg1; }
+
+        console.log(brigtImg0, brigtImg1);
+    }
+
+    function onClear(){
+        fabric.util.toArray(document.getElementsByTagName('input'))
+                .forEach(function(el){ el.disabled = true; });
+    }
+
+    function onChange(options) {
+        mycanvas.renderAll();
+        options.target.setCoords();
+        options.target.bringToFront();
+        rImage0.imr.bringToFront();
+        rImage1.imr.bringToFront();
+
+        mycanvas.forEachObject(function (obj) {
+            if (obj === options.target) return;
+            if (obj instanceof fabric.Rect) return;
+            //options.target.opacity = (options.target.intersectsWithObject(obj) ? 0.5 : 1);
+            if(options.target.isContainedWithinObject(obj) || options.target.intersectsWithObject(obj) || obj.isContainedWithinObject(options.target))
+            {
+                options.target.opacity = 0.5;
+                obj.opacity = 1.0;
+            }
+            else
+                options.target.opacity = 1.0;
+                //obj.opacity = 0.5;
+        });
+
+        var deltaleft, deltatop;
+        var sclX, sclY;
+
+        if(options.target === rImage0){
+            //rImage0
+            deltaleft = options.target.getLeft()-rImage0.iml;
+            deltatop = options.target.getTop()-rImage0.imt;
+            sclX = options.target.getWidth()/rImage0.imw;
+            sclY = options.target.getHeight()/rImage0.imh;
+
+            rImage0.updateRect(options.target.getLeft()+(rImage0.imr.left-options.target.getLeft()+deltaleft)*sclX, options.target.getTop()+(rImage0.imr.top-options.target.getTop()+deltatop)*sclY, rImage0.imr.width*sclX, rImage0.imr.height*sclY);
+            rImage0.updateImage(options.target.getLeft(), options.target.getTop(), options.target.getWidth(), options.target.getHeight());
+        }
+        else if(options.target === rImage1){
+            //rImage1
+            deltaleft = options.target.getLeft()-rImage1.iml;
+            deltatop = options.target.getTop()-rImage1.imt;
+            sclX = options.target.getWidth()/rImage1.imw;
+            sclY = options.target.getHeight()/rImage1.imh;
+
+            rImage1.updateRect(options.target.getLeft()+(rImage1.imr.left-options.target.getLeft()+deltaleft)*sclX, options.target.getTop()+(rImage1.imr.top-options.target.getTop()+deltatop)*sclY, rImage1.imr.width*sclX, rImage1.imr.height*sclY);
+            rImage1.updateImage(options.target.getLeft(), options.target.getTop(), options.target.getWidth(), options.target.getHeight());
+        }
+        mycanvas.renderAll();
+    }
+
+    function drawRect() {
+
+        rImage0.selectable = false;
+        rImage1.selectable = false;
+
+        var isDown;
+
+        mycanvas.on('mouse:down', function (o) {
+            isDown = true;
+            pointer = mycanvas.getPointer(o.e);
+            origX = pointer.x;
+            origY = pointer.y;
+
+            rImage0.updateRect(origX, origY, 0, 0);
+            rImage1.updateRect(origX, origY, 0, 0);
+        });
+
+        mycanvas.on('mouse:move', function (o) {
+            if (!isDown) return;
+
+            var pointer = mycanvas.getPointer(o.e);
+            finX = pointer.x;
+            finY = pointer.y;
+
+            if (origX > finX) {
+                rImage0.imr.set({left: Math.abs(finX)});
+                rImage1.imr.set({left: Math.abs(finX)});
+            }
+            if (origY > finY) {
+                rImage0.imr.set({top: Math.abs(finY)});
+                rImage1.imr.set({top: Math.abs(finY)});
+            }
+
+            rImage0.imr.set({width: Math.abs(origX - finX)});
+            rImage0.imr.set({height: Math.abs(origY - finY)});
+
+            rImage1.imr.set({width: Math.abs(origX - finX)});
+            rImage1.imr.set({height: Math.abs(origY - finY)});
+
+            mycanvas.renderAll();
+        });
+
+
+        mycanvas.on('mouse:up', function (o) {
+            isDown = false;
+            rImage0.selectable = true;
+            rImage1.selectable = true;
+
+            mycanvas.off({'mouse:down': null, 'mouse:move': null, 'mouse:up': null});
+        });
+    }
+
+    function drawOriginal(){
+
+        //zImg0.visible = false;
+        //zImg1.visible = false;
+
+        zImg0.remove();
+        zImg1.remove();
+
+        rImage0.visible = true;
+        rImage0.imr.visible = true;
+
+        rImage1.visible = true;
+        rImage1.imr.visible = true;
+
+        mycanvas.renderAll();
+    }
+
+    function zoomBy(x,y,z){
+        if (x || y){
+            var rectlft0 = rImage0.imr.left + x;
+            var recttp0 = rImage0.imr.top + y;
+
+            var rectlft1 = rImage1.imr.left + x;
+            var recttp1 = rImage1.imr.top + y;
+
+			console.log("RectTop1: " + recttp1);
+			console.log("imr.Height: " + rImage1.imr.height);
+			console.log("rImage1.top: " + rImage1.top);
+			console.log("rImage1.height: " + rImage1.getHeight());
+			
+            if(rectlft0 < rImage0.left || rectlft1 < rImage1.left) return;
+            if(recttp0 < rImage0.top || recttp1 < rImage1.top) return;
+
+            if(rectlft0 + rImage0.imr.width > rImage0.left + rImage0.getWidth()) return;
+            if(rectlft1 + rImage1.imr.width > rImage1.left + rImage1.getWidth()) return;
+
+            if(recttp0 + rImage0.imr.height > rImage0.top + rImage0.getHeight()) return;
+            if(recttp1 + rImage1.imr.height > rImage1.top + rImage1.getHeight()) return;
+
+            rImage0.imr.left = rectlft0;
+            rImage0.imr.top = recttp0;
+
+            rImage1.imr.left = rectlft1;
+            rImage1.imr.top = recttp1;
+        }
+
+        if (z) {
+
+            var ratio0 = rImage0.imr.width / rImage0.imr.height;
+            var ratio1 = rImage1.imr.width / rImage1.imr.height;
+
+            // Zoom to center of image initially
+            var rectlft0 = rImage0.imr.left + z/2;
+            var recttp0 = rImage0.imr.top + z/ratio0/2;
+
+            var rectlft1 = rImage1.imr.left + z/2;
+            var recttp1 = rImage1.imr.top + z/ratio1/2;
+
+            var rectwdt0 = rImage0.imr.width - z;
+            var recthgt0 = rImage0.imr.height - z/ratio0;
+
+            var rectwdt1 = rImage1.imr.width - z;
+            var recthgt1 = rImage1.imr.height - z/ratio1;
+
+            if(rectwdt0 < 32 || recthgt0 < 32) return;
+            if(rectwdt1 < 32 || recthgt1 < 32) return;
+
+            if(rectlft0 < rImage0.left || recttp0 < rImage0.top) return;
+            if(rectlft1 < rImage1.left || recttp1 < rImage1.top) return;
+
+            if(rectlft0 + rectwdt0 >= rImage0.left+rImage0.getWidth()) return;
+            if(rectlft1 + rectwdt1 >= rImage1.left+rImage1.getWidth()) return;
+
+            if(recttp0 + recthgt0 >= rImage0.top+rImage0.getHeight()) return;
+            if(recttp1 + recthgt1 >= rImage1.top+rImage1.getHeight()) return;
+
+            rImage0.imr.left = rectlft0;
+            rImage0.imr.top = recttp0;
+
+            rImage1.imr.left = rectlft1;
+            rImage1.imr.top = recttp1;
+
+            rImage0.imr.width = rectwdt0;
+            rImage0.imr.height = recthgt0;
+
+            rImage1.imr.width = rectwdt1;
+            rImage1.imr.height = recthgt1;
+        }
+
+        zImg0.crop((rImage0.imr.left-rImage0.left)/rImage0.scaleX,(rImage0.imr.top-rImage0.top)/rImage0.scaleY,
+                rImage0.imr.width/rImage0.scaleX,rImage0.imr.height/rImage0.scaleY,function(){mycanvas.renderAll()});
+
+
+        zImg1.crop((rImage1.imr.left-rImage1.left)/rImage1.scaleX,(rImage1.imr.top-rImage1.top)/rImage1.scaleY,
+                rImage1.imr.width/rImage1.scaleX,rImage1.imr.height/rImage1.scaleY,function(){mycanvas.renderAll()});
+
+    }
+
+    function cropImage(){
+
+        rImage0.visible = false;
+        rImage1.visible = false;
+        rImage0.imr.visible = false;
+        rImage1.imr.visible = false;
+
+        //var wh = reCalculate(rImage0.imr.width, rImage0.imr.height);
+        var radio0 = reCalculate2(rImage0.imr);
+
+        zImg0 = new fabric.Rectimage(img0, {
+            originX: 'center',
+            originY: 'center',
+            left: mycanvas.width/4,
+            top: mycanvas.height/2,
+            width: rImage0.imr.width*radio0,
+            height: rImage0.imr.height*radio0
+            //scaleX: radio,
+            //scaleY: radio
+        });
+
+        zImg0.crop((rImage0.imr.left-rImage0.left)/rImage0.scaleX,(rImage0.imr.top-rImage0.top)/rImage0.scaleY,
+                rImage0.imr.width/rImage0.scaleX,rImage0.imr.height/rImage0.scaleY,function(){mycanvas.renderAll()});
+
+        var radio1 = reCalculate2(rImage1.imr);
+
+        zImg1 = new fabric.Rectimage(img1, {
+            originX: 'center',
+            originY: 'center',
+            left: 3*mycanvas.width/4,
+            top: mycanvas.height/2,
+            width: rImage1.imr.width*radio1,
+            height: rImage1.imr.height*radio1
+        });
+
+        zImg1.crop((rImage1.imr.left-rImage1.left)/rImage1.scaleX,(rImage1.imr.top-rImage1.top)/rImage1.scaleY,
+                rImage1.imr.width/rImage1.scaleX,rImage1.imr.height/rImage1.scaleY,function(){mycanvas.renderAll()});
+
+        mycanvas.add(zImg0);
+        mycanvas.add(zImg1);
+
+        //mycanvas.renderAll();
+    }
+
+    function reCalculate(w, h){
+        var ratio = h/w;
+        if(w>=h) {
+            var new_w = (mycanvas.width-40)/2;
+            var new_h = new_w*ratio;
+        }
+        else if(h>w) {
+            var new_h = mycanvas.height-20;
+            var new_w = new_h/ratio;
+        }
+        return{w: new_w, h: new_h};
+    }
+
+    function reCalculate2(option){
+        var radio_width = (mycanvas.width-40)/2/option.width;
+        var radio_height = (mycanvas.height-20)/option.height;
+        var radio;
+		
+        if(radio_width<=radio_height) radio = radio_width;
+        else radio = radio_height;
+        return radio;
+    }
+
+    $('brightness-value').onchange = function() {
+
+        var obj = mycanvas.getActiveObject();
+
+        filter.brightness = parseInt(this.value, 10);
+        if(obj === rImage0) {brigtImg0 = parseInt(this.value, 10);}
+        if(obj === rImage1) {brigtImg1 = parseInt(this.value, 10);}
+        console.log(brigtImg0, brigtImg1);
+        obj.filters.push(filter);
+        obj.applyFilters(mycanvas.renderAll.bind(mycanvas));
+    };
+
+    /*$('opacity-value').onchange = function() {
+        var obj = mycanvas.getActiveObject();
+        obj.opacity = parseFloat(this.value);
+        mycanvas.renderAll();
+    };*/
+
+    function viewLarge(){
+
+        if($('check').checked){
+            var obj = mycanvas.getActiveObject();
+
+            mycanvas.forEachObject(function (other) {
+                other.visible = false;
+            });
+
+            clone = fabric.util.object.clone(obj);
+
+            var radio_width = mycanvas.width/obj.width;
+            var radio_height = mycanvas.height/obj.height;
+            var radio;
+
+            if(radio_width<=radio_height) radio = radio_width;
+            else radio = radio_height;
+
+            clone.originX = "center";
+            clone.originY = "center";
+            clone.left = mycanvas.width/2;
+            clone.top = mycanvas.height/2;
+            clone.scaleX = radio;
+            clone.scaleY = radio;
+            clone.opacity = 1;
+            clone.visible = true;
+
+            mycanvas.add(clone);
+            clone.bringToFront();
+
+            rImage0.setControlsVisibility({bl: false, br: false, mb: false, ml: false, mr: false, mt: false, tl: false, tr: false, mtr: false});
+            rImage1.setControlsVisibility({bl: false, br: false, mb: false, ml: false, mr: false, mt: false, tl: false, tr: false, mtr: false});
+        }
+        if(!($('check').checked)){
+            clone.remove();
+            //mycanvas.remove(clone);
+            //mycanvas.fxRemove(clone);
+
+            mycanvas.forEachObject(function (other) {
+                other.visible = true;
+            });
+
+            rImage0.setControlsVisibility({bl: true, br: true, mb: true, ml: true, mr: true, mt: true, tl: true, tr: true, mtr: true});
+            rImage1.setControlsVisibility({bl: true, br: true, mb: true, ml: true, mr: true, mt: true, tl: true, tr: true, mtr: true});
+
+
+        }
+        mycanvas.renderAll();
+    }
+
+
+</script>

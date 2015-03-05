@@ -1,0 +1,12 @@
+\menu
+2
+3
+5
+\mais um
+1
+0
+\mais um
+\menu
+\lightbox
+{"objects":[{"type":"image","originX":"left","originY":"top","left":566.88,"top":418.09,"width":2425,"height":1476,"fill":"rgb(0,0,0)","stroke":null,"strokeWidth":1,"strokeDashArray":null,"strokeLineCap":"butt","strokeLineJoin":"miter","strokeMiterLimit":10,"scaleX":0.25,"scaleY":0.25,"angle":313.35,"flipX":false,"flipY":false,"opacity":1,"shadow":null,"visible":true,"clipTo":null,"backgroundColor":"","fillRule":"nonzero","globalCompositeOperation":"source-over","src":"http://127.0.0.1:8000/Frick/static/images/user/5.png","filters":[],"crossOrigin":"","alignX":"none","alignY":"none","meetOrSlice":"meet"},{"type":"image","originX":"left","originY":"top","left":467.61,"top":109.97,"width":250,"height":160,"fill":"rgb(0,0,0)","stroke":null,"strokeWidth":1,"strokeDashArray":null,"strokeLineCap":"butt","strokeLineJoin":"miter","strokeMiterLimit":10,"scaleX":1,"scaleY":1,"angle":1.82,"flipX":false,"flipY":false,"opacity":1,"shadow":null,"visible":true,"clipTo":null,"backgroundColor":"","fillRule":"nonzero","globalCompositeOperation":"source-over","src":"http://127.0.0.1:8000/Frick/static/images/user/1.png","filters":[],"crossOrigin":"","alignX":"none","alignY":"none","meetOrSlice":"meet"}],"background":""}
+\lightbox

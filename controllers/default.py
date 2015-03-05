@@ -11,6 +11,83 @@
 
 def test():
     return dict(test='foi')
+	
+def	overimages():
+	return dict()
+
+def open_state():
+	import os
+	import json
+	from functions import readGroup
+
+	filename = json.loads(request.vars['filename'])
+
+	file = os.path.join(request.folder, 'static/states/user', filename + '.lightboxstate')
+
+	file_contents = []
+	filehandler = open(file, "r")
+	for line in filehandler:
+		file_contents.append(line[:-1])
+	filehandler.close()
+	
+	result = []
+	menu = True
+	file_contents = file_contents[1:]
+	#for element in file_contents[1:]:
+	while (len(file_contents) > 3):
+		print len(file_contents)
+		element = file_contents[0]
+		if (menu):
+			if (element == "\\menu"):
+				menu = False
+				del file_contents[0]
+			else:
+				if (element[0] != "\\"):
+					result.append(element)
+					del file_contents[0]
+				else:
+					result.append(readGroup(file_contents, element))
+
+	result.append(file_contents[1])
+					
+	return T(json.dumps(result))
+
+def save_state():
+	import os
+	import json
+
+	data = request.vars['data']
+	filename = request.vars['filename']
+	
+	file = os.path.join(request.folder, 'static/states/user/', filename + '.lightboxstate')
+
+	filehandler = open(file, "w")
+    #for line in file_contents:
+	filehandler.write(json.loads(data))
+	filehandler.close()
+	#filenames = []
+	#for x in os.listdir(path):
+	#	filenames.append([x[:-14], time.ctime(os.path.getmtime(path + x))])
+	
+	pass
+	#return T(json.dumps(filenames))
+	
+def state_list():
+	import os
+	import time
+	import json
+	
+	path = os.path.join(request.folder, 'static/states/user/')
+
+	filenames = []
+	for x in os.listdir(path):
+		filenames.append([x[:-14], time.ctime(os.path.getmtime(path + x))])
+
+	#result = ""
+	#for x in filenames:
+	#	result = result + "<tr><td><i class=\"fa fa-file-o\"></i>" + str(x[0]) + "</td><td style=\"text-align: center;\">" + str(x[1]) + "</td></tr>"
+	
+	return T(json.dumps(filenames))
 
 def upload():
     import os

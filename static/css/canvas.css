@@ -1,6 +1,8 @@
 .buttons {
-	position: relative;
+	position: fixed;
+	top: 1%;
 	margin: 0px;
+	z-index: 5;
 }
 
 .buttons i:hover {
@@ -9,12 +11,14 @@
 
 .group_name_input {
 	position: absolute;
-	z-index: 10;
+	z-index: 5;
 	left: 18px;
 	visibility: hidden;
 	
 	background-color: black;
 	padding: 5px;
+	
+	width: 167px;
 }
 
 .group_name_input input {
@@ -35,40 +39,60 @@
 .interface canvas {
 	z-index: -1;
 
-	position: absolute;
+	position: fixed;
 	top: 5%;
 }
-
 
 .imageMenu {
 	position: relative;
 	margin: 0px;
 }
 
-.imageMenu canvas {
-	z-index: 3;
-
-	position: absolute;
+.imageMenu #context_link {
+	position: fixed;
 	top: 5%;
+	z-index: 3;
+	
+	color: white;
+	font-weight: bold;
+	
+	-webkit-user-select: none; /* Chrome/Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+ */
+}
+
+.imageMenu #context_link a,a:link,a:visited {
+	color: yellow;
+	text-decoration: none;
+}
+
+.imageMenu canvas {
+	z-index: 4;
+
+	position: fixed;
+	top: 8.5%;
+	left: 0%;
 }
 
 .imageMenu #imageMenuCanvasBackground {
 	opacity: 0.8;
 	background-color: black;
 	z-index: 2;
+	top: 5%;
 }
 
 .lightbox {
-	position: relative;
+	position: fixed;
 	margin: 0px;
+	top: 5%;
+	left: 0%;
 }
 
 .lightbox canvas {
 	border: 1px solid #000000;
 	z-index: 0;
 
-	position: absolute;
-	top: 5%;
+	position: fixed;
 }
 
 .group_aux {
@@ -80,3 +104,163 @@
 
 .group_aux canvas {
 }
+
+.file_open_list {
+	position: fixed;
+	top: 0%;
+	left: 0%;
+	margin: 0px;
+	opacity: 0.8;
+	background-color: black;
+	z-index: -2;
+	visibility: hidden;
+}
+
+.file_open_list #btn_close_open_state {
+	position: fixed;
+	top: 0%;
+	left: 0%;
+
+	color: white;
+	font-size: 22px;
+}
+
+.file_open_list #btn_close_open_state:hover {
+	color: red;
+}
+
+.highlight {
+	color: white;
+	background: blue;
+}
+
+.file_open_list table {
+	position: fixed;
+	
+	z-index: 11;
+	
+	background: white;
+	
+	width: 430px;
+	
+	top: 21%;
+    left: 35%;
+    margin-right: -50%;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;	
+
+	-webkit-user-select: none; /* Chrome/Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+ */
+}
+
+.file_open_list table th {
+	color: white;
+	background: black;
+}
+
+.file_save_list {
+	position: fixed;
+	top: 0%;
+	left: 0%;
+	margin: 0px;
+	opacity: 0.8;
+	background-color: black;
+	z-index: -2;
+	visibility: hidden;
+}
+
+.file_save_list #btn_close_save_state {
+	position: fixed;
+	top: 0%;
+	left: 0%;
+
+	color: white;
+	font-size: 22px;
+}
+
+.file_save_list #btn_close_save_state:hover {
+	color: red;
+}
+
+.file_save_list #label {
+	position: fixed;
+	
+	top: 11%;
+    left: 35%;
+    margin-right: -50%;	
+
+	color: white;
+	font-weight: bold;
+}
+
+.file_save_list #btn_save_state {
+	position: fixed;
+	
+	top: 15%;
+    left: 67%;
+    margin-right: -50%;
+	
+	color: white;
+	
+	font-size: 22px;
+}
+
+.file_save_list input {
+	position: fixed;
+
+	width: 400px;
+	
+	top: 15%;
+    left: 35%;
+    margin-right: -50%;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.file_save_list table {
+	position: fixed;
+	
+	z-index: 11;
+	
+	background: white;
+	
+	width: 430px;
+	
+	top: 21%;
+    left: 35%;
+    margin-right: -50%;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;	
+}
+
+.file_save_list table th {
+	color: white;
+	background: black;
+}
+
+/*.file_list table tr:nth-child(even) {
+	background-color: #ccc;
+}
+
+.file_list table tr:nth-child(odd) {
+	background-color: #fff;
+}*/
+/*.highlight {
+	background: blue;
+	color: white;
+}*/
+
+/*.file_list canvas {
+	position: fixed;
+	opacity: 0.8;
+	background-color: black;
+	z-index: -2;
+	visibility: hidden;
+}*/

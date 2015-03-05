@@ -1,0 +1,16 @@
+\menu
+2
+3
+0
+5
+7
+\windmill
+1
+\new group
+6
+\new group
+\windmill
+\menu
+\lightbox
+{"objects":[{"type":"image","originX":"left","originY":"top","left":627.91,"top":128.78,"width":250,"height":207,"fill":"rgb(0,0,0)","stroke":null,"strokeWidth":1,"strokeDashArray":null,"strokeLineCap":"butt","strokeLineJoin":"miter","strokeMiterLimit":10,"scaleX":0.86,"scaleY":0.86,"angle":3.96,"flipX":false,"flipY":false,"opacity":1,"shadow":null,"visible":true,"clipTo":null,"backgroundColor":"","fillRule":"nonzero","globalCompositeOperation":"source-over","src":"http://127.0.0.1:8000/Frick/static/images/user/2.png","filters":[],"crossOrigin":"","alignX":"none","alignY":"none","meetOrSlice":"meet"}],"background":""}
+\lightbox

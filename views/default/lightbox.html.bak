@@ -7,19 +7,38 @@
 <body>
     <form>
         <input type="file" id="images" name="images[]" style="display: none;" multiple></input>
-    </form>
+	</form>
     <div id="buttons" class="buttons">
         <i class="fa fa-upload" id="btn_upload" onclick="upload_button_click()"></i>
         <i class="fa fa-plus-square" id="btn_show_add_group" onclick="show_add_group_button_click()"></i>
+		<i class="fa fa-folder-open-o" id="btn_open_state_screen" onclick="open_state_button_click()"></i>
+		<i class="fa fa-floppy-o" id="btn_save_state_screen" onclick="save_state_button_click()"></i>
         <div id="group_name_input" class="group_name_input">
             <input type="text" id="textbox_group_name"></input>
             <i class="fa fa-plus" id="btn_add_group" onclick="add_group_button_click()"></i>
         </div>
     </div>
     <div class="interface"><canvas id="interfaceCanvas" width="800" height="600"></canvas></div>
-    <div class="imageMenu"><canvas id="imageMenuCanvas" width="800" height="600"></canvas></div>
+    <div id="imageMenu" class="imageMenu">
+		<div id="context_link"><a href="#" onclick="linkClick('-1');return false;">Main</a></div>
+		<canvas id="imageMenuCanvas" width="800" height="600"></canvas>
+		<canvas id="imageMenuCanvasBackground" width="800" height="600"></canvas>
+	</div>
     <div class="lightbox"><canvas id="lightboxCanvas" width="800" height="600"></canvas></div>
     <div class="group_aux"><canvas id="auxiliarImageCanvas" width="100" height="100"></canvas></div>
+	<div class="file_open_list" id="file_open">
+		<i class="fa fa-times" id="btn_close_open_state" onclick="btn_close_open_state_click()"></i>
+		<table id="list_of_open_files">
+		</table>
+	</div>
+	<div class="file_save_list" id="file_save">
+		<i class="fa fa-times" id="btn_close_save_state" onclick="btn_close_save_state_click()"></i>
+		<text id="label">File Name</text>
+		<input type="text" id="textbox_file_name"></input>
+		<i class="fa fa-floppy-o" id="btn_save_state" onclick="btn_save_state_click()"></i>
+		<table id="list_of_files">
+		</table>
+	</div>
 </body>
 <script>
     function Group(name)
@@ -35,7 +54,7 @@
             auxiliarImageContext.clearRect( 0 , 0 , auxiliarImageCanvas.width, auxiliarImageCanvas.height );
             auxiliarImageContext.font = "20px Georgia";
             auxiliarImageContext.textAlign = "center";
-            auxiliarImageContext.fillStyle = "#000000";
+            auxiliarImageContext.fillStyle = "#ffffff";
             auxiliarImageContext.fillText(this.name, auxiliarImageCanvas.width/2, 20, auxiliarImageCanvas.width);
 
             if (this.images.length > 0)
@@ -62,6 +81,7 @@
     var lightboxCanvas = new fabric.Canvas('lightboxCanvas');
 
     var current_menu_workspace;
+	var workspace_hierarchy = "-1";
 
     var alpha = 0.5;
     var number_of_columns = 3;
@@ -85,10 +105,59 @@
             y: event.pageY - rect.top
         };
     }
+	
+	function isImage(element)
+	{
+		if (Object.prototype.toString.call(element).slice(8, -1) == 'HTMLImageElement')
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	function getMenuStateData(workspace)
+	{
+		var result = ""
+		
+		for (var i=0; i < workspace.length; i++)
+		{
+			if (isImage(workspace[i]))
+			{
+				temp = workspace[i].src;
+				temp = temp.split("/");
+				result = result + temp[temp.length - 1].substring(0, temp[temp.length - 1].length - 4) + "\n";
+			}
+			else
+			{
+				result = result + "\\" + workspace[i].name + "\n" + getMenuStateData(workspace[i].images) + "\\" + workspace[i].name + "\n";
+			}
+		}
+		
+		return result
+	}
+	
+	function getStateData(workspace)
+	{
+		var temp;
+		var result = "\\menu\n";
+		
+		result = result + getMenuStateData(workspace);
+		
+		result = result + "\\menu\n";
+		result = result + "\\lightbox\n";
+		result = result + JSON.stringify(lightboxCanvas) + "\n";
+		result = result + "\\lightbox\n";
+		
+		return result;
+	}
 
     function resizeImageMenu() {
         imageMenuCanvas.width = (window.innerWidth - (window.innerWidth * 0.03)) * 0.3;
         imageMenuCanvas.height = window.innerHeight - (window.innerHeight * 0.03);
+		$('#imageMenuCanvasBackground').width(imageMenuCanvas.width);
+		$('#imageMenuCanvasBackground').height(imageMenuCanvas.height);
+		
         marginx = imageMenuCanvas.width * 0.016;
         marginy = marginx;//imageMenuCanvas.height * 0.025;
         offsetx = imageMenuCanvas.width * 0.3;//imageMenuCanvas.width * 0.08;
@@ -100,10 +169,17 @@
         lightboxCanvas.setWidth(window.innerWidth);
         lightboxCanvas.setHeight(window.innerHeight);
 
-        imageMenuContext.globalAlpha = alpha;
+		$("#file_save").css("width", window.innerWidth);
+		$("#file_save").css("height", window.innerHeight);
+		$("#file_open").css("width", window.innerWidth);
+		$("#file_open").css("height", window.innerHeight);
+        //var fileListBackgroundCanvas = document.getElementById('file_list_background');
+		//fileListBackgroundCanvas.width = window.innerWidth;
+		//fileListBackgroundCanvas.height = window.innerHeight;
+        /*imageMenuContext.globalAlpha = alpha;
 		imageMenuContext.fillStyle = "#777777";
 		imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
-        imageMenuContext.globalAlpha = 1;
+        imageMenuContext.globalAlpha = 1;*/
     }
 
     resizeImageMenu();
@@ -124,8 +200,8 @@
 
     var editableImageArray = new Array;
     var imageArray = [];
-    var img = [];
-    current_menu_workspace = img;
+    var main_menu_workspace = [];
+    current_menu_workspace = main_menu_workspace;
 
     for (var i = 0; i<image_name_list.length; i++)
     {
@@ -138,12 +214,12 @@
         var count = 0;
 
         for (var i in arr ){
-            img[i] = new Image();
-            img[i].src = arr[i];
-            img[i].onload = function(){
+            current_menu_workspace[i] = new Image();
+            current_menu_workspace[i].src = arr[i];
+            current_menu_workspace[i].onload = function(){
                 count++;
                 if(count == arr.length){
-                    callBack(img);
+                    callBack(current_menu_workspace);
                 }
             }
         }
@@ -154,7 +230,8 @@
         var temp;
         var img_width, img_height;
 
-        //for (var i in imageArray) {
+        imageMenuContext.clearRect( 0 , 0 , imageMenuCanvas.width, imageMenuCanvas.height );
+
         for (var i in current_menu_workspace) {
             offsety = 0;
             temp = i - number_of_columns + 1;
@@ -208,7 +285,7 @@
         {
             var offsety = 0;
             var i;
-            for (i = temp; i<img.length; i = i + number_of_columns)
+            for (i = temp; i<current_menu_workspace.length; i = i + number_of_columns)
             {
                 //width = (marginy * 2) + ((offsetx / img[i].width) * img[i].height);
                 width = (marginy * 2) + offsetx;
@@ -219,7 +296,7 @@
                 }
                 offsety = offsety + width;
             }
-            if (i >= img.length)
+            if (i >= current_menu_workspace.length)
             {
                 result = -1;
             }
@@ -240,8 +317,26 @@
         if (selected_image > -1)
         {
             drag = true;
-            interfaceCanvas.style.zIndex = 3;
+            interfaceCanvas.style.zIndex = 10;
         }
+    }
+    function mouseRightClickEvent(e)
+    {
+		var mousepos = getMousePosition(imageMenuCanvas, e);
+
+		e.preventDefault();
+
+		selected_image = getImageMouseCollision(mousepos);
+		if (selected_image > -1)
+		{
+			if (Object.prototype.toString.call(current_menu_workspace[selected_image]).slice(8, -1) != 'HTMLImageElement')
+			{
+				workspace_hierarchy = workspace_hierarchy + "/" + selected_image;
+				$('#context_link').append(" > <a href='#' onclick='linkClick(\"" + workspace_hierarchy + "\");return false;'>" + current_menu_workspace[selected_image].name + "</a>");
+				current_menu_workspace = current_menu_workspace[selected_image].images;
+				imageLoaded();
+			}
+		}
     }
     function mouseMoveEvent(e)
     {
@@ -261,25 +356,23 @@
             drop_image = getImageMouseCollision(mousePosition);
             if (drop_image > -1 && drop_image != selected_image)
             {
-                if (Object.prototype.toString.call(img[drop_image]).slice(8, -1) == 'HTMLImageElement')
+                if (Object.prototype.toString.call(current_menu_workspace[drop_image]).slice(8, -1) == 'HTMLImageElement')
                 {
-                    var temp_image = img[selected_image];
-                    img[selected_image] = img[drop_image];
-                    img[drop_image] = temp_image;
+                    var temp_image = current_menu_workspace[selected_image];
+                    current_menu_workspace[selected_image] = current_menu_workspace[drop_image];
+                    current_menu_workspace[drop_image] = temp_image;
                 }
                 else
                 {
-                    img[drop_image].images.push(img[selected_image]);
-                    img.splice($.inArray(img[selected_image], img), 1);
-
-                    console.log(img[drop_image - 1]);
+                    current_menu_workspace[drop_image].images.push(current_menu_workspace[selected_image]);
+                    current_menu_workspace.splice($.inArray(current_menu_workspace[selected_image], current_menu_workspace), 1);
 
                     imageLoaded();
                 }
             }
             else if (drop_image = -1)
             {
-                editableImageArray.push(new fabric.Image.fromURL(img[selected_image].src, function(loaded_img) {
+                editableImageArray.push(new fabric.Image.fromURL(current_menu_workspace[selected_image].src, function(loaded_img) {
                     loaded_img.set('left', mousePosition.x - (loaded_img.getWidth() / 2)).set('top', mousePosition.y - (loaded_img.getHeight() / 2));
                     lightboxCanvas.add(loaded_img);
                 }));
@@ -287,10 +380,43 @@
 
             drawScreenWithRect(getMousePosition(interfaceCanvas, e), true);
         }
+		interfaceContext.clearRect(0, 0, interfaceCanvas.width, interfaceCanvas.height);
         interfaceCanvas.style.zIndex = -1;
     }
+	
+	function linkClick(link)
+	{
+		$('#context_link').empty();
+		workspace_hierarchy = "-1";
+		$('#context_link').append("<a href='#' onclick='linkClick(\"-1\");return false;'>Main</a>");
+
+		if (link == "-1")
+		{
+			current_menu_workspace = main_menu_workspace;
+		}
+		else
+		{
+			path = link.split('/');
+			for (var i = 0; i < path.length; i++)
+			{
+				if (parseInt(path[i]) < 0)
+				{
+					current_menu_workspace = main_menu_workspace;
+				}
+				else
+				{
+					workspace_hierarchy = workspace_hierarchy + '/' + path[i];
+					$('#context_link').append(" > <a href='#' onclick='linkClick(\"" + workspace_hierarchy + "\");return false;'>" + current_menu_workspace[parseInt(path[i])].name + "</a>");
+					current_menu_workspace = current_menu_workspace[parseInt(path[i])].images;
+				}
+			}
+		}
+		imageLoaded();
+	}
 
     imageMenuCanvas.onmousedown = mouseDownEvent;
+	//imageMenuCanvas.oncontextmenu = mouseRightClickEvent;
+	imageMenuCanvas.addEventListener('contextmenu', mouseRightClickEvent, false); 
     //imageMenuCanvas.onmousemove = mouseMoveEvent;
     //imageMenuCanvas.onmouseup = mouseUpEvent;
     interfaceCanvas.onmousemove = mouseMoveEvent;
@@ -298,12 +424,12 @@
 
 	function drawScreenWithRect(mousepos, erase) {
         //imageMenuContext.clearRect( 0 , 0 , imageMenuCanvas.width, imageMenuCanvas.height );
-		imageMenuContext.fillStyle = "#ffffff";
+		/*imageMenuContext.fillStyle = "#ffffff";
 		imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
         imageMenuContext.globalAlpha = alpha;
 		imageMenuContext.fillStyle = "#777777";
 		imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
-        imageMenuContext.globalAlpha = 1;
+        imageMenuContext.globalAlpha = 1;*/
 
 		imageLoaded();
 
@@ -336,20 +462,85 @@
     function add_group_button_click() {
         if ($('#textbox_group_name').val() != "")
         {
-            img.push(new Group($('#textbox_group_name').val()));
+            current_menu_workspace.push(new Group($('#textbox_group_name').val()));
             $('#textbox_group_name').val("");
             $('#group_name_input').css("visibility","hidden");
 
-            imageMenuContext.fillStyle = "#ffffff";
+            /*imageMenuContext.fillStyle = "#ffffff";
             imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
             imageMenuContext.globalAlpha = alpha;
             imageMenuContext.fillStyle = "#777777";
             imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
-            imageMenuContext.globalAlpha = 1;
+            imageMenuContext.globalAlpha = 1;*/
             imageLoaded();
         }
     }
+	
+	function open_state_button_click() {
+		$.get("state_list", function( data ) {
+			var filenames = JSON.parse(data);
+			
+			$('#list_of_open_files').html("<tr><th>File</th><th>Date</th></tr>");
+			for (var i = 0; i < filenames.length; i++)
+			{
+				$('#list_of_open_files').append("<tr class=\"row\"><td><i class=\"fa fa-file-o\"></i> " + filenames[i][0] + "</td><td style=\"text-align: center;\">" + filenames[i][1] + "</td></tr>");
+			}
 
+			var rows = $('.row');
+
+			rows.on('click', function(e) {
+				var row = $(this);
+
+				rows.removeClass('highlight');
+				row.addClass('highlight');
+				//console.log(row.text());
+				//$('#file_name').text(row.text());
+			});
+			
+			rows.on('dblclick', function(e) {
+				var row = $(this);
+				var content = row.html();
+				var filename;
+				
+				content = content.split('</i> ');
+				filename = (content[1].split('</td>'))[0];
+				
+				$.ajax({
+					url: "{{=URL('default', 'open_state')}}",
+					type: "POST",
+					data: "filename=" + JSON.stringify(filename),
+					success: function (data)
+					{
+						console.log(data);
+                        lightboxCanvas.loadFromJSON(data[], lightboxCanvas.renderAll.bind(lightboxCanvas));
+					},
+					error: function (data)
+					{
+						//console.log(data.responseText);
+					}
+				});
+			});
+			
+			$('#file_open').css("visibility", "visible");
+			$('#file_open').css("z-index", "6");
+		});
+	}
+	
+	function save_state_button_click() {
+		$.get("state_list", function( data ) {
+			var filenames = JSON.parse(data);
+			
+			$('#list_of_files').html("<tr><th>File</th><th>Date</th></tr>");
+			for (var i = 0; i < filenames.length; i++)
+			{
+				$('#list_of_files').append("<tr><td><i class=\"fa fa-file-o\"></i> " + filenames[i][0] + "</td><td style=\"text-align: center;\">" + filenames[i][1] + "</td></tr>");
+			}
+			
+			$('#file_save').css("visibility", "visible");
+			$('#file_save').css("z-index", "6");
+		});
+	}
+	
     function handleFileSelect(evt) {
         var images = evt.target.files;
 
@@ -368,9 +559,9 @@
                         success: function (data)
                         {
                             imageArray.push("../static/images/user/" + data);
-                            img.push(new Image());
-                            img[img.length - 1].src = imageArray[imageArray.length - 1];
-                            img[img.length - 1].onload = function(){
+                            current_menu_workspace.push(new Image());
+                            current_menu_workspace[current_menu_workspace.length - 1].src = imageArray[imageArray.length - 1];
+                            current_menu_workspace[current_menu_workspace.length - 1].onload = function(){
                                 imageMenuContext.fillStyle = "#ffffff";
                                 imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
                                 imageLoaded();
@@ -391,4 +582,38 @@
     }
 
     document.getElementById('images').addEventListener('change', handleFileSelect, false);
+	
+	function btn_save_state_click()
+	{
+		if ($('#textbox_file_name').val() != "")
+        {
+			$.ajax({
+				url: "{{=URL('default', 'save_state')}}",
+				type: "POST",
+				data: "data=" + JSON.stringify(getStateData(main_menu_workspace)) + "&filename=" + $('#textbox_file_name').val(),
+				success: function (data)
+				{
+					$('#file_save').css("visibility", "hidden");
+					$('#file_save').css("z-index", "-2");
+					$('#textbox_file_name').val("");
+				},
+				error: function (data)
+				{
+					//console.log(data.responseText);
+				}
+			});
+		}
+	}
+	
+	function btn_close_open_state_click()
+	{
+		$('#file_open').css("visibility", "hidden");
+		$('#file_open').css("z-index", "-2");
+	}
+	function btn_close_save_state_click()
+	{
+		$('#file_save').css("visibility", "hidden");
+		$('#file_save').css("z-index", "-2");
+		$('#textbox_file_name').val("");
+	}
 </script>

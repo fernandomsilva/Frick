@@ -12,6 +12,59 @@
 def test():
     return dict(test='foi')
 
+def open_state():
+	import os
+	import json
+
+	filename = json.loads(request.vars['filename'])
+
+	file = os.path.join(request.folder, 'static/states/user', filename + '.lightboxstate')
+
+	file_contents = []
+	filehandler = open(file, "r")
+	for line in filehandler:
+		file_contents.append(line[:-2])
+	filehandler.close()
+
+	return T(json.dumps(file_contents))
+
+def save_state():
+	import os
+	import json
+
+	data = request.vars['data']
+	filename = request.vars['filename']
+	
+	file = os.path.join(request.folder, 'static/states/user/', filename + '.lightboxstate')
+
+	filehandler = open(file, "w")
+    #for line in file_contents:
+	filehandler.write(json.loads(data))
+	filehandler.close()
+	#filenames = []
+	#for x in os.listdir(path):
+	#	filenames.append([x[:-14], time.ctime(os.path.getmtime(path + x))])
+	
+	pass
+	#return T(json.dumps(filenames))
+	
+def state_list():
+	import os
+	import time
+	import json
+	
+	path = os.path.join(request.folder, 'static/states/user/')
+
+	filenames = []
+	for x in os.listdir(path):
+		filenames.append([x[:-14], time.ctime(os.path.getmtime(path + x))])
+
+	#result = ""
+	#for x in filenames:
+	#	result = result + "<tr><td><i class=\"fa fa-file-o\"></i>" + str(x[0]) + "</td><td style=\"text-align: center;\">" + str(x[1]) + "</td></tr>"
+	
+	return T(json.dumps(filenames))
+
 def upload():
     import os
     import json
