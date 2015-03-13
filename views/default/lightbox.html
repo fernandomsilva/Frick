@@ -5,113 +5,102 @@
     <link rel="stylesheet" type="text/css" href="../static/css/canvas.css" media="screen" />
 </head>
 <body>
-    <form>
-        <input type="file" id="images" name="images[]" style="display: none;" multiple></input>
-	</form>
-    <div id="buttons" class="buttons">
-        <i class="fa fa-outdent" id="btn_slide_menu"></i>
-        <i class="fa fa-upload" id="btn_upload" onclick="upload_button_click()"></i>
-        <i class="fa fa-plus-square" id="btn_show_add_group" onclick="show_add_group_button_click()"></i>
-		<i class="fa fa-folder-open-o" id="btn_open_state_screen" onclick="open_state_button_click()"></i>
-		<i class="fa fa-floppy-o" id="btn_save_state_screen" onclick="save_state_button_click()"></i>
+<form>
+    <input type="file" id="images" name="images[]" style="display: none;" multiple></input>
+</form>
+<div id="buttons" class="buttons">
+    <i class="fa fa-outdent"         id="btn_slide_menu"></i>
+    <i class="fa fa-upload"          id="btn_upload" onclick="upload_button_click()"></i>
+    <i class="fa fa-plus-square"     id="btn_show_add_group" onclick="show_add_group_button_click()"></i>
+    <i class="fa fa-folder-open-o"   id="btn_open_state_screen" onclick="open_state_button_click()"></i>
+    <i class="fa fa-floppy-o"        id="btn_save_state_screen" onclick="save_state_button_click()"></i>
+    <i class="fa fa-pencil-square-o" id="btn_draw_rect" onclick="draw_rect_button_click()"></i>
+    <i class="fa fa-crop"            id="btn_crop_rect" onclick="crop_rect_button_click()"></i>
+    <i class="fa fa-search-plus"     id="btn_zoom" onclick="zoom_button_click(0,0,2)"></i>
+    <i class="fa fa-search-minus"    id="btn_zoom" onclick="zoom_button_click(0,0,-2)"></i>
+    <i class="fa fa-arrow-right"     id="btn_zoom" onclick="zoom_button_click(5,0,0)"></i>
+    <i class="fa fa-arrow-left"      id="btn_zoom" onclick="zoom_button_click(-5,0,0)"></i>
+    <i class="fa fa-arrow-down"      id="btn_zoom" onclick="zoom_button_click(0,5,0)"></i>
+    <i class="fa fa-arrow-up"        id="btn_zoom" onclick="zoom_button_click(0,-5,0)"></i>
+    <i class="fa fa-pencil"          id="btn_draw_line" onclick="draw_line_button_click()"></i>
+    <i class="fa fa-map-marker"      id="btn_select_obj" onclick="select_objects()"></i>
+    <i class="fa fa-refresh"         id="btn_overl_lines" onclick="overlapping_lines_button_click()"></i>
+    <label>View Large:<input type=checkbox id="check" onClick="viewLarge()"></label>
 
-		<i class="fa fa-pencil-square-o" id="btn_draw_rect" onclick="draw_rect_button_click()"></i>		
-		<i class="fa fa-crop" id="btn_crop_rect" onclick="crop_rect_button_click()"></i>		
-		
-        <div id="group_name_input" class="group_name_input">
-            <input type="text" id="textbox_group_name"></input>
-            <i class="fa fa-plus" id="btn_add_group" onclick="add_group_button_click()"></i>
-        </div>
+    <div id="group_name_input" class="group_name_input">
+        <input type="text" id="textbox_group_name"></input>
+        <i class="fa fa-plus" id="btn_add_group" onclick="add_group_button_click()"></i>
     </div>
-    <div class="interface"><canvas id="interfaceCanvas" width="800" height="600"></canvas></div>
-    <div id="imageMenu" class="imageMenu">
-		<div id="context_link"><a href="#" onclick="linkClick('-1');return false;">Main</a></div>
-		<canvas id="imageMenuCanvas" width="800" height="600"></canvas>
-		<canvas id="imageMenuCanvasBackground" width="800" height="600"></canvas>
-	</div>
-    <div class="lightbox"><canvas id="lightboxCanvas" width="800" height="600"></canvas></div>
-    <div class="group_aux"><canvas id="auxiliarImageCanvas" width="100" height="100"></canvas></div>
-	<div class="file_open_list" id="file_open">
-		<i class="fa fa-times" id="btn_close_open_state" onclick="btn_close_open_state_click()"></i>
-		<table id="list_of_open_files">
-		</table>
-	</div>
-	<div class="file_save_list" id="file_save">
-		<i class="fa fa-times" id="btn_close_save_state" onclick="btn_close_save_state_click()"></i>
-		<text id="label">File Name</text>
-		<input type="text" id="textbox_file_name"></input>
-		<i class="fa fa-floppy-o" id="btn_save_state" onclick="btn_save_state_click()"></i>
-		<table id="list_of_files">
-		</table>
-	</div>
+</div>
+<div class="interface"><canvas id="interfaceCanvas" width="800" height="600"></canvas></div>
+<div id="imageMenu" class="imageMenu">
+    <div id="context_link"><a href="#" onclick="linkClick('-1');return false;">Main</a></div>
+    <canvas id="imageMenuCanvas" width="800" height="600"></canvas>
+    <canvas id="imageMenuCanvasBackground" width="800" height="600"></canvas>
+</div>
+<div class="lightbox"><canvas id="lightboxCanvas" width="800" height="600"></canvas></div>
+<div class="group_aux"><canvas id="auxiliarImageCanvas" width="100" height="100"></canvas></div>
+<div class="file_open_list" id="file_open">
+    <i class="fa fa-times" id="btn_close_open_state" onclick="btn_close_open_state_click()"></i>
+    <table id="list_of_open_files">
+    </table>
+</div>
+<div class="file_save_list" id="file_save">
+    <i class="fa fa-times" id="btn_close_save_state" onclick="btn_close_save_state_click()"></i>
+    <text id="label">File Name</text>
+    <input type="text" id="textbox_file_name"></input>
+    <i class="fa fa-floppy-o" id="btn_save_state" onclick="btn_save_state_click()"></i>
+    <table id="list_of_files">
+    </table>
+</div>
 </body>
+
+
 <script>
-    //fabric.RectImage = fabric.util.createClass(fabric.Image, {
-    fabric.RectImage = fabric.util.createClass(fabric.Image, {
+    fabric.RectLineImage = fabric.util.createClass(fabric.Image, {
         type: 'cropzoomimage',
         zoomedXY: false,
         initialize: function(element, options)//(element, options)
         {
             options || (options = {});
             this.callSuper('initialize', element, options);
-            /*this.set({*/
-                //source: element.src,
-				/*left: options.iml,
-				top: options.imt,
-				width: options.imw,
-				height: options.imh,*/
-                //iml: options.iml,
-                //imt: options.imt,
-                //imw: options.imw,
-                //imh: options.imh,
-			this.set({
-				old_left: this.left,
-				old_top: this.top,
-				old_width: this.width,
-				old_height: this.height,
-				rects: new fabric.Rect({
-                    left: 0,
-                    top: 0,
-                    width: 0,
-                    height: 0,
-                    angle: 0,
-                    fill: 'transparent',
-                    stroke: '#000000',
-                    strokeDashArray: [3, 2],
-                    strokeWidth: 2,
-                    hasBorders: false})
+            this.set({
+                orgSrc: element.src,
+                old_left: this.left,
+                old_top: this.top,
+                old_width: this.width,
+                old_height: this.height,
+                old_angle: this.angle,
+                rects: null,
+                line: null
             });
-			//lightboxCanvas.add(this.image);
-            lightboxCanvas.add(this.rects);
         },
-		toObject : function()
-		{
-			return fabric.util.object.extend(this.callSuper('toObject'), { rects: this.rects });
-		},
+        toObject : function()
+        {
+            return fabric.util.object.extend(this.callSuper('toObject'), { rects: this.rects });
+            return fabric.util.object.extend(this.callSuper('toObject'), { line: this.line });
+        },
         updateRect: function(l, t, w, h) {
             this.rects.left = l;
             this.rects.top = t;
             this.rects.width = w;
             this.rects.height = h;
         },
-        crop: function(x, y, w, h, callback){
-            /*this.iml=x;
-            this.imt=y;
-            this.imw=w;
-            this.imh=h;*/
-			this.old_left = x;
-			this.old_top = y;
-			this.old_width = w;
-			this.old_height = h;
+        crop: function(l, t, w, h, callback){
+            this.old_left = l;
+            this.old_top = t;
+            this.old_width = w;
+            this.old_height = h;
             this.rerender(callback);
         },
         rerender: function(callback) {
-            var img = new Image()
-			var obj = this;
+            var img = new Image();
+            var obj = this;
             img.onload = function() {
                 var canvas = fabric.util.createCanvasElement();
-                canvas.width = obj.width;
+                canvas.width  = obj.width;
                 canvas.height = obj.height;
+
                 canvas.getContext('2d').drawImage(this, obj.old_left, obj.old_top, obj.old_width, obj.old_height, 0, 0, obj.width, obj.height);
 
                 img.onload = function() {
@@ -127,28 +116,28 @@
                 };
                 img.src = canvas.toDataURL('image/png');
             };
-            img.src = this.getSrc();
+            img.src = this.orgSrc;
         }
-	});
-	
-	fabric.RectImage.fromObject = function(object, callback) 
-	{
-		fabric.util.loadImage(object.src, function(img) {
-			callback && callback(new fabric.RectImage(img, object));
-		});
-	};
-	
-	fabric.RectImage.async = true;
+    });
+
+    fabric.RectLineImage.fromObject = function(object, callback) {
+        fabric.util.loadImage(object.src, function(img) {
+            callback && callback(new fabric.RectLineImage(img, object));
+        });
+    };
+
+    fabric.RectLineImage.async = true;
 </script>
+
 <script>
-	$("#btn_slide_menu").click(function() {
-		$("#imageMenu").slideToggle(0, function() {
-			$("#btn_slide_menu").toggleClass("fa fa-outdent");
-			$("#btn_slide_menu").toggleClass("fa fa-indent");
-		});
-	});
-    function Group(name)
-    {
+    $("#btn_slide_menu").click(function() {
+        $("#imageMenu").slideToggle(0, function() {
+            $("#btn_slide_menu").toggleClass("fa fa-outdent");
+            $("#btn_slide_menu").toggleClass("fa fa-indent");
+        });
+    });
+
+    function Group(name) {
         this.name = name;
         this.images = new Array;
         //this.thumbnail = new Image();
@@ -177,6 +166,7 @@
         };
     }
 </script>
+
 <script>
     var interfaceCanvas = document.getElementById('interfaceCanvas');
     var interfaceContext = interfaceCanvas.getContext('2d');
@@ -187,7 +177,7 @@
     var lightboxCanvas = new fabric.Canvas('lightboxCanvas');
 
     var current_menu_workspace;
-	var workspace_hierarchy = "-1";
+    var workspace_hierarchy = "-1";
 
     var alpha = 0.5;
     var number_of_columns = 3;
@@ -198,121 +188,115 @@
     var selected_image = -1;
     var drag = false;
     var image_name_list = "{{=image_list}}";
-    if (image_name_list.length > 0)
-    {
+
+    if (image_name_list.length > 0) {
         image_name_list = image_name_list.split(" ");
     }
-	
-	var loadingState;
-	
-    function getMousePosition(canvas, event)
-    {
+
+    var loadingState;
+
+    function getMousePosition(canvas, event) {
         var rect = canvas.getBoundingClientRect();
         return {
             x: event.pageX - rect.left,
             y: event.pageY - rect.top
         };
     }
-	
-	function isImage(element)
-	{
-		if (Object.prototype.toString.call(element).slice(8, -1) == 'HTMLImageElement')
-		{
-			return true;
-		}
-		
-		return false;
-	}
-	
-	function getMenuStateData(workspace)
-	{
-		var result = ""
-		
-		for (var i=0; i < workspace.length; i++)
-		{
-			if (isImage(workspace[i]))
-			{
-				temp = workspace[i].src;
-				temp = temp.split("/");
-				result = result + temp[temp.length - 1].substring(0, temp[temp.length - 1].length - 4) + "\n";
-			}
-			else
-			{
-				result = result + "\\" + workspace[i].name + "\n" + getMenuStateData(workspace[i].images) + "\\" + workspace[i].name + "\n";
-			}
-		}
-		
-		return result
-	}
-	
-	function getStateData(workspace)
-	{
-		var temp;
-		var result = "\\menu\n";
-		
-		result = result + getMenuStateData(workspace);
-		
-		result = result + "\\menu\n";
-		result = result + "\\lightbox\n";
-		result = result + JSON.stringify(lightboxCanvas) + "\n";
-		result = result + "\\lightbox\n";
-		
-		return result;
-	}
-	
-	function loadGroup(group, content, state)
-	{
-		group.name = content[0];
-		
-		for (var i = 1; i < content.length; i++)
-		{
-			if (content[i].constructor === Array)
-			{
-				group.images.push(new Group);
-				loadGroup(group.images[group.images.length - 1], content[i], loadingState);
-			}
-			else
-			{
-				group.images.push(' ');
-				loadingState.push({'group': group.images, 'imagesrc': "../static/images/user/" + content[i] + ".png", index: i-1});
-			}
-		}
-	}
-	
-	function loadStateData(content)
-	{
-		main_menu_workspace = [];
-		loadingState = new Array();
-		editableImageArray = new Array();
 
-		for (var i = 0; i < content.length - 1; i++)
-		{
-			if (content[i].constructor === Array)
-			{
-				main_menu_workspace.push(new Group);
-				loadGroup(main_menu_workspace[main_menu_workspace.length - 1], content[i], loadingState);
-			}
-			else
-			{
-				main_menu_workspace.push('');
-				loadingState.push({'group': main_menu_workspace, 'imagesrc': "../static/images/user/" + content[i] + ".png", index: i});
-			}
-		}
-		
-		$('#context_link').empty();
-		workspace_hierarchy = "-1";
-		$('#context_link').append("<a href='#' onclick='linkClick(\"-1\");return false;'>Main</a>");
-		lightboxCanvas.clear();
-		lightboxCanvas.loadFromJSON(content[content.length - 1], lightboxCanvas.renderAll.bind(lightboxCanvas));
-		loadImagesState(loadingState, imageLoaded);
-	}
+    function isImage(element) {
+        if (Object.prototype.toString.call(element).slice(8, -1) == 'HTMLImageElement')
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    function getMenuStateData(workspace) {
+        var result = ""
+
+        for (var i=0; i < workspace.length; i++)
+        {
+            if (isImage(workspace[i]))
+            {
+                temp = workspace[i].src;
+                temp = temp.split("/");
+                result = result + temp[temp.length - 1].substring(0, temp[temp.length - 1].length - 4) + "\n";
+            }
+            else
+            {
+                result = result + "\\" + workspace[i].name + "\n" + getMenuStateData(workspace[i].images) + "\\" + workspace[i].name + "\n";
+            }
+        }
+
+        return result
+    }
+
+    function getStateData(workspace) {
+        var temp;
+        var result = "\\menu\n";
+
+        result = result + getMenuStateData(workspace);
+
+        result = result + "\\menu\n";
+        result = result + "\\lightbox\n";
+        result = result + JSON.stringify(lightboxCanvas) + "\n";
+        result = result + "\\lightbox\n";
+
+        return result;
+    }
+
+    function loadGroup(group, content, state) {
+        group.name = content[0];
+
+        for (var i = 1; i < content.length; i++)
+        {
+            if (content[i].constructor === Array)
+            {
+                group.images.push(new Group);
+                loadGroup(group.images[group.images.length - 1], content[i], loadingState);
+            }
+            else
+            {
+                group.images.push(' ');
+                loadingState.push({'group': group.images, 'imagesrc': "../static/images/user/" + content[i] + ".png", index: i-1});
+            }
+        }
+    }
+
+    function loadStateData(content) {
+        main_menu_workspace = [];
+        loadingState = new Array();
+        editableImageArray = new Array();
+
+        for (var i = 0; i < content.length - 1; i++)
+        {
+            if (content[i].constructor === Array)
+            {
+                main_menu_workspace.push(new Group);
+                loadGroup(main_menu_workspace[main_menu_workspace.length - 1], content[i], loadingState);
+            }
+            else
+            {
+                main_menu_workspace.push('');
+                loadingState.push({'group': main_menu_workspace, 'imagesrc': "../static/images/user/" + content[i] + ".png", index: i});
+            }
+        }
+
+        $('#context_link').empty();
+        workspace_hierarchy = "-1";
+        $('#context_link').append("<a href='#' onclick='linkClick(\"-1\");return false;'>Main</a>");
+        lightboxCanvas.clear();
+        lightboxCanvas.loadFromJSON(content[content.length - 1], lightboxCanvas.renderAll.bind(lightboxCanvas));
+        loadImagesState(loadingState, imageLoaded);
+    }
 
     function resizeImageMenu() {
         imageMenuCanvas.width = (window.innerWidth - (window.innerWidth * 0.03)) * 0.3;
         imageMenuCanvas.height = window.innerHeight - (window.innerHeight * 0.03);
-		$('#imageMenuCanvasBackground').width(imageMenuCanvas.width);
-		$('#imageMenuCanvasBackground').height(imageMenuCanvas.height);
-		
+        $('#imageMenuCanvasBackground').width(imageMenuCanvas.width);
+        $('#imageMenuCanvasBackground').height(imageMenuCanvas.height);
+
         marginx = imageMenuCanvas.width * 0.016;
         marginy = marginx;//imageMenuCanvas.height * 0.025;
         offsetx = imageMenuCanvas.width * 0.3;//imageMenuCanvas.width * 0.08;
@@ -324,13 +308,13 @@
         lightboxCanvas.setWidth(window.innerWidth);
         lightboxCanvas.setHeight(window.innerHeight);
 
-		$("#file_save").css("width", window.innerWidth);
-		$("#file_save").css("height", window.innerHeight);
-		$("#file_open").css("width", window.innerWidth);
-		$("#file_open").css("height", window.innerHeight);
+        $("#file_save").css("width", window.innerWidth);
+        $("#file_save").css("height", window.innerHeight);
+        $("#file_open").css("width", window.innerWidth);
+        $("#file_open").css("height", window.innerHeight);
         //var fileListBackgroundCanvas = document.getElementById('file_list_background');
-		//fileListBackgroundCanvas.width = window.innerWidth;
-		//fileListBackgroundCanvas.height = window.innerHeight;
+        //fileListBackgroundCanvas.width = window.innerWidth;
+        //fileListBackgroundCanvas.height = window.innerHeight;
         /*imageMenuContext.globalAlpha = alpha;
 		imageMenuContext.fillStyle = "#777777";
 		imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
@@ -339,8 +323,7 @@
 
     resizeImageMenu();
 
-    function img(source)
-    {
+    function img(source) {
         this.data = new Image();
         this.data.src = source;
         this.data.onload = function() {
@@ -358,34 +341,32 @@
     var main_menu_workspace = [];
     current_menu_workspace = main_menu_workspace;
 
-    for (var i = 0; i<image_name_list.length; i++)
-    {
+    for (var i = 0; i<image_name_list.length; i++) {
         imageArray.push("../static/images/user/" + image_name_list[i]);
     }
     //editableImageArray[0] = fabric.Image.fromURL(imageArray[2], function(loaded_img) { lightboxCanvas.add(loaded_img); });
     //editableImageArray[0] = fabric.Image.fromURL('../static/images/user/2.png', function(loaded_img) { lightboxCanvas.add(loaded_img); });
 
-	function loadImagesState(array, callBack)
-	{
+    function loadImagesState(array, callBack) {
         var count = 0;
-		var temp_image;
-		var index;
+        var temp_image;
+        var index;
 
         for (var i in array) {
-			temp_image = new Image();
-			temp_image.src = array[i]['imagesrc'];
-			array[i]['group'][array[i]['index']] = temp_image;
-			index = array[i]['index'];
-			array[i]['group'][index].onload = function(){
+            temp_image = new Image();
+            temp_image.src = array[i]['imagesrc'];
+            array[i]['group'][array[i]['index']] = temp_image;
+            index = array[i]['index'];
+            array[i]['group'][index].onload = function(){
                 count++;
                 if (count == array.length){
-					current_menu_workspace = main_menu_workspace;
+                    current_menu_workspace = main_menu_workspace;
                     callBack();
                 }
             }
         }
-	}
-	
+    }
+
     function loadImages(arr, callBack){
         var count = 0;
 
@@ -445,8 +426,7 @@
 
     loadImages(imageArray, imageLoaded);
 
-    function getImageMouseCollision(mousepos)
-    {
+    function getImageMouseCollision(mousepos) {
         var result = -1;
         var temp = -1;
         for (var i = 1; i<number_of_columns+1; i++)
@@ -486,8 +466,7 @@
         return result;
     }
 
-    function mouseDownEvent(e)
-    {
+    function mouseDownEvent(e) {
         var mousepos = getMousePosition(imageMenuCanvas, e);
 
         selected_image = getImageMouseCollision(mousepos);
@@ -497,34 +476,34 @@
             interfaceCanvas.style.zIndex = 10;
         }
     }
-    function mouseRightClickEvent(e)
-    {
-		var mousepos = getMousePosition(imageMenuCanvas, e);
 
-		e.preventDefault();
+    function mouseRightClickEvent(e) {
+        var mousepos = getMousePosition(imageMenuCanvas, e);
 
-		selected_image = getImageMouseCollision(mousepos);
-		if (selected_image > -1)
-		{
-			if (Object.prototype.toString.call(current_menu_workspace[selected_image]).slice(8, -1) != 'HTMLImageElement')
-			{
-				workspace_hierarchy = workspace_hierarchy + "/" + selected_image;
-				$('#context_link').append(" > <a href='#' onclick='linkClick(\"" + workspace_hierarchy + "\");return false;'>" + current_menu_workspace[selected_image].name + "</a>");
-				current_menu_workspace = current_menu_workspace[selected_image].images;
-				imageLoaded();
-			}
-		}
+        e.preventDefault();
+
+        selected_image = getImageMouseCollision(mousepos);
+        if (selected_image > -1)
+        {
+            if (Object.prototype.toString.call(current_menu_workspace[selected_image]).slice(8, -1) != 'HTMLImageElement')
+            {
+                workspace_hierarchy = workspace_hierarchy + "/" + selected_image;
+                $('#context_link').append(" > <a href='#' onclick='linkClick(\"" + workspace_hierarchy + "\");return false;'>" + current_menu_workspace[selected_image].name + "</a>");
+                current_menu_workspace = current_menu_workspace[selected_image].images;
+                imageLoaded();
+            }
+        }
     }
-    function mouseMoveEvent(e)
-    {
+
+    function mouseMoveEvent(e) {
         if (drag)
         {
             //drawScreenWithRect(getMousePosition(imageMenuCanvas, e), false);
             drawScreenWithRect(getMousePosition(interfaceCanvas, e), false);
         }
     }
-    function mouseUpEvent(e)
-    {
+
+    function mouseUpEvent(e) {
         if (drag)
         {
             drag = false;
@@ -549,74 +528,73 @@
             }
             else if (drop_image = -1)
             {
-				if (Object.prototype.toString.call(current_menu_workspace[selected_image]).slice(8, -1) == 'HTMLImageElement')
+                if (Object.prototype.toString.call(current_menu_workspace[selected_image]).slice(8, -1) == 'HTMLImageElement')
                 {
-					/*editableImageArray.push(new fabric.Image.fromURL(current_menu_workspace[selected_image].src, function(loaded_img) {
-						loaded_img.set('left', mousePosition.x - (loaded_img.getWidth() / 2)).set('top', mousePosition.y - (loaded_img.getHeight() / 2));
-						lightboxCanvas.add(loaded_img);
-					}));*/
-					editableImageArray.push(new fabric.RectImage(current_menu_workspace[selected_image], {
-						left: mousePosition.x - (current_menu_workspace[selected_image].width / 2),//(loaded_img.getWidth() / 2),
-						top: mousePosition.y - (current_menu_workspace[selected_image].height / 2)//(loaded_img.getHeight() / 2)
-					}));
-					lightboxCanvas.add(editableImageArray[editableImageArray.length - 1]);
-				}
+                    /*editableImageArray.push(new fabric.Image.fromURL(current_menu_workspace[selected_image].src, function(loaded_img) {
+                        loaded_img.set('left', mousePosition.x - (loaded_img.getWidth() / 2)).set('top', mousePosition.y - (loaded_img.getHeight() / 2));
+                        lightboxCanvas.add(loaded_img);
+                    }));*/
+                    editableImageArray.push(new fabric.RectLineImage(current_menu_workspace[selected_image], {
+                        left: mousePosition.x - (current_menu_workspace[selected_image].width / 2),//(loaded_img.getWidth() / 2),
+                        top: mousePosition.y - (current_menu_workspace[selected_image].height / 2)//(loaded_img.getHeight() / 2)
+                    }));
+                    lightboxCanvas.add(editableImageArray[editableImageArray.length - 1]);
+                }
             }
 
             drawScreenWithRect(getMousePosition(interfaceCanvas, e), true);
         }
-		interfaceContext.clearRect(0, 0, interfaceCanvas.width, interfaceCanvas.height);
+        interfaceContext.clearRect(0, 0, interfaceCanvas.width, interfaceCanvas.height);
         interfaceCanvas.style.zIndex = -1;
     }
-	
-	function linkClick(link)
-	{
-		$('#context_link').empty();
-		workspace_hierarchy = "-1";
-		$('#context_link').append("<a href='#' onclick='linkClick(\"-1\");return false;'>Main</a>");
 
-		if (link == "-1")
-		{
-			current_menu_workspace = main_menu_workspace;
-		}
-		else
-		{
-			path = link.split('/');
-			for (var i = 0; i < path.length; i++)
-			{
-				if (parseInt(path[i]) < 0)
-				{
-					current_menu_workspace = main_menu_workspace;
-				}
-				else
-				{
-					workspace_hierarchy = workspace_hierarchy + '/' + path[i];
-					$('#context_link').append(" > <a href='#' onclick='linkClick(\"" + workspace_hierarchy + "\");return false;'>" + current_menu_workspace[parseInt(path[i])].name + "</a>");
-					current_menu_workspace = current_menu_workspace[parseInt(path[i])].images;
-				}
-			}
-		}
-		imageLoaded();
-	}
+    function linkClick(link) {
+        $('#context_link').empty();
+        workspace_hierarchy = "-1";
+        $('#context_link').append("<a href='#' onclick='linkClick(\"-1\");return false;'>Main</a>");
+
+        if (link == "-1")
+        {
+            current_menu_workspace = main_menu_workspace;
+        }
+        else
+        {
+            path = link.split('/');
+            for (var i = 0; i < path.length; i++)
+            {
+                if (parseInt(path[i]) < 0)
+                {
+                    current_menu_workspace = main_menu_workspace;
+                }
+                else
+                {
+                    workspace_hierarchy = workspace_hierarchy + '/' + path[i];
+                    $('#context_link').append(" > <a href='#' onclick='linkClick(\"" + workspace_hierarchy + "\");return false;'>" + current_menu_workspace[parseInt(path[i])].name + "</a>");
+                    current_menu_workspace = current_menu_workspace[parseInt(path[i])].images;
+                }
+            }
+        }
+        imageLoaded();
+    }
 
     imageMenuCanvas.onmousedown = mouseDownEvent;
-	//imageMenuCanvas.oncontextmenu = mouseRightClickEvent;
-	imageMenuCanvas.addEventListener('contextmenu', mouseRightClickEvent, false); 
+    //imageMenuCanvas.oncontextmenu = mouseRightClickEvent;
+    imageMenuCanvas.addEventListener('contextmenu', mouseRightClickEvent, false);
     //imageMenuCanvas.onmousemove = mouseMoveEvent;
     //imageMenuCanvas.onmouseup = mouseUpEvent;
     interfaceCanvas.onmousemove = mouseMoveEvent;
     interfaceCanvas.onmouseup = mouseUpEvent;
 
-	function drawScreenWithRect(mousepos, erase) {
+    function drawScreenWithRect(mousepos, erase) {
         //imageMenuContext.clearRect( 0 , 0 , imageMenuCanvas.width, imageMenuCanvas.height );
-		/*imageMenuContext.fillStyle = "#ffffff";
-		imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
+        /*imageMenuContext.fillStyle = "#ffffff";
+        imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
         imageMenuContext.globalAlpha = alpha;
-		imageMenuContext.fillStyle = "#777777";
-		imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
+        imageMenuContext.fillStyle = "#777777";
+        imageMenuContext.fillRect(0, 0, imageMenuCanvas.width, imageMenuCanvas.height);
         imageMenuContext.globalAlpha = 1;*/
 
-		imageLoaded();
+        imageLoaded();
 
         if (!erase)
         {
@@ -626,7 +604,7 @@
             //imageMenuContext.fillStyle = "#0000ff";
             //imageMenuContext.fillRect(mousepos.x - 10, mousepos.y - 10, 20, 20);
         }
-	}
+    }
 
     function upload_button_click() {
         $('#images').click();
@@ -660,73 +638,73 @@
             imageLoaded();
         }
     }
-	
-	function open_state_button_click() {
-		$.get("state_list", function( data ) {
-			var filenames = JSON.parse(data);
-			
-			$('#list_of_open_files').html("<tr><th>File</th><th>Date</th></tr>");
-			for (var i = 0; i < filenames.length; i++)
-			{
-				$('#list_of_open_files').append("<tr class=\"row\"><td><i class=\"fa fa-file-o\"></i> " + filenames[i][0] + "</td><td style=\"text-align: center;\">" + filenames[i][1] + "</td></tr>");
-			}
 
-			var rows = $('.row');
+    function open_state_button_click() {
+        $.get("state_list", function( data ) {
+            var filenames = JSON.parse(data);
 
-			rows.on('click', function(e) {
-				var row = $(this);
+            $('#list_of_open_files').html("<tr><th>File</th><th>Date</th></tr>");
+            for (var i = 0; i < filenames.length; i++)
+            {
+                $('#list_of_open_files').append("<tr class=\"row\"><td><i class=\"fa fa-file-o\"></i> " + filenames[i][0] + "</td><td style=\"text-align: center;\">" + filenames[i][1] + "</td></tr>");
+            }
 
-				rows.removeClass('highlight');
-				row.addClass('highlight');
-				//console.log(row.text());
-				//$('#file_name').text(row.text());
-			});
-			
-			rows.on('dblclick', function(e) {
-				var row = $(this);
-				var content = row.html();
-				var filename;
-				
-				content = content.split('</i> ');
-				filename = (content[1].split('</td>'))[0];
-				
-				$.ajax({
-					url: "{{=URL('default', 'open_state')}}",
-					type: "POST",
-					data: "filename=" + JSON.stringify(filename),
-					success: function (data)
-					{
-						var content = JSON.parse(data);
-						loadStateData(content);
-						btn_close_open_state_click();
-					},
-					error: function (data)
-					{
-						console.log(data.responseText);
-					}
-				});
-			});
-			
-			$('#file_open').css("visibility", "visible");
-			$('#file_open').css("z-index", "6");
-		});
-	}
-	
-	function save_state_button_click() {
-		$.get("state_list", function( data ) {
-			var filenames = JSON.parse(data);
-			
-			$('#list_of_files').html("<tr><th>File</th><th>Date</th></tr>");
-			for (var i = 0; i < filenames.length; i++)
-			{
-				$('#list_of_files').append("<tr><td><i class=\"fa fa-file-o\"></i> " + filenames[i][0] + "</td><td style=\"text-align: center;\">" + filenames[i][1] + "</td></tr>");
-			}
-			
-			$('#file_save').css("visibility", "visible");
-			$('#file_save').css("z-index", "6");
-		});
-	}
-	
+            var rows = $('.row');
+
+            rows.on('click', function(e) {
+                var row = $(this);
+
+                rows.removeClass('highlight');
+                row.addClass('highlight');
+                //console.log(row.text());
+                //$('#file_name').text(row.text());
+            });
+
+            rows.on('dblclick', function(e) {
+                var row = $(this);
+                var content = row.html();
+                var filename;
+
+                content = content.split('</i> ');
+                filename = (content[1].split('</td>'))[0];
+
+                $.ajax({
+                    url: "{{=URL('default', 'open_state')}}",
+                    type: "POST",
+                    data: "filename=" + JSON.stringify(filename),
+                    success: function (data)
+                    {
+                        var content = JSON.parse(data);
+                        loadStateData(content);
+                        btn_close_open_state_click();
+                    },
+                    error: function (data)
+                    {
+                        console.log(data.responseText);
+                    }
+                });
+            });
+
+            $('#file_open').css("visibility", "visible");
+            $('#file_open').css("z-index", "6");
+        });
+    }
+
+    function save_state_button_click() {
+        $.get("state_list", function( data ) {
+            var filenames = JSON.parse(data);
+
+            $('#list_of_files').html("<tr><th>File</th><th>Date</th></tr>");
+            for (var i = 0; i < filenames.length; i++)
+            {
+                $('#list_of_files').append("<tr><td><i class=\"fa fa-file-o\"></i> " + filenames[i][0] + "</td><td style=\"text-align: center;\">" + filenames[i][1] + "</td></tr>");
+            }
+
+            $('#file_save').css("visibility", "visible");
+            $('#file_save').css("z-index", "6");
+        });
+    }
+
     function handleFileSelect(evt) {
         var images = evt.target.files;
 
@@ -768,120 +746,327 @@
     }
 
     document.getElementById('images').addEventListener('change', handleFileSelect, false);
-	
-	function btn_save_state_click()
-	{
-		if ($('#textbox_file_name').val() != "")
+
+    function btn_save_state_click() {
+        if ($('#textbox_file_name').val() != "")
         {
-			$.ajax({
-				url: "{{=URL('default', 'save_state')}}",
-				type: "POST",
-				data: "data=" + JSON.stringify(getStateData(main_menu_workspace)) + "&filename=" + $('#textbox_file_name').val(),
-				success: function (data)
-				{
-					$('#file_save').css("visibility", "hidden");
-					$('#file_save').css("z-index", "-2");
-					$('#textbox_file_name').val("");
-				},
-				error: function (data)
-				{
-					//console.log(data.responseText);
-				}
-			});
-		}
-	}
-	
-	function btn_close_open_state_click()
-	{
-		$('#file_open').css("visibility", "hidden");
-		$('#file_open').css("z-index", "-2");
-	}
-	function btn_close_save_state_click()
-	{
-		$('#file_save').css("visibility", "hidden");
-		$('#file_save').css("z-index", "-2");
-		$('#textbox_file_name').val("");
-	}
-	
-	// ADDON
-	
-    lightboxCanvas.on({'object:moving': onChange, 'object:scaling': onChange, 'object:rotating': onChange});
-	
-	function isIn(rect, image)
-	{
-		if (rect.left >= image.left && rect.left + rect.width <= image.left + image.width && rect.top >= image.top && rect.top + rect.height <= image.top + image.height)
-		{
-			return true;
-		}
-		return false;
-	}
-	
-	function onChange(options) {
-		options.target.setCoords();
-		
-        lightboxCanvas.forEachObject(function (obj) {
-            if (obj === options.target) return;
-            if (obj instanceof fabric.Rect) return;
-            //options.target.opacity = (options.target.intersectsWithObject(obj) ? 0.5 : 1);
-            if(options.target.isContainedWithinObject(obj) || options.target.intersectsWithObject(obj) || obj.isContainedWithinObject(options.target))
-            {
-                options.target.opacity = 0.5;
-                obj.opacity = 1.0;
-            }
-            else
-                options.target.opacity = 1.0;
-                //obj.opacity = 0.5;
+            $.ajax({
+                url: "{{=URL('default', 'save_state')}}",
+                type: "POST",
+                data: "data=" + JSON.stringify(getStateData(main_menu_workspace)) + "&filename=" + $('#textbox_file_name').val(),
+                success: function (data)
+                {
+                    $('#file_save').css("visibility", "hidden");
+                    $('#file_save').css("z-index", "-2");
+                    $('#textbox_file_name').val("");
+                },
+                error: function (data)
+                {
+                    //console.log(data.responseText);
+                }
+            });
+        }
+    }
+
+    function btn_close_open_state_click() {
+        $('#file_open').css("visibility", "hidden");
+        $('#file_open').css("z-index", "-2");
+    }
+
+    function btn_close_save_state_click() {
+        $('#file_save').css("visibility", "hidden");
+        $('#file_save').css("z-index", "-2");
+        $('#textbox_file_name').val("");
+    }
+
+    // From here - Lhaylla
+    // ADDON
+
+    lightboxCanvas.on({'object:moving'  : onChange,
+        'object:scaling' : onChange,
+        'object:rotating': onRotating,
+        'object:selected': onSelect});
+
+    function isIn(rect, image) {
+        if(rect === image) return false;
+        if(rect.isContainedWithinObject(image)) return true;
+        return false;
+
+        /*if (rect.left >= image.left && rect.left + rect.width <= image.left + image.width && rect.top >= image.top && rect.top + rect.height <= image.top + image.height)
+        {
+            return true;
+        }
+        return false;*/
+    }
+
+    function attach(rect, image){
+        image.rects = new fabric.Rect({
+            left:            rect.left,
+            top:             rect.top,
+            width:           rect.width,
+            height:          rect.height,
+            angle:           0,
+            fill:            'transparent',
+            stroke:          '#000000',
+            strokeDashArray: [3, 2],
+            strokeWidth:     2,
+            hasBorders:      false,
+            selectable:      false
+        });
+    }
+
+    /*lightboxCanvas.on('mouse:down', function(event) {
+        pointer = lightboxCanvas.getPointer(event.e);
+        console.log(options.target.intersectsWithObject(pointer));
+    });*/
+
+    function draw_rect_button_click() {
+        var isDown;
+        var pointer;
+        var origX, origY, finX, finY;
+
+        var temp_rect = new fabric.Rect({
+            fill: 'transparent',
+            stroke: '#000000',
+            strokeDashArray: [3, 2],
+            strokeWidth: 2,
+            hasBorders: false
         });
 
-		var deltaleft = options.target.getLeft() - options.target.old_left;
-        var deltatop = options.target.getTop() - options.target.old_top;
-		var scaleX = options.target.getWidth() / options.target.old_width;
-		var scaleY = options.target.getHeight() / options.target.old_height;
-		//console.log(options.target);
-		options.target.updateRect(options.target.getLeft() + (options.target.rects.left - options.target.getLeft() + deltaleft) * scaleX, options.target.getTop() + (options.target.rects.top - options.target.getTop() + deltatop) * scaleX, options.target.rects.width * scaleX, options.target.rects.height * scaleY);
-        options.target.bringToFront();
-		options.target.rects.bringToFront();
-		options.target.set({old_left: options.target.left, old_top: options.target.top, old_width: options.target.width, old_height: options.target.height});
-        lightboxCanvas.renderAll();
+        lightboxCanvas.add(temp_rect);
+        lightboxCanvas.forEachObject(function (obj) {
+            obj.selectable = false;
+        });
+
+        lightboxCanvas.on('mouse:down', function (event) {
+            isDown = true;
+
+            pointer = lightboxCanvas.getPointer(event.e);
+            origX = pointer.x;
+            origY = pointer.y;
+            temp_rect.set({left: origX, top: origY, width: 0, height: 0});
+        });
+
+        lightboxCanvas.on('mouse:move', function (event) {
+            if (!isDown) return;
+
+            pointer = lightboxCanvas.getPointer(event.e);
+            finX = pointer.x;
+            finY = pointer.y;
+
+            if (origX > finX) temp_rect.set({left: Math.abs(finX)});
+            if (origY > finY) temp_rect.set({top: Math.abs(finY)});
+
+            temp_rect.set({width: Math.abs(origX - finX), height: Math.abs(origY - finY)});
+            temp_rect.setCoords();
+            lightboxCanvas.renderAll();
+        });
+
+
+        lightboxCanvas.on('mouse:up', function (event) {
+            isDown = false;
+
+            lightboxCanvas.forEachObject(function (obj) {
+                obj.selectable = true;
+
+                if (isIn(temp_rect, obj)) {
+
+                    attach(temp_rect, obj);
+                    /*obj.rects = new fabric.Rect({
+                        left:            temp_rect.left,
+                        top:             temp_rect.top,
+                        width:           temp_rect.width,
+                        height:          temp_rect.height,
+                        angle:           0,
+                        fill:            'transparent',
+                        stroke:          '#000000',
+                        strokeDashArray: [3, 2],
+                        strokeWidth:     2,
+                        hasBorders:      false,
+                        selectable:      false
+                    });*/
+
+                    obj.set({old_left:   obj.oCoords.tl.x,
+                        old_top:    obj.oCoords.tl.y,
+                        old_width:  obj.getWidth(),
+                        old_height: obj.getHeight(),
+                        old_angle:  obj.getAngle()
+                    });
+
+                    lightboxCanvas.add(obj.rects);
+                    obj.rects.bringToFront();
+                }
+            });
+
+            lightboxCanvas.remove(temp_rect);
+            lightboxCanvas.off({'mouse:down': null, 'mouse:move': null, 'mouse:up': null});
+            lightboxCanvas.renderAll();
+        });
     }
-	
-	/*lightboxCanvas.on('mouse:down', function(event) {
-		pointer = lightboxCanvas.getPointer(event.e);
-		console.log(options.target.intersectsWithObject(pointer));
-	});*/
-	
-    function draw_rect_button_click() {
-        //rImage0.selectable = false;
-        //rImage1.selectable = false;
+
+    var croped_images = new Array(), croped_images2 = new Array(), croped_images3 = new Array();
+
+    function crop_rect_button_click() {
+        var ratio = 1.0;
+        var width_ratio = 1.0, height_ratio = 1.0;
+        var count = 0;
+
+        lightboxCanvas.deactivateAll();
+        lightboxCanvas.forEachObject(function (obj) {
+            obj.visible = false;
+            if (obj instanceof fabric.Rect)
+            {
+                if (obj.width > 0)
+                {
+                    count = count + 1;
+                }
+            }
+        });
+
+        width_ratio = (lightboxCanvas.width - (10 * (count + 1)));
+        if (count == 2) width_ratio = width_ratio / 2;
+        else if (count > 2) width_ratio = width_ratio / Math.ceil(count / 2);
+
+        //height_ratio = ((lightboxCanvas.height  - (10 * (count + 1))) / (count > 2 ? 2:1));
+        height_ratio = ((lightboxCanvas.height - (40 + (count > 2 ? 20 : 10))) / (count > 2 ? 2 : 1));
+
+        var index = 1;
+
+        lightboxCanvas.forEachObject(function (obj) {
+            if (obj instanceof fabric.RectLineImage)
+            {
+                if (obj.rects.width > 0)
+                {
+                    ratio = width_ratio / obj.rects.width;
+                    if (ratio > height_ratio / obj.rects.height)
+                    {
+                        ratio = height_ratio / obj.rects.height;
+                    }
+
+                    var temp_img = new Image();
+                    temp_img.src = obj.getSrc();
+
+                    var left = 10;
+                    if (count > 1)
+                        left = left + ((10 + width_ratio) * (index % (Math.ceil(count/2) == 1 ? 2 : Math.ceil(count/2))));
+                    left = left + ((width_ratio - (obj.rects.width * ratio)) / 2);
+
+                    var top = 10;
+                    if (count > 2)
+                    {
+                        if (index > Math.ceil(count / 2))
+                        {
+                            top = top + 10 + height_ratio;
+                        }
+                    }
+                    top = top + ((height_ratio - (obj.rects.height * ratio)) / 2);
+
+                    temp_img.onload = function()
+                    {
+                        croped_images.push(obj);
+                        croped_images2.push(new fabric.RectLineImage(temp_img, {
+                            originX: 'left',
+                            originY: 'top',
+                            left:    left,
+                            top:     top,
+                            width:   obj.rects.width  * ratio,
+                            height:  obj.rects.height * ratio
+                        }));
+
+                        var i = croped_images2.length - 1;
+
+                        croped_images2[i].crop((obj.rects.left - obj.left) / obj.scaleX,
+                                (obj.rects.top  - obj.top)  / obj.scaleY,
+                                obj.rects.width  / obj.scaleX,
+                                obj.rects.height / obj.scaleY,
+                                function() { lightboxCanvas.renderAll() });
+
+                        lightboxCanvas.add(croped_images2[i]);
+
+                        croped_images3.push(new fabric.RectLineImage(temp_img, {
+                            originX: 'right',
+                            originY: 'bottom',
+                            left:    left + croped_images2[i].width,
+                            top:     top  + croped_images2[i].height
+                        }));
+
+                        croped_images3[i].set({scaleX: 0.1 * ratio, scaleY: 0.1 * ratio});
+                        lightboxCanvas.add(croped_images3[i]);
+                        croped_images3[i].bringToFront();
+                        croped_images3[i].selectable = false;
+                        croped_images3[i].controls = false;
+
+                        var left3 = croped_images3[i].oCoords.tl.x + ((obj.rects.left - obj.left) / obj.scaleX) * croped_images3[i].scaleX;
+                        var top3  = croped_images3[i].oCoords.tl.y + ((obj.rects.top  - obj.top)  / obj.scaleY) * croped_images3[i].scaleY;
+                        var wid3  = (obj.rects.width  / obj.scaleX) * croped_images3[i].scaleX;
+                        var hei3  = (obj.rects.height / obj.scaleY) * croped_images3[i].scaleY;
+
+                        croped_images3[i].rects = new fabric.Rect({
+                            left:            left3,
+                            top:             top3,
+                            width:           wid3,
+                            height:          hei3,
+                            fill:            'transparent',
+                            stroke:          '#000000',
+                            strokeDashArray: [3, 2],
+                            strokeWidth:     2,
+                            hasBorders:      false,
+                            selectable:      false
+                        });
+
+
+                        lightboxCanvas.add(croped_images3[i].rects);
+                        croped_images3[i].rects.bringToFront();
+
+                    }
+                    index = index + 1;
+                    //var url = obj.toDataURL({left: obj.rects.left - obj.left, top: obj.rects.top - obj.top, width: obj.rects.width, height: obj.rects.height});
+                    /*var url = obj.toDataURL();
+                    var url_image = new Image();
+                    url_image.src = url;
+                    url_image.onload = function ()
+                    {
+                        var i = new fabric.RectLineImage(url_image);
+                        lightboxCanvas.add(i);
+                        i.left = 0;
+                        i.top = 0;
+                        console.log(i);
+                    }*/
+                    //croped_images.push(new fabric.Image.fromURL(obj.getSrc(), function(image) {
+                    /*croped_images.push(new fabric.Image.fromURL(url, function(image) {
+                            image.originX = 'left';
+                            image.originY = 'top';
+                            image.left = 0;
+                            image.top = 0;
+                            //image.left = (10 * (index % (Math.ceil(count / 2)) + 1) + width_ratio * (index - 1));
+                            //image.top = (10 * (index > (count/2 + 1) ? 2:1) + height_ratio * (index > (count/2 + 1) ? 1:0));
+                            //image.width = obj.rects.width * ratio;
+                            //image.height = obj.rects.height * ratio;
+                            lightboxCanvas.add(image);
+                            console.log(image);
+                            index = index + 1;
+                            image.bringToFront();
+                        })
+                    );*/
+                    //lightboxCanvas.renderAll();
+                    //croped_images[croped_images.length - 1].crop((obj.rects.left - obj.left) / obj.scaleX, (obj.rects.top - obj.top) / obj.scaleY, obj.rects.width / obj.scaleX, obj.rects.height / obj.scaleY);
+                    //zImg1.crop((rImage1.imr.left-rImage1.left)/rImage1.scaleX,(rImage1.imr.top-rImage1.top)/rImage1.scaleY,
+                    //         rImage1.imr.width/rImage1.scaleX,rImage1.imr.height/rImage1.scaleY,function(){mycanvas.renderAll()});
+                }
+            }
+        });
+
+        lightboxCanvas.forEachObject(function (obj) {
+            obj.selectable = false;
+        });
 
         var isDown;
-		var temp_rect = new fabric.Rect({
-			angle: 0,
-			fill: 'transparent',
-			stroke: '#000000',
-			strokeDashArray: [3, 2],
-			strokeWidth: 2,
-			hasBorders: false
-		});
-		lightboxCanvas.add(temp_rect);
-		lightboxCanvas.forEachObject(function (obj) {
-			obj.selectable = false;
-		});
 
         lightboxCanvas.on('mouse:down', function (event) {
             isDown = true;
             pointer = lightboxCanvas.getPointer(event.e);
             origX = pointer.x;
             origY = pointer.y;
-
-			temp_rect.set({left: origX, top: origY, width: 0, height: 0});
-			/*options.target.updateRect(origX, origY, 0, 0);
-			lightboxCanvas.forEachObject(function (obj) {
-				if (isIn(pointer, obj))
-				{
-					obj.updateRect(origX, origY, 0, 0);
-				}
-			});*/
         });
 
         lightboxCanvas.on('mouse:move', function (event) {
@@ -891,23 +1076,10 @@
             finX = pointer.x;
             finY = pointer.y;
 
-            if (origX > finX) {
-				temp_rect.set({left: Math.abs(finX)});
-				/*rImage0.imr.set({left: Math.abs(finX)});
-                rImage1.imr.set({left: Math.abs(finX)});*/
-            }
-            if (origY > finY) {
-				temp_rect.set({top: Math.abs(finY)});
-                /*rImage0.imr.set({top: Math.abs(finY)});
-                rImage1.imr.set({top: Math.abs(finY)});*/
-            }
+            drag_croped_image((finX - origX)/10, (finY - origY)/10);
 
-			temp_rect.set({width: Math.abs(origX - finX), height: Math.abs(origY - finY)});
-            /*rImage0.imr.set({width: Math.abs(origX - finX)});
-            rImage0.imr.set({height: Math.abs(origY - finY)});
-
-            rImage1.imr.set({width: Math.abs(origX - finX)});
-            rImage1.imr.set({height: Math.abs(origY - finY)});*/
+            origX = finX;
+            origY = finY;
 
             lightboxCanvas.renderAll();
         });
@@ -915,175 +1087,462 @@
 
         lightboxCanvas.on('mouse:up', function (event) {
             isDown = false;
-            //rImage0.selectable = true;
-            //rImage1.selectable = true;
-			lightboxCanvas.forEachObject(function (obj) {
-				obj.selectable = true;
-				//console.log(obj);
-				if (isIn(temp_rect, obj) && obj instanceof fabric.RectImage)
-				{
-					obj.updateRect(temp_rect.left, temp_rect.top, temp_rect.width, temp_rect.height);
-					//obj.rects.add(temp_rect);
-					obj.rects.bringToFront();
-					//console.log(obj); //PRIMEIRO RECT É CLONADO!!
-				}
-			});
-			
-			lightboxCanvas.remove(temp_rect);
-            lightboxCanvas.off({'mouse:down': null, 'mouse:move': null, 'mouse:up': null});
-
             lightboxCanvas.renderAll();
         });
     }
-	
-	var croped_images = new Array();
-	
-	function crop_rect_button_click()
-	{
-		var ratio = 1.0;
-		var width_ratio = 1.0;
-		var height_ratio = 1.0;
-		var count = 0;
-		
-		lightboxCanvas.forEachObject(function (obj) {
-			obj.visible = false;
-			if (obj instanceof fabric.Rect)
-			{
-				if (obj.width > 0)
-				{
-					count = count + 1;
-				}
-			}
-		});
-		
-		width_ratio = (lightboxCanvas.width - (10 * (count + 1)));
-		if (count == 2)
-			width_ratio = width_ratio / 2;
-		else if (count > 2)
-			width_ratio = width_ratio / Math.ceil(count / 2);
-		
-		//height_ratio = ((lightboxCanvas.height  - (10 * (count + 1))) / (count > 2 ? 2:1));
-		height_ratio = ((lightboxCanvas.height - (10 + (count > 2 ? 20 : 10))) / (count > 2 ? 2 : 1));
-		
-		var index = 1;
-		
-		lightboxCanvas.forEachObject(function (obj) {
-			if (obj instanceof fabric.RectImage)
-			{
-				if (obj.rects.width > 0)
-				{
-					ratio = width_ratio / obj.rects.width;
-					if (ratio > height_ratio / obj.rects.height)
-					{
-						ratio = height_ratio / obj.rects.height;
-					}
-					
-					var temp_img = new Image();
-					temp_img.src = obj.getSrc();
-					
-					var left = 10;
-					if (count > 1)
-						left = left + ((10 + width_ratio) * (index % (Math.ceil(count/2) == 1 ? 2 : Math.ceil(count/2))));
-					left = left + ((width_ratio - (obj.rects.width * ratio)) / 2);
-					
-					var top = 10;
-					if (count > 2)
-					{
-						if (index > Math.ceil(count / 2))
-						{
-							top = top + 10 + height_ratio;
-						}
-					}
-					top = top + ((height_ratio - (obj.rects.height * ratio)) / 2);
-					
-					temp_img.onload = function()
-					{
-						croped_images.push(new fabric.RectImage(temp_img, {
-							originX: 'left',
-							originY: 'top',
-							//left: lightboxCanvas.width/4,
-							//top: lightboxCanvas.height/2,
-							left: left,
-							top: top,
-							width: obj.rects.width * ratio,
-							height: obj.rects.height * ratio
-						}));
-						
-						croped_images[croped_images.length - 1].crop((obj.rects.left - obj.left) / obj.scaleX, (obj.rects.top - obj.top) / obj.scaleY, obj.rects.width / obj.scaleX, obj.rects.height / obj.scaleY, function() { lightboxCanvas.renderAll() });
-						
-						lightboxCanvas.add(croped_images[croped_images.length - 1]);
-						//lightboxCanvas.renderAll();
-					}
-					index = index + 1;
-					//var url = obj.toDataURL({left: obj.rects.left - obj.left, top: obj.rects.top - obj.top, width: obj.rects.width, height: obj.rects.height});
-					/*var url = obj.toDataURL();
-					var url_image = new Image();
-					url_image.src = url;
-					url_image.onload = function ()
-					{
-						var i = new fabric.RectImage(url_image);
-						lightboxCanvas.add(i);
-						i.left = 0;
-						i.top = 0;
-						console.log(i);
-					}*/
-					//croped_images.push(new fabric.Image.fromURL(obj.getSrc(), function(image) {
-					/*croped_images.push(new fabric.Image.fromURL(url, function(image) {
-							image.originX = 'left';
-							image.originY = 'top';
-							image.left = 0;
-							image.top = 0;
-							//image.left = (10 * (index % (Math.ceil(count / 2)) + 1) + width_ratio * (index - 1));
-							//image.top = (10 * (index > (count/2 + 1) ? 2:1) + height_ratio * (index > (count/2 + 1) ? 1:0));
-							//image.width = obj.rects.width * ratio;
-							//image.height = obj.rects.height * ratio;
-							lightboxCanvas.add(image);
-							console.log(image);
-							index = index + 1;
-							image.bringToFront();
-						})
-					);*/
-					//lightboxCanvas.renderAll();
-					//croped_images[croped_images.length - 1].crop((obj.rects.left - obj.left) / obj.scaleX, (obj.rects.top - obj.top) / obj.scaleY, obj.rects.width / obj.scaleX, obj.rects.height / obj.scaleY);
-        //zImg1.crop((rImage1.imr.left-rImage1.left)/rImage1.scaleX,(rImage1.imr.top-rImage1.top)/rImage1.scaleY,
-       //         rImage1.imr.width/rImage1.scaleX,rImage1.imr.height/rImage1.scaleY,function(){mycanvas.renderAll()});
-				}
-			}
-		});
-        //var wh = reCalculate(rImage0.imr.width, rImage0.imr.height);
-        /*var radio0 = reCalculate2(rImage0.imr);
 
-        zImg0 = new fabric.Rectimage(img0, {
-            originX: 'center',
-            originY: 'center',
-            left: mycanvas.width/4,
-            top: mycanvas.height/2,
-            width: rImage0.imr.width*radio0,
-            height: rImage0.imr.height*radio0
-            //scaleX: radio,
-            //scaleY: radio
-        });
+    // Não está funcionando ainda
+    function drag_croped_image(x, y) {
+        var rectleft, recttop;
+        var element;
+        console.log(x + " " + y);
+        for (var i=0; i<croped_images.length; i++) {
+            element = croped_images[i];
 
-        zImg0.crop((rImage0.imr.left-rImage0.left)/rImage0.scaleX,(rImage0.imr.top-rImage0.top)/rImage0.scaleY,
-                rImage0.imr.width/rImage0.scaleX,rImage0.imr.height/rImage0.scaleY,function(){mycanvas.renderAll()});
+            rectleft = element.rects.left + x;
+            recttop  = element.rects.top  + y;
 
-        var radio1 = reCalculate2(rImage1.imr);
+            if (!(rectleft < element.left || recttop < element.top
+                    || rectleft + element.rects.width > element.left + element.width
+                    || recttop + element.rects.height > element.top + element.height))
+            {
+                element.rects.left = rectleft;
+                element.rects.top  = recttop;
+                //console.log(element.old_left + " " + element.old_top + " " + element.old_width + " " + element.old_height);
 
-        zImg1 = new fabric.Rectimage(img1, {
-            originX: 'center',
-            originY: 'center',
-            left: 3*mycanvas.width/4,
-            top: mycanvas.height/2,
-            width: rImage1.imr.width*radio1,
-            height: rImage1.imr.height*radio1
-        });
-
-        zImg1.crop((rImage1.imr.left-rImage1.left)/rImage1.scaleX,(rImage1.imr.top-rImage1.top)/rImage1.scaleY,
-                rImage1.imr.width/rImage1.scaleX,rImage1.imr.height/rImage1.scaleY,function(){mycanvas.renderAll()});
-
-        mycanvas.add(zImg0);
-        mycanvas.add(zImg1);
-
-        //mycanvas.renderAll();*/
+                croped_images2[i].crop((element.rects.left - element.left) / element.scaleX,
+                        (element.rects.top - element.top) / element.scaleY,
+                        element.rects.width / element.scaleX,
+                        element.rects.height / element.scaleY, function() { lightboxCanvas.renderAll(); });
+                //console.log(element.old_left + " " + element.old_top + " " + element.old_width + " " + element.old_height);
+            }
+        }
     }
+
+    function stopZoom(rectleft, recttop){
+
+        for (var i=0; i<croped_images.length; i++) {
+
+            var image = croped_images[i];
+
+            if(rectleft < image.left) return false;
+            if(recttop  < image.top)  return false;
+            if(rectleft + image.rects.width  > image.left + image.getWidth()) return false;
+            if(recttop  + image.rects.height > image.top  + image.getHeight()) return false;
+        }
+        return true;
+    }
+
+    function zoom_button_click(x,y,z) {
+
+        var ratio, rectleft, recttop, rectwidth, rectheight;
+        var element;
+        for (var i=0; i<croped_images.length; i++) {
+            element = croped_images[i];
+
+            if (x || y){
+                rectleft = element.rects.left + x;
+                recttop  = element.rects.top  + y;
+
+                /*for (var j=0; j<croped_images.length; j++) {
+                    var image = croped_images[j];
+
+                    if(rectleft < image.left) return;
+                    if(recttop  < image.top)  return;
+                    if(rectleft + image.rects.width  > image.left + image.getWidth()) return;
+                    if(recttop  + image.rects.height > image.top  + image.getHeight()) return;
+
+                    element.rects.left = rectleft;
+                    element.rects.top  = recttop;
+                }*/
+
+                if(stopZoom(rectleft, recttop)){
+                    element.rects.left = rectleft;
+                    element.rects.top  = recttop;
+                }
+
+                croped_images3[i].rects.set({
+                             left: croped_images3[i].oCoords.tl.x + ((element.rects.left - element.left) / element.scaleX) * croped_images3[i].scaleX,
+                             top:  croped_images3[i].oCoords.tl.y + ((element.rects.top  - element.top)  / element.scaleY) * croped_images3[i].scaleY
+                     });
+
+            }
+            if (z) {
+                ratio      = element.rects.width / element.rects.height;
+                rectleft   = element.rects.left + z / 2;
+                recttop    = element.rects.top + z / ratio / 2;
+                rectwidth  = element.rects.width - z;
+                rectheight = element.rects.height - z / ratio;
+
+                /*for (var j=0; j<croped_images.length; j++) {
+                    var image = croped_images[j];
+
+                    if(rectwidth < 32 || rectheight < 32) return;
+                    if(rectleft < image.left) return;
+                    if(recttop  < image.top) return;
+                    if(rectleft + image.rects.width  >= image.left + image.getWidth()) return;
+                    if(recttop  + image.rects.height >= image.top  + image.getHeight()) return;
+
+
+                    element.rects.left   = rectleft;
+                    element.rects.top    = recttop;
+                    element.rects.width  = rectwidth;
+                    element.rects.height = rectheight;
+
+
+                }*/
+
+                if(stopZoom(rectleft, recttop)){
+                    element.rects.left   = rectleft;
+                    element.rects.top    = recttop;
+                    element.rects.width  = rectwidth;
+                    element.rects.height = rectheight;
+
+                }
+
+                croped_images3[i].rects.set({
+                        left: croped_images3[i].oCoords.tl.x + ((element.rects.left - element.left) / element.scaleX) * croped_images3[i].scaleX,
+                        top:  croped_images3[i].oCoords.tl.y + ((element.rects.top  - element.top)  / element.scaleY) * croped_images3[i].scaleY,
+                        width:  (element.rects.width  / element.scaleX) * croped_images3[i].scaleX,
+                        height: (element.rects.height / element.scaleY) * croped_images3[i].scaleY
+                    });
+            }
+
+            croped_images2[i].crop((element.rects.left - element.left) / element.scaleX,
+                                   (element.rects.top - element.top) / element.scaleY,
+                                    element.rects.width / element.scaleX,
+                                    element.rects.height / element.scaleY, function () {lightboxCanvas.renderAll();
+                    });
+
+        }
+    }
+
+    function draw_line_button_click() {
+
+        var obj = lightboxCanvas.getActiveObject();
+        if(obj === null) return;
+
+        obj.set({old_left: obj.oCoords.tl.x, old_top: obj.oCoords.tl.y, old_width: obj.getWidth(),
+            old_height: obj.getHeight(), old_angle: obj.getAngle()});
+
+        lightboxCanvas.forEachObject(function (other) {
+            other.selectable = false;
+        });
+
+        lightboxCanvas.on('mouse:down', function (o) {
+            isDown = true;
+            var pointer = lightboxCanvas.getPointer(o.e);
+
+            var points = [pointer.x, pointer.y, pointer.x, pointer.y];
+            obj.imline = new fabric.Line(points, {
+                strokeWidth: 2,
+                stroke: 'red',
+                originX: 'center',
+                originY: 'center'
+            });
+            lightboxCanvas.add(obj.imline);
+        });
+
+        lightboxCanvas.on('mouse:move', function (o) {
+            if (!isDown) return;
+            var pointer = lightboxCanvas.getPointer(o.e);
+            obj.imline.bringToFront();
+            obj.imline.set({x2: pointer.x, y2: pointer.y});
+            lightboxCanvas.renderAll();
+        });
+
+        lightboxCanvas.on('mouse:up', function (o) {
+            isDown = false;
+            lightboxCanvas.off({'mouse:down': null, 'mouse:move': null, 'mouse:up': null});
+            lightboxCanvas.forEachObject(function (other) {other.selectable = true;});
+        });
+    }
+
+    function mult_matrix_vector(matrix, a, b){
+        var result = [];
+
+        result[0] = matrix[0]*a + matrix[2]*b + matrix[4];
+        result[1] = matrix[1]*a + matrix[3]*b + matrix[5];
+        return result;
+    }
+
+    function calcOverlappingLines(image1, image2){
+
+        var scale  = [1,0,0,1,0,0];
+        var rot    = [1,0,0,1,0,0];
+        var trans  = [1,0,0,1,0,0];
+        var origin = [1,0,0,1,0,0];
+
+        var a = image2.imline.x1;
+        var b = image2.imline.x2;
+        var c = image2.imline.y1;
+        var d = image2.imline.y2;
+
+        var e = image1.imline.x1;
+        var f = image1.imline.x2;
+        var g = image1.imline.y1;
+        var h = image1.imline.y2;
+
+        var A = f-e;
+        var B = h-g;
+        var C = b-a;
+        var D = d-c;
+
+        var leng0 = Math.sqrt(Math.pow(A, 2)+Math.pow(B, 2));
+        var leng1 = Math.sqrt(Math.pow(C, 2)+Math.pow(D, 2));
+        var k = leng0/leng1;
+
+        scale[0] = k;
+        scale[3] = k;
+
+        var cos  = (A*C+B*D)/(leng0*leng1);
+        var z    = A*D-B*C;
+        var acos = Math.acos(cos);
+        if(z>0) acos = 2*Math.PI - acos;
+        var angle_degrees = fabric.util.radiansToDegrees(acos);
+
+        rot[0] =  Math.cos(acos);
+        rot[1] =  Math.sin(acos);
+        rot[2] = -Math.sin(acos);
+        rot[3] =  Math.cos(acos);
+
+        origin[4] = -image2.imline.x1;
+        origin[5] = -image2.imline.y1;
+
+        trans[4] = image1.imline.x1;
+        trans[5] = image1.imline.y1;
+
+        var result0 = fabric.util.multiplyTransformMatrices(rot,origin);
+        var result1 = fabric.util.multiplyTransformMatrices(scale,result0);
+        var result  = fabric.util.multiplyTransformMatrices(trans,result1);
+
+        var transPoint1 = [];
+        var transPoint2 = [];
+
+        transPoint1 = mult_matrix_vector(result, image2.imline.x1, image2.imline.y1);
+        transPoint2 = mult_matrix_vector(result, image2.imline.x2, image2.imline.y2);
+
+        image2.imline.set({x1: transPoint1[0], y1: transPoint1[1], x2: transPoint2[0], y2: transPoint2[1]});
+
+        transPoint1 = mult_matrix_vector(result, image2.oCoords.tl.x, image2.oCoords.tl.y);
+
+        image2.set({left: transPoint1[0], top: transPoint1[1]});
+        image2.set({scaleX: k*image2.getScaleX(), scaleY: k*image2.getScaleY()});
+        //image2.set({width: k*image2.getWidth(), height: k*image2.getHeight()});
+        image2.set({angle: image2.getAngle()+angle_degrees});
+        image2.setCoords();
+        image2.set({old_left: image2.oCoords.tl.x, old_top: image2.oCoords.tl.y, old_width: image2.getWidth(), old_height: image2.getHeight()});
+        image2.set({old_angle: image2.getAngle()});
+        image2.set({opacity: 0.5});
+        image2.bringToFront();
+        image2.imline.bringToFront();
+        lightboxCanvas.renderAll();
+
+    }
+
+    function select_objects(){
+        isActive = true;
+        lightboxCanvas.deactivateAll().renderAll();
+    }
+
+    function overlapping_lines_button_click(){
+
+        if(selectObj.length != 2 ) {
+            alert('Select Objects!');
+            return;
+        }
+
+        //Remove filters
+        selectObj[0].filters = [];
+        selectObj[0].applyFilters();
+        selectObj[1].filters = [];
+        selectObj[1].applyFilters();
+
+        calcOverlappingLines(selectObj[0], selectObj[1]);
+        isActive = false;
+    }
+
+    function onChange(options) {
+        options.target.bringToFront();
+        changeOpacity(options.target);
+
+        if (options.target.rects != null) updateonChange_Rects(options.target);
+
+        if (options.target.imline != null) updateonChange_Line(options.target);
+
+        options.target.setCoords();
+        lightboxCanvas.renderAll();
+    }
+
+    function changeOpacity(image){
+        var intersected = false;
+        lightboxCanvas.forEachObject(function (obj) {
+            if (obj === image) return;
+            if (obj instanceof fabric.Line) return;
+            if (obj instanceof fabric.Rect) return;
+            //options.target.opacity = (options.target.intersectsWithObject(obj) ? 0.5 : 1);
+            if(image.isContainedWithinObject(obj) || image.intersectsWithObject(obj) || obj.isContainedWithinObject(image)) {
+                intersected = true;
+                image.opacity = 0.5;
+                obj.opacity   = 1.0;
+            }
+            else if (!intersected) {
+                image.opacity = 1.0;
+            }
+            lightboxCanvas.renderAll();
+        });
+
+    }
+
+    function updateonChange_Rects(image) {
+        var imageLeft = image.oCoords.tl.x;
+        var imageTop  = image.oCoords.tl.y;
+
+        var sclX    = image.getWidth()  / image.old_width;
+        var sclY    = image.getHeight() / image.old_height;
+
+        var newleft   = imageLeft + (image.rects.left - image.old_left) * sclX;
+        var newtop    = imageTop  + (image.rects.top  - image.old_top)  * sclY;
+        var newwidth  = image.rects.width  * sclX;
+        var newheight = image.rects.height * sclY;
+
+        image.updateRect(newleft, newtop, newwidth, newheight);
+        image.set({old_left: imageLeft, old_top: imageTop, old_width: image.getWidth(), old_height: image.getHeight()});
+        image.rects.bringToFront();
+
+        console.log(image.rects.left, image.rects.top, image.rects.width, image.rects.height);
+    }
+
+    function updateonChange_Line(image){
+        var imageLeft = image.oCoords.tl.x;
+        var imageTop  = image.oCoords.tl.y;
+
+        var sclX = image.getWidth()  / image.old_width;
+        var sclY = image.getHeight() / image.old_height;
+
+        var newx1 = imageLeft + (image.imline.x1 - image.old_left) * sclX;
+        var newy1 = imageTop  + (image.imline.y1 - image.old_top)  * sclY;
+        var newx2 = imageLeft + (image.imline.x2 - image.old_left) * sclX;
+        var newy2 = imageTop  + (image.imline.y2 - image.old_top)  * sclY;
+
+        image.imline.set({x1: newx1, y1: newy1, x2: newx2, y2: newy2});
+        image.set({old_left: imageLeft, old_top: imageTop, old_width: image.getWidth(), old_height: image.getHeight()});
+        image.imline.bringToFront();
+    }
+
+    function onRotating(options) {
+        options.target.bringToFront();
+        changeOpacity(options.target);
+
+        if(options.target.rects != null)  updateonRotating_Rects(options.target);
+        if(options.target.imline != null) updateonRotating_Line(options.target);
+
+        options.target.setCoords();
+        lightboxCanvas.renderAll();
+    }
+
+    function updateonRotating_Rects(image) {
+        var optgtLeft = image.oCoords.tl.x;
+        var optgtTop  = image.oCoords.tl.y;
+        var optAng    = image.getAngle();
+        var deltaang  = optAng - image.old_angle;
+
+        var p = new fabric.Point(0, 0);
+        p = image.getCenterPoint();
+        var newlt = fabric.util.rotatePoint(new fabric.Point(image.rects.left, image.rects.top), p,
+                fabric.util.degreesToRadians(deltaang));
+
+        image.rects.set({left: newlt.x, top: newlt.y, angle: image.rects.angle + deltaang});
+        image.set({old_left: optgtLeft, old_top: optgtTop, old_width: image.getWidth(), old_height: image.getHeight(), old_angle: optAng});
+        image.rects.bringToFront();
+    }
+
+    function updateonRotating_Line(image){
+        var optgtLeft = image.oCoords.tl.x;
+        var optgtTop  = image.oCoords.tl.y;
+        var optAng    = image.getAngle();
+        var deltaang  = optAng    - image.old_angle;
+
+        var sclX = image.getWidth()  / image.old_width;
+        var sclY = image.getHeight() / image.old_height;
+
+        var p = new fabric.Point(0, 0);
+        p = image.getCenterPoint();
+        var newx1y1 = fabric.util.rotatePoint(new fabric.Point(image.imline.x1,image.imline.y1),
+                p, fabric.util.degreesToRadians(deltaang));
+        var newx2y2 = fabric.util.rotatePoint(new fabric.Point(image.imline.x2,image.imline.y2),
+                p, fabric.util.degreesToRadians(deltaang));
+
+        image.imline.set({x1: newx1y1.x, y1: newx1y1.y, x2: newx2y2.x, y2: newx2y2.y});
+        image.set({old_left: optgtLeft, old_top: optgtTop, old_width: image.getWidth(), old_height: image.getHeight(), old_angle: image.getAngle()});
+        image.imline.bringToFront();
+    }
+
+    var isActive, selectObj = [];
+    var isDown;
+
+    var filter = new fabric.Image.filters.Sepia2({
+        sepia: 0
+    });
+
+    function onSelect(){
+        fabric.util.toArray(document.getElementsByTagName('input'))
+                .forEach(function(el){ el.disabled = false; });
+        if(isActive) {
+            var obj = lightboxCanvas.getActiveObject();
+            if(selectObj.length == 2) selectObj = [];
+            selectObj.push(obj);
+            filter.sepia = 0.5;
+            obj.filters.push(filter);
+            obj.applyFilters(lightboxCanvas.renderAll.bind(lightboxCanvas));
+        }
+    }
+
+    var clone;
+
+    function viewLarge(){
+
+        if(document.getElementById('check').checked){
+            var obj = lightboxCanvas.getActiveObject();
+
+            lightboxCanvas.forEachObject(function (other) {
+                console.log("entrou");
+                other.visible = false;
+                other.setControlsVisibility({bl: false, br: false, mb: false, ml: false, mr: false, mt: false, tl: false, tr: false, mtr: false});
+            });
+
+            clone = fabric.util.object.clone(obj);
+
+            lightboxCanvas.deactivateAll();
+
+            var radio_width = lightboxCanvas.width/obj.width;
+            var radio_height = lightboxCanvas.height/obj.height;
+            var radio;
+
+            if(radio_width<=radio_height) radio = radio_width;
+            else radio = radio_height;
+
+            clone.originX = "center";
+            clone.originY = "center";
+            clone.left    = lightboxCanvas.width/2;
+            clone.top     = lightboxCanvas.height/2;
+            clone.scaleX  = radio;
+            clone.scaleY  = radio;
+            clone.opacity = 1;
+            clone.visible = true;
+
+            lightboxCanvas.add(clone);
+            clone.bringToFront();
+        }
+        if(!document.getElementById('check').checked){
+            clone.remove();
+
+            lightboxCanvas.forEachObject(function (other) {
+                other.visible = true;
+                other.setControlsVisibility({bl: true, br: true, mb: true, ml: true, mr: true, mt: true, tl: true, tr: true, mtr: true});
+            });
+        }
+        lightboxCanvas.renderAll();
+    }
+
 </script>
