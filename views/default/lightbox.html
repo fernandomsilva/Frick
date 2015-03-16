@@ -1,49 +1,90 @@
 <head>
     <script language="javascript" type="text/javascript" src="../static/js/jquery_min.js"></script>
     <script language="javascript" type="text/javascript" src="../static/js/fabric.js"></script>
+    <script type="text/javascript" src="../static/js/buttons.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/font-awesome_min.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="../static/css/canvas.css" media="screen" />
+    <link rel="stylesheet" href="../static/css/buttons.css" media="screen"/>
 </head>
+
 <body>
 <form>
     <input type="file" id="images" name="images[]" style="display: none;" multiple></input>
 </form>
 <div id="buttons" class="buttons">
-    <i class="fa fa-outdent"         id="btn_slide_menu"></i>
-    <i class="fa fa-upload"          id="btn_upload" onclick="upload_button_click()"></i>
-    <i class="fa fa-plus-square"     id="btn_show_add_group" onclick="show_add_group_button_click()"></i>
-    <i class="fa fa-folder-open-o"   id="btn_open_state_screen" onclick="open_state_button_click()"></i>
-    <i class="fa fa-floppy-o"        id="btn_save_state_screen" onclick="save_state_button_click()"></i>
-    <i class="fa fa-pencil-square-o" id="btn_draw_rect" onclick="draw_rect_button_click()"></i>
-    <i class="fa fa-crop"            id="btn_crop_rect" onclick="crop_rect_button_click()"></i>
-    <i class="fa fa-search-plus"     id="btn_zoom" onclick="zoom_button_click(0,0,2)"></i>
-    <i class="fa fa-search-minus"    id="btn_zoom" onclick="zoom_button_click(0,0,-2)"></i>
-    <i class="fa fa-arrow-right"     id="btn_zoom" onclick="zoom_button_click(5,0,0)"></i>
-    <i class="fa fa-arrow-left"      id="btn_zoom" onclick="zoom_button_click(-5,0,0)"></i>
-    <i class="fa fa-arrow-down"      id="btn_zoom" onclick="zoom_button_click(0,5,0)"></i>
-    <i class="fa fa-arrow-up"        id="btn_zoom" onclick="zoom_button_click(0,-5,0)"></i>
-    <i class="fa fa-pencil"          id="btn_draw_line" onclick="draw_line_button_click()"></i>
-    <i class="fa fa-map-marker"      id="btn_select_obj" onclick="select_objects()"></i>
-    <i class="fa fa-refresh"         id="btn_overl_lines" onclick="overlapping_lines_button_click()"></i>
+    <!--Slide Menu-->
+    <a href="#" class="button button-pill button-flat-royal button-tiny" id="btn_slide_menu"><i class="fa fa-outdent"></i> Hide</a>
+
+    <!--Upload images, add group, save state and open state-->
+    <span class="button-dropdown" data-buttons="dropdown">
+  <a href="#" class="button button-royal button-pill  button-tiny"><i class="fa fa-th-large"></i> File <i class="fa fa-caret-down"></i></a>
+
+  <ul>
+    <li class="button-dropdown-divider"><a href="#" class="button button-rounded button-flat" id="btn_clear_canvas" onclick="upload_button_click()"> <i class="fa fa-upload"></i> Upload</a>
+    <li class="button-dropdown-divider"><a href="#" class="button button-rounded button-flat" id="btn_clear_canvas" onclick="show_add_group_button_click()"> <i class="fa fa-plus-square"></i> Add group</a>
+    <li class="button-dropdown-divider"><a href="#" class="button button-rounded button-flat" id="btn_clear_canvas" onclick="open_state_button_click()"> <i class="fa fa-folder-open-o"></i> Open project</a>
+    <li class="button-dropdown-divider"><a href="#" class="button button-rounded button-flat" id="btn_clear_canvas" onclick="save_state_button_click()"> <i class="fa fa-floppy-o"></i> Save project</a>
+  </ul>
+</span>
+
+    <!--Rectangle tools-->
+    <span class="button-dropdown" data-buttons="dropdown">
+  <a href="#" class="button button-royal button-pill  button-tiny"><i class="fa fa-pencil-square-o"></i> Rect <i class="fa fa-caret-down"></i></a>
+
+  <ul>
+    <li class="button-dropdown-divider"><a href="#" class="button button-rounded button-flat" id="btn_clear_canvas" onclick="draw_rect_button_click()"> <i class="fa fa-pencil"></i> Draw</a>
+    <li class="button-dropdown-divider"><a href="#" class="button button-rounded button-flat" id="btn_clear_canvas" onclick="hideRect()"> <i class="fa fa-retweet"></i> Hide</a>
+    <li class="button-dropdown-divider"><a href="#" class="button button-rounded button-flat" id="btn_clear_canvas" onclick="eraseRect()"> <i class="fa fa-eraser"></i> Erase</a>
+    <li class="button-dropdown-divider"><a href="#" class="button button-rounded button-flat" id="btn_clear_canvas" onclick="crop_rect_button_click()"><i class="fa fa-crop"></i> Crop</a>
+    <li class="button-dropdown-divider"><a href="#" class="button button-rounded button-flat" id="btn_clear_canvas" onclick="zoom_button_click(0,0,2)"><i class="fa fa-search-plus"></i> Zoom out</a>
+    <li class="button-dropdown-divider"><a href="#" class="button button-rounded button-flat" id="btn_clear_canvas" onclick="zoom_button_click(0,0,-2)"><i class="fa fa-search-minus"></i> Zoom in</a>
+    <li class="button-dropdown-divider"><a href="#" class="button button-rounded button-flat" id="btn_clear_canvas" onclick="drawOriginal()"><i class="fa fa-reply"></i> Return</a>
+ </ul>
+</span>
+
+    <!--Line tools-->
+    <span class="button-dropdown" data-buttons="dropdown">
+  <a href="#" class="button button-royal button-pill  button-tiny"><i class="fa fa-ellipsis-h"></i> Line <i class="fa fa-caret-down"></i></a>
+
+  <ul>
+    <li class="button-dropdown-divider"><a href="#" class="button button-rounded button-flat" id="btn_clear_canvas" onclick="draw_line_button_click()"><i class="fa fa-pencil"></i> Draw</a>
+    <li class="button-dropdown-divider"><a href="#" class="button button-rounded button-flat" id="btn_clear_canvas" onclick="hideLine()"><i class="fa fa-retweet"></i> Hide</a>
+    <li class="button-dropdown-divider"><a href="#" class="button button-rounded button-flat" id="btn_clear_canvas" onclick="eraseLine()"><i class="fa fa-eraser"></i> Erase</a>
+    <li class="button-dropdown-divider"><a href="#" class="button button-rounded button-flat" id="btn_clear_canvas" onclick="selectObjects()"><i class="fa fa-map-marker"></i> Select</a>
+    <li class="button-dropdown-divider"><a href="#" class="button button-rounded button-flat" id="btn_clear_canvas" onclick="overlapping_lines_button_click()"><i class="fa fa-refresh"></i> Matching</a>
+  </ul>
+</span>
+
+    <!--Clear canvas-->
+    <a href="#" class="button button-pill button-flat-royal button-tiny" id="btn_clear_canvas button-tiny" onclick="clearCanvas()"><i class="fa fa-eraser"></i> Clean Canvas</a>
+
+    <!--View larger image-->
+    <a href="#" class="button button-pill button-flat-royal button-tiny" id="btn_clear_canvas button-tiny" onclick="viewLarge2()"> <i class="fa fa-arrows"></i> View Large</a>
 
     <div id="group_name_input" class="group_name_input">
         <input type="text" id="textbox_group_name"></input>
         <i class="fa fa-plus" id="btn_add_group" onclick="add_group_button_click()"></i>
     </div>
 </div>
+
 <div class="interface"><canvas id="interfaceCanvas" width="800" height="600"></canvas></div>
+
 <div id="imageMenu" class="imageMenu">
     <div id="context_link"><a href="#" onclick="linkClick('-1');return false;">Main</a></div>
     <canvas id="imageMenuCanvas" width="800" height="600"></canvas>
     <canvas id="imageMenuCanvasBackground" width="800" height="600"></canvas>
 </div>
+
 <div class="lightbox"><canvas id="lightboxCanvas" width="800" height="600"></canvas></div>
+
 <div class="group_aux"><canvas id="auxiliarImageCanvas" width="100" height="100"></canvas></div>
+
 <div class="file_open_list" id="file_open">
     <i class="fa fa-times" id="btn_close_open_state" onclick="btn_close_open_state_click()"></i>
     <table id="list_of_open_files">
     </table>
 </div>
+
 <div class="file_save_list" id="file_save">
     <i class="fa fa-times" id="btn_close_save_state" onclick="btn_close_save_state_click()"></i>
     <text id="label">File Name</text>
@@ -52,6 +93,7 @@
     <table id="list_of_files">
     </table>
 </div>
+
 <div class="metadata" id="metadata_div">
 	<text>Metadata</text> 
 	<i class="fa fa-pencil-square-o" id="btn_metadata_edit" onclick="btn_metadata_edit_click()"></i>
@@ -59,6 +101,7 @@
 	<br>
 	<textarea id="textarea_metadata" rows="10" cols="40" disabled></textarea>
 </div>
+
 <div class="imageInteraction" id="imageInteraction_div">
     <i class="fa fa-times" id="btn_remove_image" onclick="btn_remove_image_click()"></i>
 	<i class="fa fa-picture-o" id="btn_enlarge_image" onclick="btn_enlarge_image_click()"></i>
@@ -82,7 +125,7 @@
                 old_height: this.height,
                 old_angle: this.angle,
                 rects: null,
-                imline: null,
+                line: null,
 				metadata: ""
             });
         },
@@ -97,7 +140,7 @@
 						old_height: this.old_height,
 						old_angle: this.old_angle,
 						rects: this.rects,
-						imline: this.imline,
+						line: this.line,
 						metadata: this.metadata
 					});
         },
@@ -156,7 +199,7 @@
 			//if (object.rects != null)
 			//	attach(object.rects, temp);
 			temp.rects = object.rects;
-			temp.imline = object.imline;
+			temp.line = object.line;
 			temp.metadata = object.metadata;
             callback && callback(temp);
         });
@@ -350,17 +393,17 @@
 				lightboxCanvas.add(object.rects).renderAll();
 				object.rects.bringToFront();
 			}
-			if (object.imline != null)
+			if (object.line != null)
 			{
-				temp = object.imline;
-				object.imline = new fabric.Line([temp.x1, temp.y1, temp.x2, temp.y2], {
+				temp = object.line;
+				object.line = new fabric.Line([temp.x1, temp.y1, temp.x2, temp.y2], {
 					strokeWidth: temp.strokeWidth,
 					stroke: temp.stroke,
 					originX: temp.originX,
 					originY: temp.originY
 				});
-				lightboxCanvas.add(object.imline).renderAll();
-				object.imline.bringToFront();
+				lightboxCanvas.add(object.line).renderAll();
+				object.line.bringToFront();
 			}
 		});
 
@@ -888,12 +931,6 @@
         if(rect === image) return false;
         if(rect.isContainedWithinObject(image)) return true;
         return false;
-
-        /*if (rect.left >= image.left && rect.left + rect.width <= image.left + image.width && rect.top >= image.top && rect.top + rect.height <= image.top + image.height)
-        {
-            return true;
-        }
-        return false;*/
     }
 
     function attach(rect, image){
@@ -911,11 +948,6 @@
             selectable:      false
         });
     }
-
-    /*lightboxCanvas.on('mouse:down', function(event) {
-        pointer = lightboxCanvas.getPointer(event.e);
-        console.log(options.target.intersectsWithObject(pointer));
-    });*/
 
     function draw_rect_button_click() {
         var isDown;
@@ -964,25 +996,11 @@
             isDown = false;
 
             lightboxCanvas.forEachObject(function (obj) {
-                obj.selectable = true;
+
+                if(obj instanceof fabric.Image) obj.selectable = true;
 
                 if (isIn(temp_rect, obj)) {
-
                     attach(temp_rect, obj);
-                    /*obj.rects = new fabric.Rect({
-                        left:            temp_rect.left,
-                        top:             temp_rect.top,
-                        width:           temp_rect.width,
-                        height:          temp_rect.height,
-                        angle:           0,
-                        fill:            'transparent',
-                        stroke:          '#000000',
-                        strokeDashArray: [3, 2],
-                        strokeWidth:     2,
-                        hasBorders:      false,
-                        selectable:      false
-                    });*/
-
                     obj.set({old_left:   obj.oCoords.tl.x,
                         old_top:    obj.oCoords.tl.y,
                         old_width:  obj.getWidth(),
@@ -999,6 +1017,28 @@
             lightboxCanvas.off({'mouse:down': null, 'mouse:move': null, 'mouse:up': null});
             lightboxCanvas.renderAll();
         });
+    }
+
+    function hideRect(){
+        lightboxCanvas.forEachObject(function (obj) {
+            if(obj instanceof fabric.Image)
+            obj.rects.visible = !obj.rects.visible;
+        });
+
+        lightboxCanvas.renderAll();
+    }
+
+    function eraseRect(){
+
+        lightboxCanvas.forEachObject(function (obj) {
+            lightboxCanvas.remove(obj.rects);
+            obj.rects = null;
+        });
+
+        croped_images.length = 0;
+        croped_images2.length = 0;
+        croped_images3.length = 0;
+        lightboxCanvas.renderAll();
     }
 
     var croped_images = new Array(), croped_images2 = new Array(), croped_images3 = new Array();
@@ -1089,7 +1129,8 @@
                             top:     top  + croped_images2[i].height
                         }));
 
-                        croped_images3[i].set({scaleX: 0.1 * ratio, scaleY: 0.1 * ratio});
+                        croped_images3[i].set({scaleX: 0.2 * obj.rects.height * ratio / croped_images[i].height,
+                                               scaleY: 0.2 * obj.rects.height * ratio / croped_images[i].height});
                         lightboxCanvas.add(croped_images3[i]);
                         croped_images3[i].bringToFront();
                         croped_images3[i].selectable = false;
@@ -1119,38 +1160,6 @@
 
                     }
                     index = index + 1;
-                    //var url = obj.toDataURL({left: obj.rects.left - obj.left, top: obj.rects.top - obj.top, width: obj.rects.width, height: obj.rects.height});
-                    /*var url = obj.toDataURL();
-                    var url_image = new Image();
-                    url_image.src = url;
-                    url_image.onload = function ()
-                    {
-                        var i = new fabric.RectLineImage(url_image);
-                        lightboxCanvas.add(i);
-                        i.left = 0;
-                        i.top = 0;
-                        console.log(i);
-                    }*/
-                    //croped_images.push(new fabric.Image.fromURL(obj.getSrc(), function(image) {
-                    /*croped_images.push(new fabric.Image.fromURL(url, function(image) {
-                            image.originX = 'left';
-                            image.originY = 'top';
-                            image.left = 0;
-                            image.top = 0;
-                            //image.left = (10 * (index % (Math.ceil(count / 2)) + 1) + width_ratio * (index - 1));
-                            //image.top = (10 * (index > (count/2 + 1) ? 2:1) + height_ratio * (index > (count/2 + 1) ? 1:0));
-                            //image.width = obj.rects.width * ratio;
-                            //image.height = obj.rects.height * ratio;
-                            lightboxCanvas.add(image);
-                            console.log(image);
-                            index = index + 1;
-                            image.bringToFront();
-                        })
-                    );*/
-                    //lightboxCanvas.renderAll();
-                    //croped_images[croped_images.length - 1].crop((obj.rects.left - obj.left) / obj.scaleX, (obj.rects.top - obj.top) / obj.scaleY, obj.rects.width / obj.scaleX, obj.rects.height / obj.scaleY);
-                    //zImg1.crop((rImage1.imr.left-rImage1.left)/rImage1.scaleX,(rImage1.imr.top-rImage1.top)/rImage1.scaleY,
-                    //         rImage1.imr.width/rImage1.scaleX,rImage1.imr.height/rImage1.scaleY,function(){mycanvas.renderAll()});
                 }
             }
         });
@@ -1184,51 +1193,42 @@
             lightboxCanvas.renderAll();
         });
 
-
         lightboxCanvas.on('mouse:up', function (event) {
             isDown = false;
             lightboxCanvas.renderAll();
         });
+
+        $("#imageMenu").slideToggle(0, function() {
+            $("#btn_slide_menu").toggleClass("fa fa-outdent");
+            $("#btn_slide_menu").toggleClass("fa fa-indent");
+        });
     }
 
-    // Não está funcionando ainda
-    /*function drag_croped_image(x, y) {
-        var rectleft, recttop;
-        var element;
-        console.log(x + " " + y);
-        for (var i=0; i<croped_images.length; i++) {
-            element = croped_images[i];
-
-            rectleft = element.rects.left + x;
-            recttop  = element.rects.top  + y;
-
-            if (!(rectleft < element.left || recttop < element.top
-                    || rectleft + element.rects.width > element.left + element.width
-                    || recttop + element.rects.height > element.top + element.height))
-            {
-                element.rects.left = rectleft;
-                element.rects.top  = recttop;
-                //console.log(element.old_left + " " + element.old_top + " " + element.old_width + " " + element.old_height);
-
-                croped_images2[i].crop((element.rects.left - element.left) / element.scaleX,
-                        (element.rects.top - element.top) / element.scaleY,
-                        element.rects.width / element.scaleX,
-                        element.rects.height / element.scaleY, function() { lightboxCanvas.renderAll(); });
-                //console.log(element.old_left + " " + element.old_top + " " + element.old_width + " " + element.old_height);
-            }
-        }
-    }*/
-
-    function stopZoom(rectleft, recttop){
+    function stopZoomXY(left, top){
 
         for (var i=0; i<croped_images.length; i++) {
 
             var image = croped_images[i];
 
-            if(rectleft < image.left) return false;
-            if(recttop  < image.top)  return false;
-            if(rectleft + image.rects.width  > image.left + image.getWidth()) return false;
-            if(recttop  + image.rects.height > image.top  + image.getHeight()) return false;
+            if(left < image.left) return false;
+            if(top  < image.top)  return false;
+            if(left + image.rects.width  > image.left + image.getWidth())  return false;
+            if(top  + image.rects.height > image.top  + image.getHeight()) return false;
+        }
+        return true;
+    }
+
+    function stopZoomZ(left, top, width, height){
+
+        for (var i=0; i<croped_images.length; i++) {
+
+            var image = croped_images[i];
+
+            if(width < 32 || height < 32) return false;
+            if(left < image.left) return false;
+            if(top  < image.top)  return false;
+            if(left + width  >= image.left + image.getWidth())  return false;
+            if(top  + height >= image.top  + image.getHeight()) return false;
         }
         return true;
     }
@@ -1244,77 +1244,59 @@
                 rectleft = element.rects.left + x;
                 recttop  = element.rects.top  + y;
 
-                /*for (var j=0; j<croped_images.length; j++) {
-                    var image = croped_images[j];
-
-                    if(rectleft < image.left) return;
-                    if(recttop  < image.top)  return;
-                    if(rectleft + image.rects.width  > image.left + image.getWidth()) return;
-                    if(recttop  + image.rects.height > image.top  + image.getHeight()) return;
-
-                    element.rects.left = rectleft;
-                    element.rects.top  = recttop;
-                }*/
-
-                if(stopZoom(rectleft, recttop)){
-                    element.rects.left = rectleft;
-                    element.rects.top  = recttop;
-                }
+                if(stopZoomXY(rectleft, recttop)) element.rects.set({left: rectleft, top:recttop});
 
                 croped_images3[i].rects.set({
-                             left: croped_images3[i].oCoords.tl.x + ((element.rects.left - element.left) / element.scaleX) * croped_images3[i].scaleX,
-                             top:  croped_images3[i].oCoords.tl.y + ((element.rects.top  - element.top)  / element.scaleY) * croped_images3[i].scaleY
-                     });
+                    left: croped_images3[i].oCoords.tl.x + ((element.rects.left - element.left) / element.scaleX) * croped_images3[i].scaleX,
+                    top:  croped_images3[i].oCoords.tl.y + ((element.rects.top  - element.top)  / element.scaleY) * croped_images3[i].scaleY
+                });
 
             }
             if (z) {
                 ratio      = element.rects.width / element.rects.height;
-                rectleft   = element.rects.left + z / 2;
-                recttop    = element.rects.top + z / ratio / 2;
-                rectwidth  = element.rects.width - z;
+                rectleft   = element.rects.left   + z / 2;
+                recttop    = element.rects.top    + z / ratio / 2;
+                rectwidth  = element.rects.width  - z;
                 rectheight = element.rects.height - z / ratio;
 
-                /*for (var j=0; j<croped_images.length; j++) {
-                    var image = croped_images[j];
-
-                    if(rectwidth < 32 || rectheight < 32) return;
-                    if(rectleft < image.left) return;
-                    if(recttop  < image.top) return;
-                    if(rectleft + image.rects.width  >= image.left + image.getWidth()) return;
-                    if(recttop  + image.rects.height >= image.top  + image.getHeight()) return;
-
-
-                    element.rects.left   = rectleft;
-                    element.rects.top    = recttop;
-                    element.rects.width  = rectwidth;
-                    element.rects.height = rectheight;
-
-
-                }*/
-
-                if(stopZoom(rectleft, recttop)){
-                    element.rects.left   = rectleft;
-                    element.rects.top    = recttop;
-                    element.rects.width  = rectwidth;
-                    element.rects.height = rectheight;
-
-                }
+                if(stopZoomZ(rectleft, recttop, rectwidth, rectheight)) element.rects.set({left:  rectleft,  top: recttop,
+                                                                                           width: rectwidth, height: rectheight});
 
                 croped_images3[i].rects.set({
-                        left: croped_images3[i].oCoords.tl.x + ((element.rects.left - element.left) / element.scaleX) * croped_images3[i].scaleX,
-                        top:  croped_images3[i].oCoords.tl.y + ((element.rects.top  - element.top)  / element.scaleY) * croped_images3[i].scaleY,
-                        width:  (element.rects.width  / element.scaleX) * croped_images3[i].scaleX,
-                        height: (element.rects.height / element.scaleY) * croped_images3[i].scaleY
-                    });
+                    left: croped_images3[i].oCoords.tl.x + ((element.rects.left - element.left) / element.scaleX) * croped_images3[i].scaleX,
+                    top:  croped_images3[i].oCoords.tl.y + ((element.rects.top  - element.top)  / element.scaleY) * croped_images3[i].scaleY,
+                    width:  (element.rects.width  / element.scaleX) * croped_images3[i].scaleX,
+                    height: (element.rects.height / element.scaleY) * croped_images3[i].scaleY
+                });
             }
 
             croped_images2[i].crop((element.rects.left - element.left) / element.scaleX,
-                                   (element.rects.top - element.top) / element.scaleY,
-                                    element.rects.width / element.scaleX,
-                                    element.rects.height / element.scaleY, function () {lightboxCanvas.renderAll();
-                    });
+                    (element.rects.top  - element.top)  / element.scaleY,
+                    element.rects.width  / element.scaleX,
+                    element.rects.height / element.scaleY, function () {lightboxCanvas.renderAll();
+            });
 
         }
+    }
+
+    function drawOriginal(){
+
+        for (var i=0; i<croped_images.length; i++) {
+            croped_images2[i].remove();
+            croped_images3[i].remove();
+            croped_images3[i].rects.remove();
+        }
+
+        croped_images.length = 0;
+        croped_images2.length = 0;
+        croped_images3.length = 0;
+
+        lightboxCanvas.forEachObject(function (obj) {
+            obj.visible = true;
+            if(obj instanceof fabric.Image) obj.selectable = true;
+        });
+
+        lightboxCanvas.renderAll();
     }
 
     function draw_line_button_click() {
@@ -1334,31 +1316,50 @@
             var pointer = lightboxCanvas.getPointer(o.e);
 
             var points = [pointer.x, pointer.y, pointer.x, pointer.y];
-            obj.imline = new fabric.Line(points, {
+            obj.line = new fabric.Line(points, {
                 strokeWidth: 2,
                 stroke: 'red',
                 originX: 'center',
-                originY: 'center'
+                originY: 'center',
+                selectable: false,
+                controls: false
             });
-            lightboxCanvas.add(obj.imline);
+            lightboxCanvas.add(obj.line);
         });
 
         lightboxCanvas.on('mouse:move', function (o) {
             if (!isDown) return;
             var pointer = lightboxCanvas.getPointer(o.e);
-            obj.imline.bringToFront();
-            obj.imline.set({x2: pointer.x, y2: pointer.y});
+            obj.line.set({x2: pointer.x, y2: pointer.y});
+            obj.line.setCoords();
+            obj.line.bringToFront();
+            //obj.line.selectable = false;
             lightboxCanvas.renderAll();
         });
 
         lightboxCanvas.on('mouse:up', function (o) {
             isDown = false;
             lightboxCanvas.off({'mouse:down': null, 'mouse:move': null, 'mouse:up': null});
-            lightboxCanvas.forEachObject(function (other) {other.selectable = true;});
+            lightboxCanvas.forEachObject(function (other) {
+                if(other instanceof fabric.Image) other.selectable = true;
+            });
         });
     }
 
-    function mult_matrix_vector(matrix, a, b){
+    function eraseLine(){
+        var obj = lightboxCanvas.getActiveObject();
+        lightboxCanvas.remove(obj.line);
+        obj.line = null;
+        lightboxCanvas.renderAll();
+    }
+
+    function hideLine(){
+        var obj = lightboxCanvas.getActiveObject();
+        obj.line.visible = !obj.line.visible;
+        lightboxCanvas.renderAll();
+    }
+
+    function multMatrixVector(matrix, a, b){
         var result = [];
 
         result[0] = matrix[0]*a + matrix[2]*b + matrix[4];
@@ -1373,15 +1374,15 @@
         var trans  = [1,0,0,1,0,0];
         var origin = [1,0,0,1,0,0];
 
-        var a = image2.imline.x1;
-        var b = image2.imline.x2;
-        var c = image2.imline.y1;
-        var d = image2.imline.y2;
+        var a = image2.line.x1;
+        var b = image2.line.x2;
+        var c = image2.line.y1;
+        var d = image2.line.y2;
 
-        var e = image1.imline.x1;
-        var f = image1.imline.x2;
-        var g = image1.imline.y1;
-        var h = image1.imline.y2;
+        var e = image1.line.x1;
+        var f = image1.line.x2;
+        var g = image1.line.y1;
+        var h = image1.line.y2;
 
         var A = f-e;
         var B = h-g;
@@ -1406,11 +1407,11 @@
         rot[2] = -Math.sin(acos);
         rot[3] =  Math.cos(acos);
 
-        origin[4] = -image2.imline.x1;
-        origin[5] = -image2.imline.y1;
+        origin[4] = -image2.line.x1;
+        origin[5] = -image2.line.y1;
 
-        trans[4] = image1.imline.x1;
-        trans[5] = image1.imline.y1;
+        trans[4] = image1.line.x1;
+        trans[5] = image1.line.y1;
 
         var result0 = fabric.util.multiplyTransformMatrices(rot,origin);
         var result1 = fabric.util.multiplyTransformMatrices(scale,result0);
@@ -1419,12 +1420,12 @@
         var transPoint1 = [];
         var transPoint2 = [];
 
-        transPoint1 = mult_matrix_vector(result, image2.imline.x1, image2.imline.y1);
-        transPoint2 = mult_matrix_vector(result, image2.imline.x2, image2.imline.y2);
+        transPoint1 = multMatrixVector(result, image2.line.x1, image2.line.y1);
+        transPoint2 = multMatrixVector(result, image2.line.x2, image2.line.y2);
 
-        image2.imline.set({x1: transPoint1[0], y1: transPoint1[1], x2: transPoint2[0], y2: transPoint2[1]});
+        image2.line.set({x1: transPoint1[0], y1: transPoint1[1], x2: transPoint2[0], y2: transPoint2[1]});
 
-        transPoint1 = mult_matrix_vector(result, image2.oCoords.tl.x, image2.oCoords.tl.y);
+        transPoint1 = multMatrixVector(result, image2.oCoords.tl.x, image2.oCoords.tl.y);
 
         image2.set({left: transPoint1[0], top: transPoint1[1]});
         image2.set({scaleX: k*image2.getScaleX(), scaleY: k*image2.getScaleY()});
@@ -1435,12 +1436,12 @@
         image2.set({old_angle: image2.getAngle()});
         image2.set({opacity: 0.5});
         image2.bringToFront();
-        image2.imline.bringToFront();
+        image2.line.bringToFront();
         lightboxCanvas.renderAll();
 
     }
 
-    function select_objects(){
+    function selectObjects(){
         isActive = true;
         lightboxCanvas.deactivateAll().renderAll();
     }
@@ -1461,17 +1462,13 @@
         calcOverlappingLines(selectObj[0], selectObj[1]);
         isActive = false;
     }
-	
+
 	var obj_selected;
 
     function onChange(options) {
         options.target.bringToFront();
         changeOpacity(options.target);
-		
-        if (options.target.rects != null) updateonChange_Rects(options.target);
-
-        if (options.target.imline != null) updateonChange_Line(options.target);
-		
+        updateonChange(options.target);
         options.target.setCoords();
         lightboxCanvas.renderAll();
     }
@@ -1496,88 +1493,85 @@
 
     }
 
-    function updateonChange_Rects(image) {
-        var imageLeft = image.oCoords.tl.x;
-        var imageTop  = image.oCoords.tl.y;
+    function updateonChange(image) {
 
-        var sclX    = image.getWidth()  / image.old_width;
-        var sclY    = image.getHeight() / image.old_height;
+        if (image.line === null && image.rects === null){
+            return;
+        }
+        else{
+            var imageLeft = image.oCoords.tl.x;
+            var imageTop = image.oCoords.tl.y;
 
-        var newleft   = imageLeft + (image.rects.left - image.old_left) * sclX;
-        var newtop    = imageTop  + (image.rects.top  - image.old_top)  * sclY;
-        var newwidth  = image.rects.width  * sclX;
-        var newheight = image.rects.height * sclY;
+            var sclX = image.getWidth() / image.old_width;
+            var sclY = image.getHeight() / image.old_height;
 
-        image.updateRect(newleft, newtop, newwidth, newheight);
-        image.set({old_left: imageLeft, old_top: imageTop, old_width: image.getWidth(), old_height: image.getHeight()});
-        image.rects.bringToFront();
+            if(image.rects != null){
+                var newleft   = imageLeft + (image.rects.left - image.old_left) * sclX;
+                var newtop    = imageTop  + (image.rects.top - image.old_top)   * sclY;
+                var newwidth  = image.rects.width  * sclX;
+                var newheight = image.rects.height * sclY;
 
-        console.log(image.rects.left, image.rects.top, image.rects.width, image.rects.height);
-    }
+                image.updateRect(newleft, newtop, newwidth, newheight);
+                image.rects.bringToFront();
+            }
 
-    function updateonChange_Line(image){
-        var imageLeft = image.oCoords.tl.x;
-        var imageTop  = image.oCoords.tl.y;
+            if(image.line != null) {
+                var newx1 = imageLeft + (image.line.x1 - image.old_left) * sclX;
+                var newy1 = imageTop  + (image.line.y1 - image.old_top)  * sclY;
+                var newx2 = imageLeft + (image.line.x2 - image.old_left) * sclX;
+                var newy2 = imageTop  + (image.line.y2 - image.old_top)  * sclY;
 
-        var sclX = image.getWidth()  / image.old_width;
-        var sclY = image.getHeight() / image.old_height;
+                image.line.set({x1: newx1, y1: newy1, x2: newx2, y2: newy2});
+                image.line.bringToFront();
+            }
 
-        var newx1 = imageLeft + (image.imline.x1 - image.old_left) * sclX;
-        var newy1 = imageTop  + (image.imline.y1 - image.old_top)  * sclY;
-        var newx2 = imageLeft + (image.imline.x2 - image.old_left) * sclX;
-        var newy2 = imageTop  + (image.imline.y2 - image.old_top)  * sclY;
-
-        image.imline.set({x1: newx1, y1: newy1, x2: newx2, y2: newy2});
-        image.set({old_left: imageLeft, old_top: imageTop, old_width: image.getWidth(), old_height: image.getHeight()});
-        image.imline.bringToFront();
+            image.set({old_left: imageLeft, old_top: imageTop, old_width: image.getWidth(), old_height: image.getHeight()});
+        }
     }
 
     function onRotating(options) {
         options.target.bringToFront();
         changeOpacity(options.target);
-
-        if(options.target.rects != null)  updateonRotating_Rects(options.target);
-        if(options.target.imline != null) updateonRotating_Line(options.target);
-
+        updateonRotating(options.target);
         options.target.setCoords();
         lightboxCanvas.renderAll();
     }
 
-    function updateonRotating_Rects(image) {
-        var optgtLeft = image.oCoords.tl.x;
-        var optgtTop  = image.oCoords.tl.y;
-        var optAng    = image.getAngle();
-        var deltaang  = optAng - image.old_angle;
+    function updateonRotating(image) {
 
-        var p = new fabric.Point(0, 0);
-        p = image.getCenterPoint();
-        var newlt = fabric.util.rotatePoint(new fabric.Point(image.rects.left, image.rects.top), p,
-                fabric.util.degreesToRadians(deltaang));
+        if (image.line === null && image.rects === null) return;
+        else {
+            var optgtLeft = image.oCoords.tl.x;
+            var optgtTop  = image.oCoords.tl.y;
+            var optAng    = image.getAngle();
+            var deltaang  = optAng - image.old_angle;
 
-        image.rects.set({left: newlt.x, top: newlt.y, angle: image.rects.angle + deltaang});
-        image.set({old_left: optgtLeft, old_top: optgtTop, old_width: image.getWidth(), old_height: image.getHeight(), old_angle: optAng});
-        image.rects.bringToFront();
-    }
+            var sclX = image.getWidth() / image.old_width;
+            var sclY = image.getHeight() / image.old_height;
 
-    function updateonRotating_Line(image){
-        var optgtLeft = image.oCoords.tl.x;
-        var optgtTop  = image.oCoords.tl.y;
-        var optAng    = image.getAngle();
-        var deltaang  = optAng    - image.old_angle;
+            var p = new fabric.Point(0, 0);
+            p = image.getCenterPoint();
 
-        var sclX = image.getWidth()  / image.old_width;
-        var sclY = image.getHeight() / image.old_height;
+            if(image.rects != null) {
+                var newlt = fabric.util.rotatePoint(new fabric.Point(image.rects.left, image.rects.top), p,
+                        fabric.util.degreesToRadians(deltaang));
 
-        var p = new fabric.Point(0, 0);
-        p = image.getCenterPoint();
-        var newx1y1 = fabric.util.rotatePoint(new fabric.Point(image.imline.x1,image.imline.y1),
-                p, fabric.util.degreesToRadians(deltaang));
-        var newx2y2 = fabric.util.rotatePoint(new fabric.Point(image.imline.x2,image.imline.y2),
-                p, fabric.util.degreesToRadians(deltaang));
+                image.rects.set({left: newlt.x, top: newlt.y, angle: image.rects.angle + deltaang});
+                image.rects.bringToFront();
+            }
 
-        image.imline.set({x1: newx1y1.x, y1: newx1y1.y, x2: newx2y2.x, y2: newx2y2.y});
-        image.set({old_left: optgtLeft, old_top: optgtTop, old_width: image.getWidth(), old_height: image.getHeight(), old_angle: image.getAngle()});
-        image.imline.bringToFront();
+            if(image.line != null) {
+                var newx1y1 = fabric.util.rotatePoint(new fabric.Point(image.line.x1,image.line.y1),
+                    p, fabric.util.degreesToRadians(deltaang));
+                var newx2y2 = fabric.util.rotatePoint(new fabric.Point(image.line.x2,image.line.y2),
+                    p, fabric.util.degreesToRadians(deltaang));
+
+                image.line.set({x1: newx1y1.x, y1: newx1y1.y, x2: newx2y2.x, y2: newx2y2.y});
+                image.line.bringToFront();
+            }
+
+            image.set({old_left: optgtLeft, old_top: optgtTop, old_width: image.getWidth(), old_height: image.getHeight(), old_angle: optAng});
+        }
     }
 
     var isActive, selectObj = [];
@@ -1611,7 +1605,6 @@
             //var obj = lightboxCanvas.getActiveObject();
 
             lightboxCanvas.forEachObject(function (other) {
-                console.log("entrou");
                 other.visible = false;
                 other.setControlsVisibility({bl: false, br: false, mb: false, ml: false, mr: false, mt: false, tl: false, tr: false, mtr: false});
             });
@@ -1635,6 +1628,7 @@
             clone.scaleY  = radio;
             clone.opacity = 1;
             clone.visible = true;
+            clone.selectable = false;
 
             lightboxCanvas.add(clone);
             clone.bringToFront();
@@ -1648,15 +1642,82 @@
             });
         }*/
         lightboxCanvas.renderAll();
+
+        $("#imageMenu").slideToggle(0, function() {
+            $("#btn_slide_menu").toggleClass("fa fa-outdent");
+            $("#btn_slide_menu").toggleClass("fa fa-indent");
+        });
     }
 
-	function btn_metadata_edit_click()
-	{
+    function clearCanvas(){
+        lightboxCanvas.clear();
+
+        croped_images.length = 0;
+        croped_images2.length = 0;
+        croped_images3.length = 0;
+        selected_image.length = 0;
+    }
+
+    // Essa função pode desaparecer, depois que o problema do botão sobre a image for resolvido.
+    var view = false;
+    function viewLarge2(){
+
+        view = !view;
+
+        if(view){
+            var obj = lightboxCanvas.getActiveObject();
+
+            lightboxCanvas.forEachObject(function (other) {
+                other.visible = false;
+                other.setControlsVisibility({bl: false, br: false, mb: false, ml: false, mr: false, mt: false, tl: false, tr: false, mtr: false});
+            });
+
+            clone = fabric.util.object.clone(obj);
+
+            lightboxCanvas.deactivateAll();
+
+            var radio_width = lightboxCanvas.width/obj.width;
+            var radio_height = lightboxCanvas.height/obj.height;
+            var radio;
+
+            if(radio_width<=radio_height) radio = radio_width;
+            else radio = radio_height;
+
+            clone.originX = "center";
+            clone.originY = "center";
+            clone.left    = lightboxCanvas.width/2;
+            clone.top     = lightboxCanvas.height/2;
+            clone.scaleX  = radio;
+            clone.scaleY  = radio;
+            clone.opacity = 1;
+            clone.visible = true;
+            clone.selectable = false;
+            clone.controls = false;
+
+            lightboxCanvas.add(clone);
+            clone.bringToFront();
+
+        } else{
+            clone.remove();
+
+            lightboxCanvas.forEachObject(function (other) {
+                other.visible = true;
+                other.setControlsVisibility({bl: true, br: true, mb: true, ml: true, mr: true, mt: true, tl: true, tr: true, mtr: true});
+            });
+        }
+        lightboxCanvas.renderAll();
+
+        $("#imageMenu").slideToggle(0, function() {
+            $("#btn_slide_menu").toggleClass("fa fa-outdent");
+            $("#btn_slide_menu").toggleClass("fa fa-indent");
+        });
+    }
+
+    function btn_metadata_edit_click() {
 		$("#textarea_metadata").attr("disabled",!($("#textarea_metadata").attr("disabled")));
 	}
 	
-	function btn_metadata_save_click()
-	{
+	function btn_metadata_save_click() {
 		obj_selected.metadata = $("#textarea_metadata").val();
 	}
 	
@@ -1674,6 +1735,7 @@
 			hovering_obj = event.target;
 		}
 	});
+
 	lightboxCanvas.on('mouse:out', function(event) {
 		if (event.target instanceof fabric.RectLineImage)
 		{
@@ -1694,8 +1756,8 @@
 				{
 					if (hovering_obj.rects != null)
 						lightboxCanvas.remove(hovering_obj.rects);
-					if (hovering_obj.imline != null)
-						lightboxCanvas.remove(hovering_obj.imline);
+					if (hovering_obj.line != null)
+						lightboxCanvas.remove(hovering_obj.line);
 					lightboxCanvas.remove(hovering_obj);
 					$('#btn_remove_image').hide();
 					$('#btn_enlarge_image').hide();
@@ -1703,7 +1765,6 @@
 				}
 				else
 				{
-					console.log(hovering_obj);
 					current_menu_workspace.splice(hovering_obj, 1);
 					$('#btn_remove_image').hide();
 					hovering_obj = null;
@@ -1719,4 +1780,5 @@
 		$('#btn_enlarge_image').hide();
 		hovering_obj = null;
 	}
+
 </script>
