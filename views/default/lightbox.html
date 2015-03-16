@@ -1,6 +1,6 @@
 <head>
     <script language="javascript" type="text/javascript" src="../static/js/jquery_min.js"></script>
-    <script language="javascript" type="text/javascript" src="../static/js/fabric_min.js"></script>
+    <script language="javascript" type="text/javascript" src="../static/js/fabric.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/font-awesome_min.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="../static/css/canvas.css" media="screen" />
 </head>
@@ -25,7 +25,6 @@
     <i class="fa fa-pencil"          id="btn_draw_line" onclick="draw_line_button_click()"></i>
     <i class="fa fa-map-marker"      id="btn_select_obj" onclick="select_objects()"></i>
     <i class="fa fa-refresh"         id="btn_overl_lines" onclick="overlapping_lines_button_click()"></i>
-    <label>View Large:<input type=checkbox id="check" onClick="viewLarge()"></label>
 
     <div id="group_name_input" class="group_name_input">
         <input type="text" id="textbox_group_name"></input>
@@ -53,12 +52,23 @@
     <table id="list_of_files">
     </table>
 </div>
+<div class="metadata" id="metadata_div">
+	<text>Metadata</text> 
+	<i class="fa fa-pencil-square-o" id="btn_metadata_edit" onclick="btn_metadata_edit_click()"></i>
+	<i class="fa fa-floppy-o" id="btn_metadata_save" onclick="btn_metadata_save_click()"></i>
+	<br>
+	<textarea id="textarea_metadata" rows="10" cols="40" disabled></textarea>
+</div>
+<div class="imageInteraction" id="imageInteraction_div">
+    <i class="fa fa-times" id="btn_remove_image" onclick="btn_remove_image_click()"></i>
+	<i class="fa fa-picture-o" id="btn_enlarge_image" onclick="btn_enlarge_image_click()"></i>
+</div>
 </body>
 
 
 <script>
     fabric.RectLineImage = fabric.util.createClass(fabric.Image, {
-        type: 'cropzoomimage',
+        type: 'rectLineImage',
         zoomedXY: false,
         initialize: function(element, options)//(element, options)
         {
@@ -72,13 +82,24 @@
                 old_height: this.height,
                 old_angle: this.angle,
                 rects: null,
-                line: null
+                imline: null,
+				metadata: ""
             });
         },
         toObject : function()
         {
-            return fabric.util.object.extend(this.callSuper('toObject'), { rects: this.rects });
-            return fabric.util.object.extend(this.callSuper('toObject'), { line: this.line });
+            //return fabric.util.object.extend(this.callSuper('toObject'), { rects: this.rects, line: this.line, metadata: this.metadata });
+			return fabric.util.object.extend(this.callSuper('toObject'), {
+						orgSrc: this.orgSrc,
+						old_left: this.old_left,
+						old_top: this.old_top,
+						old_width: this.old_width,
+						old_height: this.old_height,
+						old_angle: this.old_angle,
+						rects: this.rects,
+						imline: this.imline,
+						metadata: this.metadata
+					});
         },
         updateRect: function(l, t, w, h) {
             this.rects.left = l;
@@ -120,13 +141,37 @@
         }
     });
 
-    fabric.RectLineImage.fromObject = function(object, callback) {
-        fabric.util.loadImage(object.src, function(img) {
-            callback && callback(new fabric.RectLineImage(img, object));
-        });
-    };
-
     fabric.RectLineImage.async = true;
+
+    fabric.RectLineImage.fromObject = function(object, callback) {
+        var temp;
+		fabric.util.loadImage(object.src, function(img) {
+			temp = new fabric.RectLineImage(img, object);
+			temp.orgSrc = object.orgSrc;
+			temp.old_left = object.old_left;
+			temp.old_top = object.old_top;
+			temp.old_width = object.old_width;
+			temp.old_height = object.old_height;
+			temp.old_angle = object.old_angle;
+			//if (object.rects != null)
+			//	attach(object.rects, temp);
+			temp.rects = object.rects;
+			temp.imline = object.imline;
+			temp.metadata = object.metadata;
+            callback && callback(temp);
+        });
+		/*fabric.util.loadImage(object.src, function(img) {
+			fabric.Image.prototype._initFilters.call(object, object, function(filters) {
+				object.filters = filters || [];
+				var instance = new fabric.RectLineImage(img, object);
+				if (callback) { callback(instance); }
+			});
+		}, null, object.crossOrigin);*/
+		/*fabric.util.enlivenObjects(object.objects, function (enlivenedObjects) {
+			delete object.objects;
+			callback && callback(new fabric.RectLineImage(enlivenedObjects, object));
+		});*/
+    };
 </script>
 
 <script>
@@ -235,6 +280,12 @@
     function getStateData(workspace) {
         var temp;
         var result = "\\menu\n";
+		var canvas_backup = lightboxCanvas;
+		
+		lightboxCanvas.forEachObject(function (obj) {
+			if (obj instanceof fabric.RectLineImage) return;
+			lightboxCanvas.remove(obj);
+		});
 
         result = result + getMenuStateData(workspace);
 
@@ -243,6 +294,9 @@
         result = result + JSON.stringify(lightboxCanvas) + "\n";
         result = result + "\\lightbox\n";
 
+		lightboxCanvas = canvas_backup;
+		lightboxCanvas.renderAll();
+		
         return result;
     }
 
@@ -287,13 +341,37 @@
         workspace_hierarchy = "-1";
         $('#context_link').append("<a href='#' onclick='linkClick(\"-1\");return false;'>Main</a>");
         lightboxCanvas.clear();
-        lightboxCanvas.loadFromJSON(content[content.length - 1], lightboxCanvas.renderAll.bind(lightboxCanvas));
+        lightboxCanvas.loadFromJSON(content[content.length - 1], lightboxCanvas.renderAll.bind(lightboxCanvas), function (o, object) {
+			var temp;
+			if (object.rects != null)
+			{
+				temp = object.rects;
+				attach(temp, object);
+				lightboxCanvas.add(object.rects).renderAll();
+				object.rects.bringToFront();
+			}
+			if (object.imline != null)
+			{
+				temp = object.imline;
+				object.imline = new fabric.Line([temp.x1, temp.y1, temp.x2, temp.y2], {
+					strokeWidth: temp.strokeWidth,
+					stroke: temp.stroke,
+					originX: temp.originX,
+					originY: temp.originY
+				});
+				lightboxCanvas.add(object.imline).renderAll();
+				object.imline.bringToFront();
+			}
+		});
+
         loadImagesState(loadingState, imageLoaded);
     }
 
     function resizeImageMenu() {
         imageMenuCanvas.width = (window.innerWidth - (window.innerWidth * 0.03)) * 0.3;
-        imageMenuCanvas.height = window.innerHeight - (window.innerHeight * 0.03);
+        imageMenuCanvas.height = (window.innerHeight - (window.innerHeight * 0.03)) * 2;
+		$('#imageMenu').width((window.innerWidth - (window.innerWidth * 0.03)) * 0.3 + 17);
+		$('#imageMenu').height(window.innerHeight * 0.95);
         $('#imageMenuCanvasBackground').width(imageMenuCanvas.width);
         $('#imageMenuCanvasBackground').height(imageMenuCanvas.height);
 
@@ -306,7 +384,10 @@
         auxiliarImageCanvas.height = offsetx;
 
         lightboxCanvas.setWidth(window.innerWidth);
-        lightboxCanvas.setHeight(window.innerHeight);
+        lightboxCanvas.setHeight(imageMenuCanvas.height / 2);
+		
+		interfaceCanvas.width = lightboxCanvas.getWidth();
+		interfaceCanvas.height = lightboxCanvas.getHeight();
 
         $("#file_save").css("width", window.innerWidth);
         $("#file_save").css("height", window.innerHeight);
@@ -476,6 +557,21 @@
             interfaceCanvas.style.zIndex = 10;
         }
     }
+	
+	function mouseMoveImageMenuEvent(e) {
+		var mousePosition = getMousePosition(imageMenuCanvas, e);
+		var image_index = getImageMouseCollision(mousePosition);
+		
+		var positionX = (offsetx + 2 * marginx) * ((image_index % 3) + 1);
+		var positionY = marginy + (offsetx + 2 * marginy) * (Math.floor(image_index / 3));
+		
+		hovering_obj = image_index;
+		
+		$('#btn_remove_image').show();
+		$('#btn_enlarge_image').hide();
+		
+		$('#btn_remove_image').offset({top: $('#imageMenuCanvas').offset().top + positionY + $('#btn_remove_image').height() - 10, left: positionX - $('#btn_remove_image').width() - 10});
+	}
 
     function mouseRightClickEvent(e) {
         var mousepos = getMousePosition(imageMenuCanvas, e);
@@ -579,6 +675,7 @@
 
     imageMenuCanvas.onmousedown = mouseDownEvent;
     //imageMenuCanvas.oncontextmenu = mouseRightClickEvent;
+	imageMenuCanvas.addEventListener('mousemove', mouseMoveImageMenuEvent, false);
     imageMenuCanvas.addEventListener('contextmenu', mouseRightClickEvent, false);
     //imageMenuCanvas.onmousemove = mouseMoveEvent;
     //imageMenuCanvas.onmouseup = mouseUpEvent;
@@ -982,6 +1079,8 @@
                                 function() { lightboxCanvas.renderAll() });
 
                         lightboxCanvas.add(croped_images2[i]);
+						croped_images2[i].selectable = false;
+						croped_images2[i].controls = false;
 
                         croped_images3.push(new fabric.RectLineImage(temp_img, {
                             originX: 'right',
@@ -1076,7 +1175,8 @@
             finX = pointer.x;
             finY = pointer.y;
 
-            drag_croped_image((finX - origX)/10, (finY - origY)/10);
+            //drag_croped_image((finX - origX)/10, (finY - origY)/10);
+			zoom_button_click((origX - finX)/5, (origY - finY)/5, 0);
 
             origX = finX;
             origY = finY;
@@ -1092,7 +1192,7 @@
     }
 
     // Não está funcionando ainda
-    function drag_croped_image(x, y) {
+    /*function drag_croped_image(x, y) {
         var rectleft, recttop;
         var element;
         console.log(x + " " + y);
@@ -1117,7 +1217,7 @@
                 //console.log(element.old_left + " " + element.old_top + " " + element.old_width + " " + element.old_height);
             }
         }
-    }
+    }*/
 
     function stopZoom(rectleft, recttop){
 
@@ -1361,15 +1461,17 @@
         calcOverlappingLines(selectObj[0], selectObj[1]);
         isActive = false;
     }
+	
+	var obj_selected;
 
     function onChange(options) {
         options.target.bringToFront();
         changeOpacity(options.target);
-
+		
         if (options.target.rects != null) updateonChange_Rects(options.target);
 
         if (options.target.imline != null) updateonChange_Line(options.target);
-
+		
         options.target.setCoords();
         lightboxCanvas.renderAll();
     }
@@ -1496,14 +1598,17 @@
             obj.filters.push(filter);
             obj.applyFilters(lightboxCanvas.renderAll.bind(lightboxCanvas));
         }
+		//if (options.target instanceof fabric.RectLineImage)
+		$("#textarea_metadata").val(lightboxCanvas.getActiveObject().metadata);
+		$("#textarea_metadata").attr("disabled", true);
+		obj_selected = lightboxCanvas.getActiveObject();
     }
 
     var clone;
 
-    function viewLarge(){
-
-        if(document.getElementById('check').checked){
-            var obj = lightboxCanvas.getActiveObject();
+    function viewLarge(obj){
+        //if (document.getElementById('check').checked){
+            //var obj = lightboxCanvas.getActiveObject();
 
             lightboxCanvas.forEachObject(function (other) {
                 console.log("entrou");
@@ -1533,16 +1638,85 @@
 
             lightboxCanvas.add(clone);
             clone.bringToFront();
-        }
-        if(!document.getElementById('check').checked){
+        //}
+        /*if(!document.getElementById('check').checked){
             clone.remove();
 
             lightboxCanvas.forEachObject(function (other) {
                 other.visible = true;
                 other.setControlsVisibility({bl: true, br: true, mb: true, ml: true, mr: true, mt: true, tl: true, tr: true, mtr: true});
             });
-        }
+        }*/
         lightboxCanvas.renderAll();
     }
 
+	function btn_metadata_edit_click()
+	{
+		$("#textarea_metadata").attr("disabled",!($("#textarea_metadata").attr("disabled")));
+	}
+	
+	function btn_metadata_save_click()
+	{
+		obj_selected.metadata = $("#textarea_metadata").val();
+	}
+	
+	var hovering_obj = null;
+	$('#btn_remove_image').hide();
+	$('#btn_enlarge_image').hide();
+	
+	lightboxCanvas.on('mouse:over', function(event) {
+		if (event.target instanceof fabric.RectLineImage)
+		{
+			$('#btn_remove_image').show();
+			$('#btn_enlarge_image').show();
+			$('#btn_remove_image').offset({top: event.target.top + $('#imageMenu').offset().top, left: event.target.left + event.target.width - $('#btn_remove_image').width() - 10});
+			$('#btn_enlarge_image').offset({top: event.target.top + $('#imageMenu').offset().top + event.target.height - $('#btn_enlarge_image').height() - 10, left: event.target.left + event.target.width - $('#btn_enlarge_image').width() - 10});
+			hovering_obj = event.target;
+		}
+	});
+	lightboxCanvas.on('mouse:out', function(event) {
+		if (event.target instanceof fabric.RectLineImage)
+		{
+			$('#btn_remove_image').hide();
+			$('#btn_enlarge_image').hide();
+			hovering_obj = null;
+		}
+	});
+	
+	function btn_remove_image_click() {
+		var dialog;
+		if (hovering_obj != null)
+		{
+			dialog = confirm("Do you wish do remove this image?");
+			if (dialog == true)
+			{
+				if (hovering_obj instanceof fabric.RectLineImage)
+				{
+					if (hovering_obj.rects != null)
+						lightboxCanvas.remove(hovering_obj.rects);
+					if (hovering_obj.imline != null)
+						lightboxCanvas.remove(hovering_obj.imline);
+					lightboxCanvas.remove(hovering_obj);
+					$('#btn_remove_image').hide();
+					$('#btn_enlarge_image').hide();
+					hovering_obj = null;
+				}
+				else
+				{
+					console.log(hovering_obj);
+					current_menu_workspace.splice(hovering_obj, 1);
+					$('#btn_remove_image').hide();
+					hovering_obj = null;
+					imageLoaded();
+				}
+			}
+		}
+	}
+	
+	function btn_enlarge_image_click() {
+		viewLarge(hovering_obj);
+		$('#btn_remove_image').hide();
+		$('#btn_enlarge_image').hide();
+		hovering_obj = null;
+	}
 </script>

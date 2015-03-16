@@ -1,0 +1,12 @@
+\menu
+0
+1
+2
+3
+5
+6
+7
+\menu
+\lightbox
+{"objects":[{"type":"rectLineImage","originX":"left","originY":"top","left":442.16,"top":75.76,"width":250,"height":167,"fill":"rgb(0,0,0)","stroke":null,"strokeWidth":1,"strokeDashArray":null,"strokeLineCap":"butt","strokeLineJoin":"miter","strokeMiterLimit":10,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"opacity":1,"shadow":null,"visible":true,"clipTo":null,"backgroundColor":"","fillRule":"nonzero","globalCompositeOperation":"source-over","src":"http://127.0.0.1:8000/Frick/static/images/user/0.png","filters":[],"crossOrigin":"","alignX":"none","alignY":"none","meetOrSlice":"meet","orgSrc":"http://127.0.0.1:8000/Frick/static/images/user/0.png","old_left":440.660686427457,"old_top":74.26750547045953,"old_width":250,"old_height":167,"old_angle":0,"rects":{"type":"rect","originX":"left","originY":"top","left":451.29,"top":91.85,"width":61.9,"height":77.66,"fill":"transparent","stroke":"#000000","strokeWidth":2,"strokeDashArray":[3,2],"strokeLineCap":"butt","strokeLineJoin":"miter","strokeMiterLimit":10,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"opacity":1,"shadow":null,"visible":true,"clipTo":null,"backgroundColor":"","fillRule":"nonzero","globalCompositeOperation":"source-over","rx":0,"ry":0},"imline":{"type":"line","originX":"center","originY":"center","left":605.55,"top":144.61,"width":74.88,"height":37.83,"fill":"rgb(0,0,0)","stroke":"red","strokeWidth":2,"strokeDashArray":null,"strokeLineCap":"butt","strokeLineJoin":"miter","strokeMiterLimit":10,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"opacity":1,"shadow":null,"visible":true,"clipTo":null,"backgroundColor":"","fillRule":"nonzero","globalCompositeOperation":"source-over","x1":-37.44149765990642,"x2":37.44149765990642,"y1":18.91684901531729,"y2":-18.91684901531729},"metadata":""}],"background":""}
+\lightbox
