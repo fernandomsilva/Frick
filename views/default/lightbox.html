@@ -75,7 +75,7 @@
     <canvas id="imageMenuCanvasBackground" width="800" height="600"></canvas>
 </div>
 
-<div class="lightbox"><canvas id="lightboxCanvas" width="800" height="600"></canvas></div>
+<div class="lightbox" id="lightbox"><canvas id="lightboxCanvas" width="800" height="600"></canvas></div>
 
 <div class="group_aux"><canvas id="auxiliarImageCanvas" width="100" height="100"></canvas></div>
 
@@ -282,6 +282,8 @@
     }
 
     var loadingState;
+	var width_scale;
+	var height_scale;
 
     function getMousePosition(canvas, event) {
         var rect = canvas.getBoundingClientRect();
@@ -410,24 +412,28 @@
         loadImagesState(loadingState, imageLoaded);
     }
 
-    function resizeImageMenu() {
-        imageMenuCanvas.width = (window.innerWidth - (window.innerWidth * 0.03)) * 0.3;
-        imageMenuCanvas.height = (window.innerHeight - (window.innerHeight * 0.03)) * 2;
+    function resizeCanvas() {
 		$('#imageMenu').width((window.innerWidth - (window.innerWidth * 0.03)) * 0.3 + 17);
 		$('#imageMenu').height(window.innerHeight * 0.95);
+        imageMenuCanvas.width = (window.innerWidth - (window.innerWidth * 0.03)) * 0.3;
+        imageMenuCanvas.height = (window.innerHeight - (window.innerHeight * 0.03));
+		//$('#imageMenu').scrollTop($('#imageMenu')[0].scrollHeight);
         $('#imageMenuCanvasBackground').width(imageMenuCanvas.width);
         $('#imageMenuCanvasBackground').height(imageMenuCanvas.height);
 
         marginx = imageMenuCanvas.width * 0.016;
         marginy = marginx;//imageMenuCanvas.height * 0.025;
         offsetx = imageMenuCanvas.width * 0.3;//imageMenuCanvas.width * 0.08;
+		
+		width_scale = window.innerWidth / 3;
+		height_scale = imageMenuCanvas.height / 3;
 
         var auxiliarImageCanvas = document.getElementById('auxiliarImageCanvas');
         auxiliarImageCanvas.width = offsetx;
         auxiliarImageCanvas.height = offsetx;
 
         lightboxCanvas.setWidth(window.innerWidth);
-        lightboxCanvas.setHeight(imageMenuCanvas.height / 2);
+        lightboxCanvas.setHeight(imageMenuCanvas.height);
 		
 		interfaceCanvas.width = lightboxCanvas.getWidth();
 		interfaceCanvas.height = lightboxCanvas.getHeight();
@@ -445,7 +451,21 @@
         imageMenuContext.globalAlpha = 1;*/
     }
 
-    resizeImageMenu();
+    resizeCanvas();
+	
+	function resizeImageMenu() {
+		if (marginy + (Math.floor(current_menu_workspace.length/3) + 1) * (2 * marginy + offsetx) > imageMenuCanvas.height)
+		{
+			imageMenuCanvas.height = marginy + (Math.floor(current_menu_workspace.length/3) + 1) * (2 * marginy + offsetx);
+		}
+		else
+		{
+			if (marginy + (Math.floor(current_menu_workspace.length/3) + 1) * (2 * marginy + offsetx) <= window.innerHeight * 0.95)
+				imageMenuCanvas.height = window.innerHeight * 0.95;
+			else
+				imageMenuCanvas.height = marginy + (Math.floor(current_menu_workspace.length/3) + 1) * (2 * marginy + offsetx);
+		}
+	}
 
     function img(source) {
         this.data = new Image();
@@ -511,6 +531,7 @@
         var temp;
         var img_width, img_height;
 
+		resizeImageMenu();
         imageMenuContext.clearRect( 0 , 0 , imageMenuCanvas.width, imageMenuCanvas.height );
 
         for (var i in current_menu_workspace) {
@@ -615,6 +636,17 @@
 		
 		$('#btn_remove_image').offset({top: $('#imageMenuCanvas').offset().top + positionY + $('#btn_remove_image').height() - 10, left: positionX - $('#btn_remove_image').width() - 10});
 	}
+	
+	function mouseOutImageMenuEvent(e) {
+		var mousePosition = getMousePosition(imageMenuCanvas, e);
+		var imageIndex = getImageMouseCollision(mousePosition);
+
+		if (imageIndex == -1)
+		{
+			$('#btn_remove_image').hide();
+			hovering_obj = null;
+		}
+	}
 
     function mouseRightClickEvent(e) {
         var mousepos = getMousePosition(imageMenuCanvas, e);
@@ -647,7 +679,8 @@
         {
             drag = false;
 
-            var mousePosition = getMousePosition(interfaceCanvas, e);
+            var mousePosition = getMousePosition(imageMenuCanvas, e);
+			//console.log(getMousePosition(imageMenuCanvas, e));
             drop_image = getImageMouseCollision(mousePosition);
             if (drop_image > -1 && drop_image != selected_image)
             {
@@ -673,10 +706,27 @@
                         loaded_img.set('left', mousePosition.x - (loaded_img.getWidth() / 2)).set('top', mousePosition.y - (loaded_img.getHeight() / 2));
                         lightboxCanvas.add(loaded_img);
                     }));*/
+					mousePosition = getMousePosition(interfaceCanvas, e);
+					var ratio = 1.0;
+					if (current_menu_workspace[selected_image].width > current_menu_workspace[selected_image].height)
+					{
+						if (current_menu_workspace[selected_image].width > width_scale)
+						{
+							ratio = width_scale / current_menu_workspace[selected_image].width;
+						}
+					}
+					else
+					{
+						if (current_menu_workspace[selected_image].height > height_scale)
+						{
+							ratio = height_scale / current_menu_workspace[selected_image].height;
+						}
+					}
                     editableImageArray.push(new fabric.RectLineImage(current_menu_workspace[selected_image], {
-                        left: mousePosition.x - (current_menu_workspace[selected_image].width / 2),//(loaded_img.getWidth() / 2),
-                        top: mousePosition.y - (current_menu_workspace[selected_image].height / 2)//(loaded_img.getHeight() / 2)
+                        left: mousePosition.x - (current_menu_workspace[selected_image].width * ratio / 2),//(loaded_img.getWidth() / 2),
+                        top: mousePosition.y - (current_menu_workspace[selected_image].height * ratio / 2)//(loaded_img.getHeight() / 2)
                     }));
+					editableImageArray[editableImageArray.length - 1].set({scaleX: ratio, scaleY: ratio});
                     lightboxCanvas.add(editableImageArray[editableImageArray.length - 1]);
                 }
             }
@@ -719,6 +769,7 @@
     imageMenuCanvas.onmousedown = mouseDownEvent;
     //imageMenuCanvas.oncontextmenu = mouseRightClickEvent;
 	imageMenuCanvas.addEventListener('mousemove', mouseMoveImageMenuEvent, false);
+	imageMenuCanvas.addEventListener('mouseout', mouseOutImageMenuEvent, false);
     imageMenuCanvas.addEventListener('contextmenu', mouseRightClickEvent, false);
     //imageMenuCanvas.onmousemove = mouseMoveEvent;
     //imageMenuCanvas.onmouseup = mouseUpEvent;
@@ -1470,6 +1521,8 @@
         changeOpacity(options.target);
         updateonChange(options.target);
         options.target.setCoords();
+		$('#btn_remove_image').offset({top: options.target.top + $('#lightbox').offset().top, left: options.target.left + options.target.width * options.target.scaleX - $('#btn_remove_image').width() - 10});
+		$('#btn_enlarge_image').offset({top: options.target.top + $('#lightbox').offset().top + options.target.height * options.target.scaleY - $('#btn_enlarge_image').height() - 10, left: options.target.left + options.target.width * options.target.scaleX - $('#btn_enlarge_image').width() - 10});
         lightboxCanvas.renderAll();
     }
 
@@ -1604,6 +1657,8 @@
         //if (document.getElementById('check').checked){
             //var obj = lightboxCanvas.getActiveObject();
 
+			view = true;
+			
             lightboxCanvas.forEachObject(function (other) {
                 other.visible = false;
                 other.setControlsVisibility({bl: false, br: false, mb: false, ml: false, mr: false, mt: false, tl: false, tr: false, mtr: false});
@@ -1647,6 +1702,8 @@
             $("#btn_slide_menu").toggleClass("fa fa-outdent");
             $("#btn_slide_menu").toggleClass("fa fa-indent");
         });
+		
+		$('#metadata_div').hide();
     }
 
     function clearCanvas(){
@@ -1696,6 +1753,8 @@
 
             lightboxCanvas.add(clone);
             clone.bringToFront();
+			
+			$('#metadata_div').hide();
 
         } else{
             clone.remove();
@@ -1704,6 +1763,8 @@
                 other.visible = true;
                 other.setControlsVisibility({bl: true, br: true, mb: true, ml: true, mr: true, mt: true, tl: true, tr: true, mtr: true});
             });
+			
+			$('#metadata_div').show();
         }
         lightboxCanvas.renderAll();
 
@@ -1730,14 +1791,14 @@
 		{
 			$('#btn_remove_image').show();
 			$('#btn_enlarge_image').show();
-			$('#btn_remove_image').offset({top: event.target.top + $('#imageMenu').offset().top, left: event.target.left + event.target.width - $('#btn_remove_image').width() - 10});
-			$('#btn_enlarge_image').offset({top: event.target.top + $('#imageMenu').offset().top + event.target.height - $('#btn_enlarge_image').height() - 10, left: event.target.left + event.target.width - $('#btn_enlarge_image').width() - 10});
+			$('#btn_remove_image').offset({top: event.target.top + $('#lightbox').offset().top, left: event.target.left + event.target.width * event.target.scaleX - $('#btn_remove_image').width() - 10});
+			$('#btn_enlarge_image').offset({top: event.target.top + $('#lightbox').offset().top + event.target.height * event.target.scaleY - $('#btn_enlarge_image').height() - 10, left: event.target.left + event.target.width * event.target.scaleX - $('#btn_enlarge_image').width() - 10});
 			hovering_obj = event.target;
 		}
 	});
 
 	lightboxCanvas.on('mouse:out', function(event) {
-		if (event.target instanceof fabric.RectLineImage)
+		if (event.target instanceof fabric.RectLineImage && event.target == hovering_obj)
 		{
 			$('#btn_remove_image').hide();
 			$('#btn_enlarge_image').hide();
