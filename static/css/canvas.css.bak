@@ -1,35 +1,323 @@
+.buttons {
+	position: fixed;
+	top: 5%;
+	margin: 0px;
+	z-index: 5;
+}
+
+.buttons i:hover {
+	color: #0000FF;
+}
+
+.group_name_input {
+	position: absolute;
+	z-index: 5;
+	left: 18px;
+	visibility: hidden;
+	
+	background-color: black;
+	padding: 5px;
+	
+	width: 167px;
+}
+
+.group_name_input input {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.group_name_input i {
+	color: white;
+}
+
 .interface {
 	position: relative;
+	margin: 0px;
 }
 
 .interface canvas {
 	z-index: -1;
-
-	position: absolute;
+	position: fixed;
 	top: 5%;
 }
 
-
 .imageMenu {
-	position: relative;
+	position: fixed;
+	margin: 0px;
+	overflow-y: scroll;
+	top: 5%;
+	left: 0%;
+	z-index: 4;
+}
+
+.imageMenu #context_link {
+	position: absolute;
+	top: 1%;
+    left: 1%;
+	z-index: 3;
+	color: white;
+	font-weight: bold;
+	-webkit-user-select: none; /* Chrome/Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+ */
+}
+
+.imageMenu #context_link a,a:link,a:visited {
+	color: black;
+	text-decoration: none;
+    text-shadow: aliceblue;
 }
 
 .imageMenu canvas {
-	z-index: 2;
+	z-index: 4;
 
 	position: absolute;
+	top: 1.5%;
+	left: 0%;
+}
+
+.imageMenu #imageMenuCanvasBackground {
+	opacity: 0.8;
+	background-color: #cbd5e8;
+	z-index: 2;
+	position: fixed;
 	top: 5%;
 }
 
 .lightbox {
-	position: relative;
+	position: fixed;
+	margin: 0px;
+	top: 5%;
+	left: 0%;
 }
 
 .lightbox canvas {
 	border: 1px solid #000000;
 	z-index: 0;
 
+	position: fixed;
+}
+
+.group_aux {
 	position: absolute;
+	visibility: hidden;
+	z-index: -1;
 	top: 5%;
-    left: -3%;
+}
+
+.group_aux canvas {
+}
+
+.file_open_list {
+	position: fixed;
+	top: 0%;
+	left: 0%;
+	margin: 0px;
+	opacity: 0.8;
+	background-color: black;
+	z-index: -2;
+	visibility: hidden;
+}
+
+.file_open_list #btn_close_open_state {
+	position: fixed;
+	top: 0%;
+	left: 0%;
+
+	color: white;
+	font-size: 22px;
+}
+
+.file_open_list #btn_close_open_state:hover {
+	color: red;
+}
+
+.highlight {
+	color: white;
+	background: blue;
+}
+
+.file_open_list table {
+	position: fixed;
+	
+	z-index: 11;
+	
+	background: white;
+	
+	width: 430px;
+	
+	top: 21%;
+    left: 35%;
+    margin-right: -50%;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;	
+
+	-webkit-user-select: none; /* Chrome/Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+ */
+}
+
+.file_open_list table th {
+	color: white;
+	background: black;
+}
+
+.file_save_list {
+	position: fixed;
+	top: 0%;
+	left: 0%;
+	margin: 0px;
+	opacity: 0.8;
+	background-color: black;
+	z-index: -2;
+	visibility: hidden;
+}
+
+.file_save_list #btn_close_save_state {
+	position: fixed;
+	top: 0%;
+	left: 0%;
+
+	color: white;
+	font-size: 22px;
+}
+
+.file_save_list #btn_close_save_state:hover {
+	color: red;
+}
+
+.file_save_list #label {
+	position: fixed;
+	
+	top: 11%;
+    left: 35%;
+    margin-right: -50%;	
+
+	color: white;
+	font-weight: bold;
+}
+
+.file_save_list #btn_save_state {
+	position: fixed;
+	
+	top: 15%;
+    left: 67%;
+    margin-right: -50%;
+	
+	color: white;
+	
+	font-size: 22px;
+}
+
+.file_save_list input {
+	position: fixed;
+
+	width: 400px;
+	
+	top: 15%;
+    left: 35%;
+    margin-right: -50%;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.file_save_list table {
+	position: fixed;
+	
+	z-index: 11;
+	
+	background: white;
+	
+	width: 430px;
+	
+	top: 21%;
+    left: 35%;
+    margin-right: -50%;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;	
+}
+
+.file_save_list table th {
+	color: white;
+	background: black;
+}
+
+.metadata {
+	position: fixed;
+	top: 5%;
+	left: 75.5%;
+	width: 24.5%;
+	height: 172px;
+	margin: 0px;
+	opacity: 0.8;
+	background-color: black;
+	z-index: 22;
+	/*visibility: hidden;*/
+}
+
+.metadata text {
+	color: white;
+	padding: 5px;
+}
+
+.metadata i {
+	/*position: fixed;
+	top: 0%;
+	left: 0%;*/
+	padding: 2px;
+
+	color: white;
+	/*font-size: 22px;*/
+}
+
+.metadata i:hover {
+	color: red;
+}
+
+.metadata #textarea_metadata {
+	padding: 2px;
+	margin-left: 5px;
+	
+	rows: 10;
+	cols: 40;
+	
+	color: white;
+	background-color: grey;
+}
+
+.imageInteraction {
+	position: fixed;
+	top: 10%;
+	left: 10%;
+	z-index: 23;
+}
+
+.imageInteraction i {
+	background: #d93434;
+	background-image: -webkit-linear-gradient(top, #d93434, #b82b47);
+	background-image: -moz-linear-gradient(top, #d93434, #b82b47);
+	background-image: -ms-linear-gradient(top, #d93434, #b82b47);
+	background-image: -o-linear-gradient(top, #d93434, #b82b47);
+	background-image: linear-gradient(to bottom, #d93434, #b82b47);
+	color: #ffffff;
+	font-size: 14px;
+	padding: 5px 5px 5px 5px;
+	text-decoration: none;
+}
+
+.imageInteraction i:hover {
+	background: #3cb0fd;
+	background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+	background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+	background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+	background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+	background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+	text-decoration: none;
 }
