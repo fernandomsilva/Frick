@@ -16,7 +16,7 @@
 
 <div class="menu_background">
 <div id="menu" class="main">
-    <a href="#" class="btn orange" id="btn_slide_menu"> <i class="fa fa-outdent"></i> Hide</a>
+    <!--<a href="#" class="btn orange" id="btn_slide_menu"> <i class="fa fa-outdent"></i> Hide</a>-->
     <a href="#" class="btn blue"   onclick="toggleSubMenu('workMenu')">      <i class="fa fa-th-large"></i> Workspace</a>
     <a href="#" class="btn green"  onclick="toggleSubMenu('rectMenu')">      <i class="fa fa-pencil-square-o"></i> Rect </a>
     <a href="#" class="btn red"    onclick="toggleSubMenu('lineMenu')">      <i class="fa fa-ellipsis-h"></i> Line</a>
@@ -30,8 +30,8 @@
      <a href="#" class="btn green" onclick="hideRect()">               <i class="fa fa-retweet"></i> Hide</a>
      <a href="#" class="btn green" onclick="eraseRect()">              <i class="fa fa-eraser"></i> Erase</a>
      <a href="#" class="btn green" onclick="crop_rect_button_click()"> <i class="fa fa-crop"></i> Crop</a>
-     <a href="#" class="btn green" onclick="zoom_button_click(0,0,2)"> <i class="fa fa-search-plus"></i> Zoom out</a>
-     <a href="#" class="btn green" onclick="zoom_button_click(0,0,-2)"><i class="fa fa-search-minus"></i> Zoom in</a>
+     <!--<a href="#" class="btn green" onclick="zoom_button_click(0,0,2)"> <i class="fa fa-search-plus"></i> Zoom out</a>
+     <a href="#" class="btn green" onclick="zoom_button_click(0,0,-2)"><i class="fa fa-search-minus"></i> Zoom in</a>-->
      <a href="#" class="btn green" onclick="drawOriginal()">           <i class="fa fa-reply"></i> Return</a>
 </div>
 <div id="lineMenu" class="submenu">
@@ -55,12 +55,22 @@
 </div>
 </div>
 
+<div id="group_name_input" class="group_name_input">
+        <input type="text" id="textbox_group_name"></input>
+        <i class="fa fa-plus" id="btn_add_group" onclick="add_group_button_click()"></i>
+</div>
+
 <div class="interface"><canvas id="interfaceCanvas" width="800" height="600"></canvas></div>
 
 <div id="imageMenu" class="imageMenu">
     <div id="context_link"><a href="#" onclick="linkClick('-1');return false;">Main</a></div>
     <canvas id="imageMenuCanvas" width="800" height="600"></canvas>
     <canvas id="imageMenuCanvasBackground" width="800" height="600"></canvas>
+    <i class="fa fa-times"           id="btn_imageMenu_hide" onclick="bt_imageMenu_hide()"></i>
+</div>
+
+<div class="show_imageMenu"           id="show_imageMenu_div">
+	<i class="fa fa-caret-square-o-right" id="btn_imageMenu_show" onclick="bt_imageMenu_show()"></i>
 </div>
 
 <div class="lightbox" id="lightbox"><canvas id="lightboxCanvas" width="800" height="600"></canvas></div>
@@ -82,22 +92,51 @@
     </table>
 </div>
 
-<!--<div class="metadata" id="metadata_div">
-	<text>Metadata</text> 
+<div class="metadata" id="metadata_div">
+	<text>Annotations</text>
 	<i class="fa fa-pencil-square-o" id="btn_metadata_edit" onclick="btn_metadata_edit_click()"></i>
-	<i class="fa fa-floppy-o" id="btn_metadata_save" onclick="btn_metadata_save_click()"></i>
+	<i class="fa fa-floppy-o"        id="btn_metadata_save" onclick="btn_metadata_save_click()"></i>
+    <i class="fa fa-times"           id="btn_metadata_hide" onclick="bt_metadata_hide()"></i>
 	<br>
 	<textarea id="textarea_metadata" rows="10" cols="40" disabled></textarea>
-</div>-->
+</div>
 
-<div class="imageInteraction" id="imageInteraction_div">
-    <i class="fa fa-times" id="btn_remove_image" onclick="btn_remove_image_click()"></i>
+<div class="show_metadata"           id="show_metadata_div">
+	<i class="fa fa-caret-square-o-left" id="btn_metadata_show" onclick="bt_metadata_show()"></i>
+</div>
+
+<div class="imageInteraction"  id="imageInteraction_div">
+    <i class="fa fa-times"     id="btn_remove_image" onclick="btn_remove_image_click()"></i>
     <i class="fa fa-picture-o" id="btn_enlarge_image" onclick="btn_enlarge_image_click()"></i>
 </div>
 </body>
 
 
 <script>
+    /*$('#metadata_button').click(function () {
+    alert('I am clickable');
+});*/
+    
+    function bt_imageMenu_hide(){
+        document.getElementById('imageMenu').style.visibility = 'hidden';
+        document.getElementById('show_imageMenu_div').style.visibility = 'visible';
+    }
+    
+    function bt_imageMenu_show(){
+        document.getElementById('imageMenu').style.visibility = 'visible';
+        document.getElementById('show_imageMenu_div').style.visibility = 'hidden';
+    }
+
+    function bt_metadata_hide(){
+        document.getElementById('metadata_div').style.visibility = 'hidden';
+        document.getElementById('show_metadata_div').style.visibility = 'visible';
+    }
+
+    function bt_metadata_show(){
+        document.getElementById('metadata_div').style.visibility = 'visible';
+        document.getElementById('show_metadata_div').style.visibility = 'hidden';
+    }
+
     function toggleSubMenu(str){
 
         if(str != undefined){
@@ -116,6 +155,12 @@
         });
     }
 
+    $("#btn_slide_menu").click(function() {
+        $("#imageMenu").slideToggle(0);
+    });
+</script>
+
+<script>
     fabric.RectLineImage = fabric.util.createClass(fabric.Image, {
         type: 'rectLineImage',
         zoomedXY: false,
@@ -293,10 +338,6 @@
 </script>
 
 <script>
-    $("#btn_slide_menu").click(function() {
-        $("#imageMenu").slideToggle(0);
-    });
-
     function Group(name) {
         this.name = name;
         this.images = new Array;
@@ -1168,6 +1209,7 @@
     var croped_images = new Array(), croped_images2 = new Array(), croped_images3 = new Array();
 
     function crop_rect_button_click() {
+
         var ratio = 1.0;
         var width_ratio = 1.0, height_ratio = 1.0;
         var count = 0;
@@ -1323,7 +1365,8 @@
             lightboxCanvas.renderAll();
         });
 
-        $("#imageMenu").slideToggle(0);
+        bt_metadata_hide();
+        bt_imageMenu_hide();
     }
 
     function stopZoomXY(left, top){
@@ -1764,8 +1807,8 @@
         }*/
         lightboxCanvas.renderAll();
 
-        $("#imageMenu").slideToggle(0);
-        $('#metadata_div').hide();
+        bt_metadata_hide();
+        bt_imageMenu_hide();
     }
 
     function clearCanvas(){
@@ -1779,9 +1822,8 @@
 
     // Essa função pode desaparecer, depois que o problema do botão sobre a image for resolvido.
     var view = false;
-
     function viewLarge2(){
-
+       
         view = !view;
 
         if(view){
@@ -1831,10 +1873,16 @@
         }
         lightboxCanvas.renderAll();
 
-        $("#imageMenu").slideToggle(0);
+        bt_metadata_hide();
+        bt_imageMenu_hide();
     }
 
     function btn_metadata_edit_click() {
+        if(lightboxCanvas.getActiveObject() === null){
+            alert('Select one object!');
+            return;
+        }
+        
         $("#textarea_metadata").attr("disabled",!($("#textarea_metadata").attr("disabled")));
     }
 

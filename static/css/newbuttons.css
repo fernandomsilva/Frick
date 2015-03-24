@@ -1,0 +1,125 @@
+/* Google Fonts */
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+
+/* set global font to Open Sans */
+body {
+  font-family: 'Open Sans', 'sans-serif';
+  /*background-image: url(http://benague.ca/files/pw_pattern.png);*/
+  margin: 0px;
+}
+
+/* css for title */
+h1 {
+  color: #55acee;
+  text-align: center;
+}
+
+.link {
+  border-bottom: 2px dotted #55acee;
+  text-decoration: none;
+  color: #55acee;
+  transition: .3s;
+  -webkit-transition: .3s;
+  -moz-transition: .3s;
+  -o-transition: .3s;
+}
+
+.link:hover {
+  color: #2ecc71;
+  border-bottom: 2px dotted #2ecc71;
+}
+
+/* css for the shiny buttons */
+.btn {
+  cursor: pointer;
+  margin: 5px;
+  border-radius: 8px;
+  text-decoration: none;
+  padding: 5px;
+  font-size: 12px;
+  transition: .3s;
+  -webkit-transition: .3s;
+  -moz-transition: .3s;
+  -o-transition: .3s;
+  display: inline-block;
+}
+
+/*
+.btn:hover {
+  cursor: url(http://cur.cursors-4u.net/symbols/sym-1/sym46.cur), auto;
+}*/
+
+.blue {
+  color: #8b9dc3;
+  border: 2px #8b9dc3 solid;
+}
+
+.blue:hover {
+  background-color: #8b9dc3;
+  color: #fff
+}
+
+.green {
+  color: #71ceb4;
+  border: 2px #71ceb4 solid;
+}
+
+.green:hover {
+  color: #fff;
+  background-color: #71ceb4;
+}
+
+.red {
+  color: #c73e4e;
+  border: 2px #c73e4e solid;
+}
+
+.red:hover {
+  color: #fff;
+  background-color: #c73e4e;
+}
+
+.purple {
+  color: #9b59b6;
+  border: 2px #9b59b6 solid;
+}
+
+.purple:hover {
+  color: #fff;
+  background-color: #9b59b6;
+}
+
+.orange {
+  color: #eaa770;
+  border: 2px #eaa770 solid;
+}
+
+.orange:hover {
+  color: #fff;
+  background-color: #eaa770;
+}
+
+.yellow {
+  color: #f1c40f;
+  border: 2px #f1c40f solid;
+}
+
+.yellow:hover {
+  color: #fff;
+  background-color: #f1c40f;
+}
+
+.buttons {
+  padding-top: 0px;
+  text-align: center;
+}
+
+.menu_background{
+    position: fixed;
+    margin: 0%;
+    padding: 0%;
+    width: 100%;
+    height: 8%;
+    background-color: #f5f6f9;
+    z-index: 5;
+}

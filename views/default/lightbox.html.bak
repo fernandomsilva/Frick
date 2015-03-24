@@ -16,15 +16,13 @@
 
 <div class="menu_background">
 <div id="menu" class="main">
-    <a href="#" class="btn yellow" id="btn_slide_menu"> <i class="fa fa-outdent"></i> Hide</a>
+    <!--<a href="#" class="btn orange" id="btn_slide_menu"> <i class="fa fa-outdent"></i> Hide</a>-->
     <a href="#" class="btn blue"   onclick="toggleSubMenu('workMenu')">      <i class="fa fa-th-large"></i> Workspace</a>
     <a href="#" class="btn green"  onclick="toggleSubMenu('rectMenu')">      <i class="fa fa-pencil-square-o"></i> Rect </a>
     <a href="#" class="btn red"    onclick="toggleSubMenu('lineMenu')">      <i class="fa fa-ellipsis-h"></i> Line</a>
-    <a href="#" class="btn purple" onclick="toggleSubMenu(); clearCanvas()"> <i class="fa fa-eraser"></i> Clean Canvas</a>
+    <a href="#" class="btn purple" onclick="toggleSubMenu('filtersMenu')">   <i class="fa fa-arrows"></i> Filters</a>
+    <a href="#" class="btn orange" onclick="toggleSubMenu(); clearCanvas()"> <i class="fa fa-eraser"></i> Clean</a>
     <a href="#" class="btn orange" onclick="toggleSubMenu(); viewLarge2();"> <i class="fa fa-arrows"></i> View Large</a>
-    <a href="#" class="btn orange" onclick="grayFilter()"> <i class="fa fa-arrows"></i> Grayscale</a>
-    <a href="#" class="btn orange" onclick="edgeCanny()"> <i class="fa fa-arrows"></i> Edge-Canny</a>
-
 </div>
 
 <div id="rectMenu" class="submenu">
@@ -32,8 +30,8 @@
      <a href="#" class="btn green" onclick="hideRect()">               <i class="fa fa-retweet"></i> Hide</a>
      <a href="#" class="btn green" onclick="eraseRect()">              <i class="fa fa-eraser"></i> Erase</a>
      <a href="#" class="btn green" onclick="crop_rect_button_click()"> <i class="fa fa-crop"></i> Crop</a>
-     <a href="#" class="btn green" onclick="zoom_button_click(0,0,2)"> <i class="fa fa-search-plus"></i> Zoom out</a>
-     <a href="#" class="btn green" onclick="zoom_button_click(0,0,-2)"><i class="fa fa-search-minus"></i> Zoom in</a>
+     <!--<a href="#" class="btn green" onclick="zoom_button_click(0,0,2)"> <i class="fa fa-search-plus"></i> Zoom out</a>
+     <a href="#" class="btn green" onclick="zoom_button_click(0,0,-2)"><i class="fa fa-search-minus"></i> Zoom in</a>-->
      <a href="#" class="btn green" onclick="drawOriginal()">           <i class="fa fa-reply"></i> Return</a>
 </div>
 <div id="lineMenu" class="submenu">
@@ -49,6 +47,17 @@
      <a href="#" class="btn blue" onclick="open_state_button_click()">     <i class="fa fa-folder-open-o"></i> Open project</a>
      <a href="#" class="btn blue" onclick="save_state_button_click()">     <i class="fa fa-floppy-o"></i> Save project</a>
 </div>
+<div id="filtersMenu" class="submenu">
+    <a href="#" class="btn purple" onclick="applyNewFilters('EdgeDet')"> <i class="fa fa-play-circle"></i> Edge Detect</a>
+    <a href="#" class="btn purple" onclick="applyNewFilters('Gray')">    <i class="fa fa-play-circle-o"></i> Grayscale</a>
+    <a href="#" class="btn purple" onclick="removeFilters()">            <i class="fa fa-eraser"></i> Remove</a>
+    <a href="#" class="btn purple" onclick="removeFiltersCanvas()">      <i class="fa fa-eraser"></i> Remove All</a>
+</div>
+</div>
+
+<div id="group_name_input" class="group_name_input">
+        <input type="text" id="textbox_group_name"></input>
+        <i class="fa fa-plus" id="btn_add_group" onclick="add_group_button_click()"></i>
 </div>
 
 <div class="interface"><canvas id="interfaceCanvas" width="800" height="600"></canvas></div>
@@ -57,6 +66,11 @@
     <div id="context_link"><a href="#" onclick="linkClick('-1');return false;">Main</a></div>
     <canvas id="imageMenuCanvas" width="800" height="600"></canvas>
     <canvas id="imageMenuCanvasBackground" width="800" height="600"></canvas>
+    <i class="fa fa-times"           id="btn_imageMenu_hide" onclick="bt_imageMenu_hide()"></i>
+</div>
+
+<div class="show_imageMenu"           id="show_imageMenu_div">
+	<i class="fa fa-caret-square-o-right" id="btn_imageMenu_show" onclick="bt_imageMenu_show()"></i>
 </div>
 
 <div class="lightbox" id="lightbox"><canvas id="lightboxCanvas" width="800" height="600"></canvas></div>
@@ -78,22 +92,51 @@
     </table>
 </div>
 
-<!--<div class="metadata" id="metadata_div">
-	<text>Metadata</text> 
+<div class="metadata" id="metadata_div">
+	<text>Annotations</text>
 	<i class="fa fa-pencil-square-o" id="btn_metadata_edit" onclick="btn_metadata_edit_click()"></i>
-	<i class="fa fa-floppy-o" id="btn_metadata_save" onclick="btn_metadata_save_click()"></i>
+	<i class="fa fa-floppy-o"        id="btn_metadata_save" onclick="btn_metadata_save_click()"></i>
+    <i class="fa fa-times"           id="btn_metadata_hide" onclick="bt_metadata_hide()"></i>
 	<br>
 	<textarea id="textarea_metadata" rows="10" cols="40" disabled></textarea>
-</div>-->
+</div>
 
-<div class="imageInteraction" id="imageInteraction_div">
-    <i class="fa fa-times" id="btn_remove_image" onclick="btn_remove_image_click()"></i>
+<div class="show_metadata"           id="show_metadata_div">
+	<i class="fa fa-caret-square-o-left" id="btn_metadata_show" onclick="bt_metadata_show()"></i>
+</div>
+
+<div class="imageInteraction"  id="imageInteraction_div">
+    <i class="fa fa-times"     id="btn_remove_image" onclick="btn_remove_image_click()"></i>
     <i class="fa fa-picture-o" id="btn_enlarge_image" onclick="btn_enlarge_image_click()"></i>
 </div>
 </body>
 
 
 <script>
+    /*$('#metadata_button').click(function () {
+    alert('I am clickable');
+});*/
+    
+    function bt_imageMenu_hide(){
+        document.getElementById('imageMenu').style.visibility = 'hidden';
+        document.getElementById('show_imageMenu_div').style.visibility = 'visible';
+    }
+    
+    function bt_imageMenu_show(){
+        document.getElementById('imageMenu').style.visibility = 'visible';
+        document.getElementById('show_imageMenu_div').style.visibility = 'hidden';
+    }
+
+    function bt_metadata_hide(){
+        document.getElementById('metadata_div').style.visibility = 'hidden';
+        document.getElementById('show_metadata_div').style.visibility = 'visible';
+    }
+
+    function bt_metadata_show(){
+        document.getElementById('metadata_div').style.visibility = 'visible';
+        document.getElementById('show_metadata_div').style.visibility = 'hidden';
+    }
+
     function toggleSubMenu(str){
 
         if(str != undefined){
@@ -104,7 +147,7 @@
             m.style.visibility = 'hidden';
         }
 
-        var menus = ['lineMenu','rectMenu','workMenu'];
+        var menus = ['lineMenu','rectMenu','workMenu', 'filtersMenu'];
 
         menus.forEach(function(d){
             if(d === str) return;
@@ -112,7 +155,12 @@
         });
     }
 
+    $("#btn_slide_menu").click(function() {
+        $("#imageMenu").slideToggle(0);
+    });
+</script>
 
+<script>
     fabric.RectLineImage = fabric.util.createClass(fabric.Image, {
         type: 'rectLineImage',
         zoomedXY: false,
@@ -218,13 +266,78 @@
             callback && callback(new fabric.RectLineImage(enlivenedObjects, object));
         });*/
     };
+
+    fabric.Image.filters.EdgeCanny = fabric.util.createClass(fabric.Image.filters.BaseFilter, {
+                type: 'Canny',
+                initialize: function (options) {
+                },
+                applyTo: function (canvasEl) {
+                    var context = canvasEl.getContext('2d'),
+                            imagedata = context.getImageData(0, 0, canvasEl.width, canvasEl.height),
+                            data = imagedata.data;
+
+                    var img_u8 = new jsfeat.matrix_t(canvasEl.width, canvasEl.height, jsfeat.U8_t | jsfeat.C1_t);
+
+                    var blur_radius = 2;
+                    var low_threshold = 20;
+                    var high_threshold = 50;
+
+                    jsfeat.imgproc.grayscale(data, canvasEl.width, canvasEl.height, img_u8);
+
+                    var r = blur_radius|0;
+                    var kernel_size = (r+1) << 1;
+
+                    jsfeat.imgproc.gaussian_blur(img_u8, img_u8, kernel_size, 0);
+
+                    jsfeat.imgproc.canny(img_u8, img_u8, low_threshold|0, high_threshold|0);
+
+                    // render result back to canvas
+                    var data_u32 = new Uint32Array(data.buffer);
+                    var alpha = (0xff << 24);
+                    var i = img_u8.cols*img_u8.rows, pix = 0;
+
+                    while(--i >= 0) {
+                      pix = img_u8.data[i];
+                        data_u32[i] = alpha | (pix << 16) | (pix << 8) | pix;
+                    }
+
+                    context.putImageData(imagedata, 0,0);
+                }
+            });
+
+    fabric.Image.filters.GrayScale = fabric.util.createClass(fabric.Image.filters.BaseFilter, {
+                type: 'Canny',
+                initialize: function (options) {
+                },
+                applyTo: function (canvasEl) {
+                    var context = canvasEl.getContext('2d'),
+                            imagedata = context.getImageData(0, 0, canvasEl.width, canvasEl.height),
+                            data = imagedata.data;
+
+                    var img_u8 = new jsfeat.matrix_t(canvasEl.width, canvasEl.height, jsfeat.U8_t | jsfeat.C1_t);
+
+                    jsfeat.imgproc.grayscale(data, canvasEl.width, canvasEl.height, img_u8);
+
+                    // render result back to canvas
+                    var data_u32 = new Uint32Array(data.buffer);
+                    var alpha = (0xff << 24);
+                    var i = img_u8.cols*img_u8.rows, pix = 0;
+
+                    while(--i >= 0) {
+                      pix = img_u8.data[i];
+                        data_u32[i] = alpha | (pix << 16) | (pix << 8) | pix;
+                    }
+
+                    context.putImageData(imagedata, 0,0);
+                }
+            });
+
+    var filter = new fabric.Image.filters.Sepia2({
+        sepia: 0
+    });
 </script>
 
 <script>
-    $("#btn_slide_menu").click(function() {
-        $("#imageMenu").slideToggle(0);
-    });
-
     function Group(name) {
         this.name = name;
         this.images = new Array;
@@ -263,7 +376,7 @@
     var imageMenuContext = imageMenuCanvas.getContext('2d');
 
     var lightboxCanvas = new fabric.Canvas('lightboxCanvas');
-    var ctx = lightboxCanvas.getContext('2d');
+    var lightboxCanvasContext = imageMenuCanvas.getContext('2d');
 
     var current_menu_workspace;
     var workspace_hierarchy = "-1";
@@ -304,7 +417,7 @@
     }
 
     function getMenuStateData(workspace) {
-        var result = ""
+        var result = "";
 
         for (var i=0; i < workspace.length; i++)
         {
@@ -320,7 +433,7 @@
             }
         }
 
-        return result
+        return result;
     }
 
     function getStateData(workspace) {
@@ -682,7 +795,7 @@
 
             var mousePosition = getMousePosition(imageMenuCanvas, e);
             //console.log(getMousePosition(imageMenuCanvas, e));
-            drop_image = getImageMouseCollision(mousePosition);
+            var drop_image = getImageMouseCollision(mousePosition);
             if (drop_image > -1 && drop_image != selected_image)
             {
                 if (Object.prototype.toString.call(current_menu_workspace[drop_image]).slice(8, -1) == 'HTMLImageElement')
@@ -729,6 +842,7 @@
                     }));
                     editableImageArray[editableImageArray.length - 1].set({scaleX: ratio, scaleY: ratio});
                     lightboxCanvas.add(editableImageArray[editableImageArray.length - 1]);
+                    editableImageArray[editableImageArray.length - 1].setCoords();
                 }
             }
 
@@ -788,8 +902,7 @@
 
         imageLoaded();
 
-        if (!erase)
-        {
+        if (!erase) {
             interfaceContext.clearRect( 0 , 0 , interfaceCanvas.width, interfaceCanvas.height );
             interfaceContext.fillStyle = "#0000ff"
             interfaceContext.fillRect(mousepos.x - 10, mousepos.y - 10, 20, 20);
@@ -1096,6 +1209,7 @@
     var croped_images = new Array(), croped_images2 = new Array(), croped_images3 = new Array();
 
     function crop_rect_button_click() {
+
         var ratio = 1.0;
         var width_ratio = 1.0, height_ratio = 1.0;
         var count = 0;
@@ -1251,7 +1365,8 @@
             lightboxCanvas.renderAll();
         });
 
-        $("#imageMenu").slideToggle(0);
+        bt_metadata_hide();
+        bt_imageMenu_hide();
     }
 
     function stopZoomXY(left, top){
@@ -1514,6 +1629,8 @@
     }
 
     var obj_selected;
+    var isActive, selectObj = [];
+    var isDown;
 
     function onChange(options) {
         options.target.bringToFront();
@@ -1523,6 +1640,23 @@
         $('#btn_remove_image').offset({top: options.target.top + $('#lightbox').offset().top, left: options.target.left + options.target.width * options.target.scaleX - $('#btn_remove_image').width() - 10});
         $('#btn_enlarge_image').offset({top: options.target.top + $('#lightbox').offset().top + options.target.height * options.target.scaleY - $('#btn_enlarge_image').height() - 10, left: options.target.left + options.target.width * options.target.scaleX - $('#btn_enlarge_image').width() - 10});
         lightboxCanvas.renderAll();
+    }
+
+    function onSelect(){
+        fabric.util.toArray(document.getElementsByTagName('input'))
+                .forEach(function(el){ el.disabled = false; });
+        if(isActive) {
+            var obj = lightboxCanvas.getActiveObject();
+            if(selectObj.length == 2) selectObj = [];
+            selectObj.push(obj);
+            filter.sepia = 0.5;
+            obj.filters.push(filter);
+            obj.applyFilters(lightboxCanvas.renderAll.bind(lightboxCanvas));
+        }
+        //if (options.target instanceof fabric.RectLineImage)
+        $("#textarea_metadata").val(lightboxCanvas.getActiveObject().metadata);
+        $("#textarea_metadata").attr("disabled", true);
+        obj_selected = lightboxCanvas.getActiveObject();
     }
 
     function changeOpacity(image){
@@ -1626,30 +1760,6 @@
         }
     }
 
-    var isActive, selectObj = [];
-    var isDown;
-
-    var filter = new fabric.Image.filters.Sepia2({
-        sepia: 0
-    });
-
-    function onSelect(){
-        fabric.util.toArray(document.getElementsByTagName('input'))
-                .forEach(function(el){ el.disabled = false; });
-        if(isActive) {
-            var obj = lightboxCanvas.getActiveObject();
-            if(selectObj.length == 2) selectObj = [];
-            selectObj.push(obj);
-            filter.sepia = 0.5;
-            obj.filters.push(filter);
-            obj.applyFilters(lightboxCanvas.renderAll.bind(lightboxCanvas));
-        }
-        //if (options.target instanceof fabric.RectLineImage)
-        $("#textarea_metadata").val(lightboxCanvas.getActiveObject().metadata);
-        $("#textarea_metadata").attr("disabled", true);
-        obj_selected = lightboxCanvas.getActiveObject();
-    }
-
     var clone;
 
     function viewLarge(obj){
@@ -1697,8 +1807,8 @@
         }*/
         lightboxCanvas.renderAll();
 
-        $("#imageMenu").slideToggle(0);
-        $('#metadata_div').hide();
+        bt_metadata_hide();
+        bt_imageMenu_hide();
     }
 
     function clearCanvas(){
@@ -1712,8 +1822,12 @@
 
     // Essa função pode desaparecer, depois que o problema do botão sobre a image for resolvido.
     var view = false;
-
     function viewLarge2(){
+        
+        if(lightboxCanvas.getActiveObject() === null){
+            alert('Select one object!');
+            return;
+        }
 
         view = !view;
 
@@ -1764,10 +1878,16 @@
         }
         lightboxCanvas.renderAll();
 
-        $("#imageMenu").slideToggle(0);
+        bt_metadata_hide();
+        bt_imageMenu_hide();
     }
 
     function btn_metadata_edit_click() {
+        if(lightboxCanvas.getActiveObject() === null){
+            alert('Select one object!');
+            return;
+        }
+        
         $("#textarea_metadata").attr("disabled",!($("#textarea_metadata").attr("disabled")));
     }
 
@@ -1836,7 +1956,6 @@
     }
 
     //Keyboard shortcuts:
-
     function objManip(prop, value) {
 		    switch(prop) {
 			    case 'zoomBy-x':
@@ -1897,65 +2016,33 @@
             }
         };
     }
-    
-    function grayFilter(){
-        
-          var obj = lightboxCanvas.getActiveObject();
-          var width = obj.getWidth();
-          var height = obj.getHeight();
-        
-          var image_data = ctx.getImageData(obj.left, obj.top, width, height);
-          console.log(image_data);
- 
-          var img_u8 = new jsfeat.matrix_t(obj.width, obj.height, jsfeat.U8_t | jsfeat.C1_t);
 
-          jsfeat.imgproc.grayscale(image_data.data, obj.width, obj.height, img_u8);
-          
-          // render result back to canvas         
-          var data_u32 = new Uint32Array(image_data.data.buffer);
-          var alpha = (0xff << 24);
-          var i = img_u8.cols*img_u8.rows, pix = 0;
-          
-          while(--i >= 0) {
-              pix = img_u8.data[i];
-              data_u32[i] = alpha | (pix << 16) | (pix << 8) | pix;
-          }
-          ctx.putImageData(image_data, obj.left, obj.top);
-      }
-      
-      function edgeCanny(){
-          var obj = lightboxCanvas.getActiveObject();
-          var width = obj.getWidth();
-          var height = obj.getHeight();
-          
-          var image_data = ctx.getImageData(obj.left, obj.top, width, height);
-          
-          var blur_radius = 2;
-          var low_threshold = 20;
-          var high_threshold = 50;
-          
-          var img_u8 = new jsfeat.matrix_t(width, height, jsfeat.U8_t | jsfeat.C1_t);
-          
-          jsfeat.imgproc.grayscale(image_data.data, width, height, img_u8);
-          
-          var r = blur_radius|0;
-          var kernel_size = (r+1) << 1;
-          
-          jsfeat.imgproc.gaussian_blur(img_u8, img_u8, kernel_size, 0);
-          
-          jsfeat.imgproc.canny(img_u8, img_u8, low_threshold|0, high_threshold|0);
-          
-          // render result back to canvas
-          var data_u32 = new Uint32Array(image_data.data.buffer);
-          var alpha = (0xff << 24);
-          var i = img_u8.cols*img_u8.rows, pix = 0;
-          
-          while(--i >= 0) {
-               pix = img_u8.data[i];
-               data_u32[i] = alpha | (pix << 16) | (pix << 8) | pix;
-          }
-                    
-          ctx.putImageData(image_data, obj.left, obj.top);
-      }
+    //Filters
+    function applyNewFilters(option){
+         var obj = lightboxCanvas.getActiveObject();
+
+        if(option === 'EdgeDet') var filter = new fabric.Image.filters.EdgeCanny({});
+        if(option === 'Gray') var filter = new fabric.Image.filters.GrayScale({});
+
+        obj.filters.push(filter);
+        obj.applyFilters(lightboxCanvas.renderAll.bind(lightboxCanvas));
+    }
+
+    function removeFilters(){
+        var obj = lightboxCanvas.getActiveObject();
+
+        obj.filters = [];
+        obj.applyFilters();
+
+        lightboxCanvas.renderAll();
+    }
+
+    function removeFiltersCanvas(){
+        lightboxCanvas.forEachObject(function (obj) {
+            obj.filters = [];
+            obj.applyFilters();
+        });
+        lightboxCanvas.renderAll();
+    }
 
 </script>

@@ -1,12 +1,11 @@
 .group_name_input {
 	position: absolute;
 	z-index: 5;
-	left: 18px;
+    top: 8%;
+	left: 55%;
 	visibility: hidden;
-	
-	background-color: black;
+	background-color: #8b9dc3;
 	padding: 5px;
-	
 	width: 167px;
 }
 
@@ -89,6 +88,39 @@
     border: 2px solid #3b5998;
 }
 
+.imageMenu #btn_imageMenu_hide {
+    position: fixed;
+    z-index: 2;
+	top: 9%;
+    left: 28%;
+    color: white;
+}
+
+.imageMenu #btn_imageMenu_hide:hover {
+	color: red;
+}
+
+.show_imageMenu {
+	position: fixed;
+	top: 9%;
+	left: 0.1%;
+	width: 19px;
+	height: 19px;
+	margin: 0px;
+	opacity: 0.8;
+	background-color: #3b5998;
+	z-index: 5;
+	visibility: hidden;
+}
+
+.show_imageMenu i {
+	padding: 2px;
+	color: white;
+}
+
+.show_imageMenu i:hover {
+	color: red;
+}
 
 .lightbox {
 	position: fixed;
@@ -118,8 +150,8 @@
 	top: 0%;
 	left: 0%;
 	margin: 0px;
-	opacity: 0.8;
-	background-color: black;
+	opacity: 0.9;
+	background-color: #3b5998;
 	z-index: -2;
 	visibility: hidden;
 }
@@ -128,7 +160,6 @@
 	position: fixed;
 	top: 0%;
 	left: 0%;
-
 	color: white;
 	font-size: 22px;
 }
@@ -139,26 +170,20 @@
 
 .highlight {
 	color: white;
-	background: blue;
+	background: #8b9dc3;
 }
 
 .file_open_list table {
 	position: fixed;
-	
 	z-index: 11;
-	
 	background: white;
-	
 	width: 430px;
-	
 	top: 21%;
     left: 35%;
     margin-right: -50%;
-	
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;	
-
 	-webkit-user-select: none; /* Chrome/Safari */        
 	-moz-user-select: none; /* Firefox */
 	-ms-user-select: none; /* IE10+ */
@@ -166,7 +191,7 @@
 
 .file_open_list table th {
 	color: white;
-	background: black;
+	background: #3b5998;
 }
 
 .file_save_list {
@@ -174,8 +199,8 @@
 	top: 0%;
 	left: 0%;
 	margin: 0px;
-	opacity: 0.8;
-	background-color: black;
+	opacity: 0.9;
+	background-color: #3b5998;
 	z-index: -2;
 	visibility: hidden;
 }
@@ -184,7 +209,6 @@
 	position: fixed;
 	top: 0%;
 	left: 0%;
-
 	color: white;
 	font-size: 22px;
 }
@@ -195,36 +219,28 @@
 
 .file_save_list #label {
 	position: fixed;
-	
 	top: 11%;
     left: 35%;
     margin-right: -50%;	
-
 	color: white;
 	font-weight: bold;
 }
 
 .file_save_list #btn_save_state {
 	position: fixed;
-	
 	top: 15%;
     left: 67%;
     margin-right: -50%;
-	
 	color: white;
-	
 	font-size: 22px;
 }
 
 .file_save_list input {
 	position: fixed;
-
 	width: 400px;
-	
 	top: 15%;
     left: 35%;
     margin-right: -50%;
-	
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
@@ -232,17 +248,12 @@
 
 .file_save_list table {
 	position: fixed;
-	
 	z-index: 11;
-	
 	background: white;
-	
 	width: 430px;
-	
 	top: 21%;
     left: 35%;
     margin-right: -50%;
-	
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;	
@@ -250,25 +261,48 @@
 
 .file_save_list table th {
 	color: white;
-	background: black;
+	background: #3b5998;
 }
 
 .metadata {
 	position: fixed;
-	top: 5%;
+	top: 9%;
 	left: 75.5%;
 	width: 24.5%;
 	height: 172px;
 	margin: 0px;
 	opacity: 0.8;
-	background-color: black;
-	z-index: 22;
+	background-color: #3b5998;
+	z-index: 5;
 	/*visibility: hidden;*/
+}
+
+.show_metadata {
+	position: fixed;
+	top: 9%;
+	left: 98.5%;
+	width: 19px;
+	height: 19px;
+	margin: 0px;
+	opacity: 0.8;
+	background-color: #3b5998;
+	z-index: 5;
+	visibility: hidden;
+}
+
+.show_metadata i {
+	padding: 2px;
+	color: white;
+}
+
+.show_metadata i:hover {
+	color: red;
 }
 
 .metadata text {
 	color: white;
 	padding: 5px;
+    font-size: small;
 }
 
 .metadata i {
@@ -276,7 +310,6 @@
 	top: 0%;
 	left: 0%;*/
 	padding: 2px;
-
 	color: white;
 	/*font-size: 22px;*/
 }
@@ -293,17 +326,18 @@
 	cols: 40;
 	
 	color: white;
-	background-color: grey;
+	background-color: #8b9dc3;
 }
 
 .imageInteraction {
 	position: fixed;
 	top: 10%;
 	left: 10%;
-	z-index: 23;
+	z-index: 4;
 }
 
 .imageInteraction i {
+    z-index: 4;
 	background: #d93434;
 	background-image: -webkit-linear-gradient(top, #d93434, #b82b47);
 	background-image: -moz-linear-gradient(top, #d93434, #b82b47);
